@@ -1,4 +1,6 @@
 #include <bits/stdc++.h>
+#include <queue>
+#include <stdexcept>
 
 using namespace std;
 
@@ -71,14 +73,159 @@ public:
         }
         return *this;
     }
+
+    void insert(int value) {
+        if(!root) {
+            root = new TreeNode(value);
+            return;
+        }
+
+        TreeNode* current = root;
+        TreeNode* parent = nullptr;
+
+        while(current) {
+            parent = current;
+            if(value < current->val) {
+                current = current->left;
+            } else if(value > current->val) {
+                current = current->right;
+            } else {
+                return; // duplicate (already in the tree)
+            }
+        }
+
+        if(value < parent->val) {
+            parent->left = new TreeNode(value);
+        } else {
+            parent->right = new TreeNode(value);
+        }
+    }
+
+    void remove(int value) {
+        root = removeNode(root, value);
+    }
+
+    bool search(int value) const {
+        TreeNode* current = root;
+        while(current) {
+            if(value == current->val) {
+                return true;
+            } else if(value < current->val) {
+                current = current->left;
+            } else {
+                current = current->right;
+            }
+        }
+        return false;
+    }
+
+    int find_min() const {
+        if(!root) throw std::runtime_error("Tree is empty\n");
+
+        TreeNode* current = root;
+        while(current->left) {
+            current = current->left;
+        }
+        return current->val;
+    }
+
+
+    int find_max() const {
+        if(!root) throw std::runtime_error("Tree is empty\n");
+
+        TreeNode* current = root;
+        while(current->right) {
+            current = current->right;
+        }
+        return current->val;
+    }
+
+    int get_height() const {
+        if(!root) return 0;
+
+        std::queue<TreeNode*> q;
+        q.push(root);
+        int height = 0;
+
+        while(!q.empty()) {
+            int level_size = q.size();
+            height++;
+
+            for(int i = 0; i < level_size; i++) {
+                TreeNode* current = q.front();
+                q.pop();
+
+                if(current->left) q.push(current->left);
+                if(current->right) q.push(current->right);
+            }
+        }
+
+        return height;
+    }
+
+    int size() const {
+        if(!root) return 0;
+
+        std::queue<TreeNode*> q;
+        q.push(root);
+        int count = 0;
+
+        while(!q.empty()) {
+            TreeNode* current = q.front();
+            q.pop();
+            count++;
+
+            if(current->left) q.push(current->left);
+            if(current->right) q.push(current->right);
+        }
+        
+        return count;
+    }
+
+    bool is_empty() const {
+        return root == nullptr;
+    }
+
+private:
+    TreeNode* removeNode(TreeNode* node, int value) {
+        if(!node) return nullptr;
+
+        if(value < node->val) {
+            node->left = removeNode(node->left, value);
+        } else if(value > node->val) {
+            node->right = removeNode(node->right, value);
+        } else {
+            // no children (leaf node)
+            if(!node->left && !node->right) {
+                delete node;
+                return nullptr;
+            } else if(!node->left) {
+                TreeNode* temp = node->right;
+                delete node;
+                return temp;
+            } else if(!node->right) {
+                TreeNode* temp = node->left;
+                delete node;
+                return temp;
+            } else {
+                TreeNode* min_right = node->right;
+                while(min_right->left) {
+                    min_right = min_right->left;
+                }
+                node->val = min_right->val;
+                node->right = removeNode(node->right, min_right->val);
+            }
+        }
+        return node;
+    }
 };
 
-int getHeight(TreeNode *node, bool &isBalancedTree) {
+int isBalancedHelper(TreeNode *node, bool &isBalancedTree) {
     if (!node || !isBalancedTree)
       return 0;
     
-    int left = getHeight(node->left, isBalancedTree);
-    int right = getHeight(node->right, isBalancedTree);
+    int left = isBalancedHelper(node->left, isBalancedTree);
+    int right = isBalancedHelper(node->right, isBalancedTree);
 
     if (abs(left - right) > 1)
       isBalancedTree = false;
@@ -88,7 +235,7 @@ int getHeight(TreeNode *node, bool &isBalancedTree) {
 // Check if a Binary Tree is Balanced
 bool isBalanced(TreeNode *root) {
     bool isBalancedTree = true;
-    getHeight(root, isBalancedTree);
+    isBalancedHelper(root, isBalancedTree);
 
     return isBalancedTree;
 }
@@ -104,6 +251,7 @@ bool isValidBSTHelper(TreeNode *node, long min_val, long max_val) {
     return isValidBSTHelper(node->left, min_val, node->val) &&
            isValidBSTHelper(node->right, node->val, max_val);
 }
+
 bool isValidBST(TreeNode *root) {
     return isValidBSTHelper(root, LONG_MIN, LONG_MAX);
 }
