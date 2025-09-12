@@ -34,6 +34,40 @@ public:
 
     // Check if an edge exists
     bool has_edge(int u, int v) const {
+        for(const auto& edge : edges) {
+            auto [src, dest, weight] = edge;
+            if(src == u && dest == v) {
+                return true;
+            }
+            if(!directed) {
+                if(src == v && dest == u) return true;
+            }
+        }
+        
+        return false;
+    }
 
+    // Get weight of an edge
+    int get_weight(int u, int v) const {
+        for(const auto& edge : edges) {
+            auto [src, dest, weight] = edge;
+            if(src == u && dest == v) {
+                return weight;
+            }
+            if(!directed) {
+                if(src == v && dest == u) return weight;
+            }
+        }
+
+        return 0;
+    }
+
+    // Print graph
+    void print() const {
+        std::cout << "Edge List:\n";
+        for(const auto& edge : edges) {
+            auto [u, v, weight] = edge;
+            std::cout << "(" << u << " - " << v << ", w: " << weight << ")\n";
+        }
     }
 };
