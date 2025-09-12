@@ -83,7 +83,7 @@ public:
 };
 
 
-// testing
+// testing example
 int main(void) {
     std::cout << "Adjacency Matrix Representation:\n";
     GraphMatrix matrixGraph(5);
