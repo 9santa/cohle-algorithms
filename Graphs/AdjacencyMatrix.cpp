@@ -6,7 +6,7 @@
 
 using namespace std;
 
-// 3. Adjacency Matrix
+// 3. Adjacency Matrix. Space: O(V^2)
 class GraphMatrix {
 private:
     int V;  // number of vertices
