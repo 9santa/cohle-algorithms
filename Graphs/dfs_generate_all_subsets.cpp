@@ -3,6 +3,7 @@
 
 using namespace std;
 
+// Generate The Power Set
 void generate_subsets(const vector<int>& nums) {
     struct State {
         int index;
