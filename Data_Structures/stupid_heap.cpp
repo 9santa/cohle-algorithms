@@ -40,7 +40,7 @@ struct heap_v2 {
 private:
     int h[MAXN];
     int n = 0;
-    int m;
+    int m = 0;
 
 public:
     // O(1)
