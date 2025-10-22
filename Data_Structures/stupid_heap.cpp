@@ -80,7 +80,7 @@ public:
 
     // O(1)
     int get_min() {
-        return h[n--];
+        return h[--n];
     }
 
     // sift-left (1-run of insertion sort). O(n)
