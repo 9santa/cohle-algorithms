@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
+#include <execution>
 #include <queue>
 #include <stdexcept>
+#include <unordered_map>
 
 using namespace std;
 
@@ -208,6 +210,7 @@ private:
                 delete node;
                 return temp;
             } else {
+                // min_right = inorder successor
                 TreeNode* min_right = node->right;
                 while(min_right->left) {
                     min_right = min_right->left;
@@ -245,7 +248,7 @@ bool isValidBSTHelper(TreeNode *node, long min_val, long max_val) {
     if (!node)
       return true;
 
-    if (node->left->val <= min_val || node->right->val >= max_val)
+    if (node->val <= min_val || node->val >= max_val)
       return false;
 
     return isValidBSTHelper(node->left, min_val, node->val) &&
@@ -258,12 +261,52 @@ bool isValidBST(TreeNode *root) {
 
 // First Common Ancestor of 2 nodes in a binary tree
 TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *first, TreeNode *second) {
-    if (root && root != first && root != second) {
-      TreeNode *left = lowestCommonAncestor(root->left, first, second);
-      TreeNode *right = lowestCommonAncestor(root->right, first, second);
+    if(!root || root == first || root == second) return root;
+
+    TreeNode *left = lowestCommonAncestor(root->left, first, second);
+    TreeNode *right = lowestCommonAncestor(root->right, first, second);
+
+    if(left && right) return root;  // first and second in different subtrees
+    if(left) return left;           // both in left subtree
+    return right;                   // both in right subtree
+}
+
+// Iterative First Common Ancestor of 2 nodes in a binary tree
+TreeNode *lowestCommonAncestorIterative(TreeNode* root, TreeNode* p, TreeNode* q) {
+    unordered_map<TreeNode*, TreeNode*> parent;
+    parent[root] = nullptr;
+
+    stack<TreeNode*> st;
+    st.push(root);
+
+    while(!parent.count(p) || !parent.count(q)) {
+        TreeNode* node = st.top();
+        st.pop();
+
+        if(node->left) {
+            parent[node->left] = node;
+            st.push(node->left);
+        }
+
+        if(node->right) {
+            parent[node->right] = node;
+            st.push(node->right);
+        }
     }
 
-    return root; // root is the LCA
+    // Find all ancestors of p
+    unordered_set<TreeNode*> ancestors;
+    while(p) {
+        ancestors.insert(p);
+        p = parent[p];
+    }
+
+    // Find first intersection
+    while(!ancestors.count(q)) {
+        q = parent[q];
+    }
+
+    return q;
 }
 
 // Minimal BST from sorted array
