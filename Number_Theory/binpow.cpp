@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include <ctime>
 
 #define pb push_back
 #define eb emplace_back
@@ -18,7 +17,7 @@ using pii = pair<int, int>;
 
 constexpr int MOD = 1e9+7;
 
-// BINARY EXPONENTIATION
+// BINARY EXPONENTIATION. O(log n)
 class Exponentiation {
     long long binpowRecursive(long long a, long long power) {
         if (power == 0) return 1;   // a^0 = 1
@@ -57,3 +56,5 @@ class Exponentiation {
     }
 };
 
+// In Multiplicative group of Integers modulo MOD:
+// If MOD is prime -> inverted element is binpow(a, MOD-2, MOD)

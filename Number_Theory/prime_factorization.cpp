@@ -18,9 +18,9 @@ using pii = pair<int, int>;
 
 
 // Simple algorithm for prime factorization. Any number can be represented as a product of primes
-vector<int> prime_factorization(int n) {
-    vector<int> primes;
-    for (int i = 2; i < sqrt(n); i++) {
+vector<i64> prime_factorization(i64 n) {
+    vector<i64> primes;
+    for (i64 i = 2; i < sqrt(n); i++) {
         while (n % i == 0) {
             n /= i;
             primes.push_back(i);
@@ -38,7 +38,8 @@ int main(void)
     ios::sync_with_stdio(0);
     cin.tie(0);
 
-    vector<int> primes = prime_factorization(376);
+    i64 n; cin >> n;
+    vector<i64> primes = prime_factorization(n);
     for(auto el : primes) cout << el << " ";
 
 
