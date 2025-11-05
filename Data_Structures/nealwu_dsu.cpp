@@ -3,6 +3,7 @@
 using namespace std;
 
 // efficient & minimized DSU implementation stolen from Neal Wu
+// don't know who came up with this, but super cute
 struct DSU {
     vector<int> data;
     vector<int> min_el;
