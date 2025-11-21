@@ -1,0 +1,39 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+// https://en.wikipedia.org/wiki/Hilbert_curve
+template<class T, class T_large>
+struct hilbert_curve_2d{
+	int level;
+	T size;
+	hilbert_curve_2d(int level = 0): level(level), size(T(1) << level){ }
+	void rotate(T size, T &x, T &y, bool rx, bool ry) const{
+		if(!ry){
+			if(rx) x ^= size - 1, y ^= size - 1;
+			swap(x, y);
+		}
+	}
+	T_large order(T x, T y) const{
+		assert(0 <= x && x < size && 0 <= y && y < size);
+		T_large d = 0;
+		for(auto s = size >> 1; s; s >>= 1){
+			bool rx = x & s, ry = y & s;
+			d = d << 2 | 3 * rx ^ ry;
+			rotate(size, x, y, rx, ry);
+		}
+		return d;
+	}
+	array<T, 2> position(T_large d) const{
+		assert(0 <= d && d < T_large(1) * size * size);
+		T x = 0, y = 0;
+		for(auto s = T(1); s < size; s <<= 1){
+			bool rx = (d >> 1) & 1, ry = (d ^ rx) & 1;
+			rotate(s, x, y, rx, ry);
+			x += s * rx, y += s * ry;
+			d >>= 2;
+		}
+		return {x, y};
+	}
+};

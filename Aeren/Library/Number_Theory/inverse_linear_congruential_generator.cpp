@@ -1,0 +1,22 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+// Returns the minimum n >= 0 with s_n = obj where s_0 = s and s_{i+1} = s_i * a + b
+// O(sqrt(mod) + log(max(s, a, b)))
+// T must be of modular type
+// Requires modular
+template<class T>
+auto inverse_linear_congruential_generator(T s, T a, T b, T obj){
+	using U = decay_t<decltype(T::mod())>;
+	if(s == obj) return optional<U>{0};
+	if(a == 1){
+		if(auto inverse_ptr = b.inverse()) return optional<U>{((obj - s) * *inverse_ptr).data()};
+		else return optional<U>{};
+	}
+	T c = b / (a - 1);
+	if(s + c == 0) return optional<U>{};
+	if(auto resptr = ((obj + c) / (s + c)).log(a)) return resptr;
+	return optional<U>{};
+}

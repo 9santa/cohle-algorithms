@@ -1,0 +1,24 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+// Returns a tree T where for all s!=t, min s-t cut of g equals the min weight of edges in the s-t path in T
+// n - 1 dinic_maximum_flow.minimum_cut() calls
+// Requires flow_network and dinic_maximum_flow
+template<class T>
+vector<tuple<int, int, T>> gomory_hu_tree(int n, const vector<tuple<int, int, T>> &edge){
+	flow_network<T> F(n);
+	for(auto &[u, v, w]: edge) F.link(u, v, w);
+	vector<tuple<int, int, T>> res(max(n - 1, 0));
+	vector<int> pv(n), cut(n);
+	for(auto i = 1; i < n; ++ i){
+		F.clear_flow();
+		auto [flow, left, right] = dinic_maximum_flow<T>(F).minimum_cut(pv[i], i);
+		fill(cut.begin(), cut.end(), 0);
+		for(auto u: right) cut[u] = 1;
+		for(auto j = i + 1; j < n; ++ j) if(cut[j] == cut[i] && pv[j] == pv[i]) pv[j] = i;
+		res[i - 1] = {pv[i], i, flow};
+	}
+	return res;
+}

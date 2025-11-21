@@ -1,0 +1,22 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+// Count # of standard young tableau with the given shape with hook length formula
+// O(\sum(lambda))
+template<class T>
+T count_young_tableaux(const vector<int> &lambda){
+	for(auto i = 0; i < (int)lambda.size() - 1; ++ i){
+		assert(lambda[i] >= lambda[i + 1]);
+		assert(lambda[i + 1] >= 0);
+	}
+	T res = 1;
+	for(auto h = (int)lambda.size(), y = 0; y < lambda[0]; ++ y){
+		while(h && lambda[h - 1] <= y) -- h;
+		for(auto i = 0; i < h; ++ i) res *= lambda[i] - y + h - i - 1;
+	}
+	res = 1 / res;
+	for(auto x = accumulate(lambda.begin(), lambda.end(), 0); x >= 1; -- x) res *= x;
+	return res;
+}

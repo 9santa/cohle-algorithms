@@ -1,0 +1,35 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+// Source: https://codeforces.com/blog/entry/98167
+// Returns the Robinson-Schensted-Knuth mapping of p
+// p must be a permutation
+// O(n^2)
+array<vector<vector<int>>, 2> RSK_mapping(const vector<int> &p){
+	int n = (int)p.size();
+	{ // Check if p is a permutation
+		vector<int> flag(n);
+		for(auto x: p){
+			assert(0 <= x && x < n && !flag[x]);
+			flag[x] = true;
+		}
+	}
+	vector<vector<int>> s, t;
+	for(auto ind = 0; ind < n; ++ ind){
+		int x = p[ind];
+		bool found = false;
+		for(auto i = 0; i < (int)s.size(); ++ i){
+			int j = upper_bound(s[i].begin(), s[i].end(), x) - s[i].begin();
+			if(j == (int)s[i].size()){
+				s[i].push_back(x), t[i].push_back(ind);
+				found = true;
+				break;
+			}
+			swap(s[i][j], x);
+		}
+		if(!found) s.emplace_back(vector<int>{x}), t.emplace_back(vector<int>{ind});
+	}
+	return {s, t};
+}

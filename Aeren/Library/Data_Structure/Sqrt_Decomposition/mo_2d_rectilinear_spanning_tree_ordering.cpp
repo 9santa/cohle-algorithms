@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+// WARNING: VERY VERY SLOW
+// Reorder N 2D points with max_x - min_x <= X, max_y - min_y <= Y
+// so that sum(abs(xi - x(i+1)) + abs(yi - y(i+1)) is small and process queries on the new order.
+// Requires point, disjoint_set, and rectilinear_minimum_spanning_tree
+struct mo_2d_rectilinear_spanning_tree_ordering{
+	vector<point<int>> points{{0, 0}};
+	vector<int> ind{-1};
+	void query(int qi, int x, int y){
+		points.push_back({x, y}), ind.push_back(qi);
+	}
+	// Access each points and execute queries.
+	void solve(auto inc_x, auto dec_x, auto inc_y, auto dec_y, auto process){
+		int n = (int)points.size();
+		vector<vector<int>> adj(n);
+		for(auto [ignore, i, j]: rectilinear_minimum_spanning_tree<int>(points)) adj[i].push_back(j), adj[j].push_back(i);
+		int x = 0, y = 0;
+		auto dfs = [&](auto self, int u, int p)->void{
+			for(auto v: adj[u]){
+				if(v != p){
+					auto [qx, qy] = points[v];
+					while(qx < x) dec_x(), -- x;
+					while(y < qy) inc_y(), ++ y;
+					while(x < qx) inc_x(), ++ x;
+					while(qy < y) dec_y(), -- y;
+					process(ind[v]);
+					self(self, v, u);
+					qx = points[u].x, qy = points[u].y;
+					while(qx < x) dec_x(), -- x;
+					while(y < qy) inc_y(), ++ y;
+					while(x < qx) inc_x(), ++ x;
+					while(qy < y) dec_y(), -- y;
+				}
+			}
+		};
+		dfs(dfs, 0, -1);
+	}
+};

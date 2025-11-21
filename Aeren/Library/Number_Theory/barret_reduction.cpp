@@ -1,0 +1,24 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+struct barrett{
+	unsigned int _m;
+	unsigned long long im;
+	// @param m `1 <= m`
+	barrett(unsigned int m): _m(m), im((unsigned long long)(-1) / m + 1){}
+	// @return m
+	unsigned int umod() const{ return _m; }
+	// @param a `0 <= a < m`
+	// @param b `0 <= b < m`
+	// @return `a * b % m`
+	unsigned int mul(unsigned int a, unsigned int b) const{
+		unsigned long long z = a;
+		z *= b;
+		unsigned long long x = (unsigned long long)(((unsigned __int128)(z)*im) >> 64);
+		unsigned int v = (unsigned int)(z - x * _m);
+		if(_m <= v) v += _m;
+		return v;
+	}
+};

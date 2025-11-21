@@ -1,0 +1,55 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+// Implicitly assumes that group() returns the additive identity.
+template<class T>
+struct group{
+	// Modify begin
+	T data = 0;
+	bool operator==(const group &x) const{
+		return data == x.data;
+	}
+	group &operator+=(const group &x){
+		data += x.data;
+		return *this;
+	}
+	group &operator-=(const group &x){
+		data -= x.data;
+		return *this;
+	}
+	template<class U>
+	group &operator*=(U e){
+		if(e < 0){
+			*this = -*this;
+			e = -e;
+		}
+		group res{};
+		for(; e; e >>= 1, *this = *this * *this) if(e & 1) res += *this;
+		return *this = res;
+	}
+	friend ostream &operator<<(ostream &out, const group &x){
+		return out << x.data;
+	}
+	// Modify end
+	bool operator!=(const group &x) const{
+		return !(*this == x);
+	}
+	group operator+(const group &x) const{
+		return group(*this) += x;
+	}
+	group operator+() const{
+		return *this;
+	}
+	group operator-(const group &x) const{
+		return group(*this) -= x;
+	}
+	group operator-() const{
+		return group() - *this;
+	}
+	template<class U>
+	group operator*(U e) const{
+		return group(*this) *= e;
+	}
+};

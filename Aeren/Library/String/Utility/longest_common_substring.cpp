@@ -1,0 +1,26 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+// Given a suffix automaton aut of a string s and a string t
+// Returns {
+//  length of the longest common substring,
+//  starting index of any such substring in s,
+//  starting index of any such substring in t
+// }
+// O(m)
+// Requires suffix_automaton
+template<class Char_Type, class Adjacency_Type>
+array<int, 3> longest_common_substring(const suffix_automaton<Char_Type, Adjacency_Type> &aut, const vector<Char_Type> &t){
+	int l = 0, r = 0, opt_len = 0;
+	for(auto i = 0, u = 0, len = 0; i < (int)t.size(); ++ i){
+		tie(u, len) = aut.next_state(u, len, t[i]);
+		if(opt_len < len){
+			opt_len = len;
+			l = aut.firstpos[u] + 1 - len;
+			r = i + 1 - len;
+		}
+	}
+	return {opt_len, l, r};
+}

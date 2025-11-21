@@ -1,0 +1,22 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+// Returns O(n * log(n)) tuples {l, r, len} indicating that [i, i + len) equals [i + len, i + 2 * len) for all i in [l, r)
+// O(n * log(n))
+template<class Char_Type, class SuffixArray_t, class RangeMinQuery_t>
+vector<array<int, 3>> main_lorentz(const vector<Char_Type> &s){
+	int n = (int)s.size();
+	SuffixArray_t sa(s), rsa(vector<int>{s.rbegin(), s.rend()});
+	RangeMinQuery_t rmq(sa.lcp), rrmq(rsa.lcp);
+	vector<array<int, 3>> res;
+	for(auto len = 1; len << 1 <= n; ++ len){
+		for(auto i = 0, last = -1; i + len <= n; i += len){
+			int l = i - rsa.longest_common_prefix(n - i - len, n - i, rrmq), r = i - len + sa.longest_common_prefix(i, i + len, rmq);
+			if(l > r || l == last) continue;
+			res.push_back({last = l, r + 1, len});
+		}
+	}
+	return res;
+}

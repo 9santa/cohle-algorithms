@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+// Requires graph
+struct compressed_tree: graph<int>{
+	compressed_tree(int n): graph<int>(n), was(n, -2), in_subset(n){ }
+	int attempt = -1;
+	vector<int> was;
+	vector<int> in_subset;
+	vector<int> order; // dfs-order of compressed tree
+	// Build the smallest tree containing all nodes in the subset
+	// O(size(subset) * log(n))
+	template<class lca_solver_t>
+	void compress(const lca_solver_t &ls, const vector<int> &subset){
+		assert(ls.n <= n);
+		assert(!subset.empty());
+		for(auto u: order) adj[u].clear();
+		edge.clear();
+		order = subset;
+		const auto &p = ls.pos;
+		auto cmp = [&](int u, int v){ return p[u] != p[v] ? p[u] < p[v] : u < v; };
+		sort(order.begin(), order.end(), cmp);
+		order.erase(unique(order.begin(), order.end()), order.end());
+		for(auto i = 1, size = (int)order.size(); i < size; ++ i) order.push_back(ls.lca(order[i - 1], order[i]));
+		sort(order.begin(), order.end(), cmp), order.erase(unique(order.begin(), order.end()), order.end());
+		for(auto i = 1; i < (int)order.size(); ++ i){
+			int lca = ls.lca(order[i - 1], order[i]);
+			orient(lca, order[i], ls.steps(lca, order[i], lca));
+		}
+		++ attempt;
+		for(auto u: order) was[u] = attempt, in_subset[u] = false;
+		for(auto u: subset) in_subset[u] = true;
+	}
+	bool visited(int u){
+		assert(0 <= u && u < n);
+		return was[u] == attempt;
+	}
+};

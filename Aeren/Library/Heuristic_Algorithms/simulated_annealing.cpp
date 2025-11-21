@@ -1,0 +1,34 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+// base: starting state
+// neighboring_state(state): returns a random neighbor of state
+// evaluate(state): returns the score of the state
+// Returns the state with maximum score among the searched states
+template<class State>
+State simulated_annealing(State base, auto neighboring_state, auto evaluate, double time_limit){
+	mt19937 rng(chrono::high_resolution_clock::now().time_since_epoch().count());
+	uniform_real_distribution<double> gen(0, 1);
+	State current = base, best = current;
+	auto current_score = evaluate(current), best_score = current_score;
+	// Returns a real number in [0, 1]
+	auto acceptance_probability = [&](auto current_score, auto next_score, double temperature)->double{
+		return next_score < current_score ? 1 : exp((current_score - next_score) / temperature);
+	};
+	for(auto START = chrono::high_resolution_clock::now(); chrono::duration<double>(chrono::high_resolution_clock::now() - START).count() <= time_limit; ){
+		double temperature = chrono::duration<double>(chrono::high_resolution_clock::now() - START).count() / time_limit;
+		State next = neighboring_state(current);
+		auto next_score = evaluate(next);
+		if(best_score < next_score){
+			best = next;
+			best_score = next_score;
+		}
+		if((next_score < current_score ? 1 : exp((current_score - next_score) / temperature)) >= gen(rng)){
+			current = next;
+			current_score = next_score;
+		}
+	}
+	return best;
+}

@@ -1,0 +1,20 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+// O(n * log(n))
+// Requires modular and number_theoric_transform
+template<class T, class FFT>
+vector<T> touchard_polynomial(int n){
+	vector<T> fact(n + 1, 1), invfact(n + 1, 1), p(n + 1), q(n + 1);
+	for(auto i = 2; i <= n; ++ i) fact[i] = fact[i - 1] * i;
+	invfact[n] = 1 / fact[n];
+	for(auto i = n - 1; i >= 2; -- i) invfact[i] = invfact[i + 1] * (i + 1);
+	for(auto i = 0; i <= n; ++ i){
+		p[i] = invfact[i] * (i & 1 ? -1 : 1);
+		q[i] = invfact[i] * T(i).power(n);
+	}
+	(p = FFT::convolve(p, q)).resize(n + 1);
+	return p;
+}

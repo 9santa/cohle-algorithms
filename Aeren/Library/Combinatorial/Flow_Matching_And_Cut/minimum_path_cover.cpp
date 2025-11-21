@@ -1,0 +1,28 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+// g must be a DAG.
+// Returns the list of path where a path is represented by the starting vertex along with the sequence of edges.
+// Requires graph, maximum_bipartite_matching_solver, and hopcroft_karp_algorithm
+template<class T>
+vector<vector<int>> minimum_path_cover(const graph<T> &g){
+	int n = g.n;
+	hopcroft_karp_algorithm hk(n, n);
+	for(auto id = 0; id < (int)g.edge.size(); ++ id){
+		if(g.ignore && g.ignore(id)) continue;
+		auto &e = g.edge[id];
+		hk.insert(e.from, e.to);
+	}
+	int size_matching = hk.maximum_matching();
+	vector<vector<int>> path_cover;
+	for(auto s = 0; s < n; ++ s){
+		if(~hk.pv[s]) continue;
+		vector<int> path{s};
+		for(auto u = s; ~hk.pu[u]; u = hk.pu[u]) for(auto id: g.adj[u]) if(g.edge[id].to == hk.pu[u]) path.push_back(id);
+		path_cover.push_back(path);
+	}
+	assert(size_matching + (int)path_cover.size() == n);
+	return path_cover;
+}

@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+// Requires test_closedness and test_normal_subgroup
+bool test_direct_product(int n, auto op, const vector<vector<int>> &f){
+	int size = 1;
+	for(const auto &s: f){
+		if(__builtin_mul_overflow_p(size, (int)s.size(), 0)) return false;
+		size *= (int)s.size();
+	}
+	if(n != size) return false;
+	if(n == 1) return true;
+	for(const auto &s: f) if(!test_normal_subgroup(n, op, s)) return false;
+	vector<int> flag(n);
+	for(auto x: f[0]){
+		auto recurse = [&](auto self, int i, int x)->void{
+			if(i == (int)f.size()){
+				flag[x] = true;
+				return;
+			}
+			for(auto y: f[i]) self(self, i + 1, op(x, y));
+		};
+		recurse(recurse, 1, x);
+	}
+	return all_of(flag.begin(), flag.end(), [&](int x){ return x; });
+}
+bool test_direct_product(const vector<vector<int>> &g, const vector<vector<int>> &f){
+	return test_direct_product((int)g.size(), [&](int x, int y){ return g[x][y]; }, f);
+}

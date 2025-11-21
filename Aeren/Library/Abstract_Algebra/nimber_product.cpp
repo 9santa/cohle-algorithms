@@ -1,0 +1,23 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+// Source: https://github.com/ecnerwala/cp-book/blob/master/src/nim_prod.hpp
+struct nimber_product{
+	unsigned long long bit_prod[64][64]{};
+	constexpr nimber_product(){
+		for(auto i = 0; i < 64; ++ i) for(auto j = 0; j < 64; ++ j){
+			if((i & j) == 0) bit_prod[i][j] = unsigned long long(1) << (i | j);
+			else{
+				int a = i & j & -(i & j);
+				bit_prod[i][j] = bit_prod[i ^ a][j] ^ bit_prod[i ^ a | a - 1][j ^ a | i & a - 1];
+			}
+		}
+	}
+	constexpr unsigned long long operator()(unsigned long long x, unsigned long long y) const{
+		unsigned long long res = 0;
+		for(auto i = 0; i < 64 && x >> i; ++ i) if(x >> i & 1) for(auto j = 0; j < 64 && y >> j; ++ j) if(y >> j & 1) res ^= bit_prod[i][j];
+		return res;
+	}
+};

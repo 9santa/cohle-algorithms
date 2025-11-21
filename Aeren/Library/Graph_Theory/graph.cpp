@@ -1,0 +1,327 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+template<class T>
+struct graph{
+#ifdef LOCAL
+	#define ASSERT(x) assert(x)
+#else
+	#define ASSERT(x) 42
+#endif
+	using Weight_t = T;
+	struct Edge_t{
+		int from, to;
+		T cost;
+		Edge_t &inplace_flip(){
+			swap(from, to);
+			return *this;
+		}
+		Edge_t flip() const{
+			return (*this).inplace_flip();
+		}
+	};
+	int n;
+	vector<Edge_t> edge;
+	vector<vector<int>> adj;
+	function<bool(int)> ignore;
+	graph(int n = 1): n(n), adj(n){
+		ASSERT(n >= 1);
+	}
+	graph(const vector<vector<int>> &adj, bool undirected = true): n((int)adj.size()), adj(n){
+		ASSERT(n >= 1);
+		if(undirected){
+			for(auto u = 0; u < n; ++ u) for(auto v: adj[u]) if(u < v) link(u, v);
+		}
+		else for(auto u = 0; u < n; ++ u) for(auto v: adj[u]) orient(u, v);
+	}
+	graph(const vector<vector<pair<int, T>>> &adj, bool undirected = true): n((int)adj.size()), adj(n){
+		ASSERT(n >= 1);
+		if(undirected){
+			for(auto u = 0; u < n; ++ u) for(auto [v, w]: adj[u]) if(u < v) link(u, v, w);
+		}
+		else for(auto u = 0; u < n; ++ u) for(auto [v, w]: adj[u]) orient(u, v, w);
+	}
+	graph(int n, const vector<array<int, 2>> &edge, bool undirected = true): n(n), adj(n){
+		ASSERT(n >= 1);
+		for(auto [u, v]: edge) undirected ? link(u, v) : orient(u, v);
+	}
+	graph(int n, const vector<tuple<int, int, T>> &edge, bool undirected = true): n(n), adj(n){
+		ASSERT(n >= 1);
+		for(auto [u, v, w]: edge) undirected ? link(u, v, w) : orient(u, v, w);
+	}
+	int add_vertex(){
+		adj.emplace_back();
+		return n ++;
+	}
+	int operator()(int u, int id) const{
+		ASSERT(0 <= id && id < (int)edge.size());
+		ASSERT(edge[id].from == u || edge[id].to == u);
+		return u ^ edge[id].from ^ edge[id].to;
+	}
+	int link(int u, int v, T w = {}){ // insert an undirected edge
+		ASSERT(0 <= min(u, v) && max(u, v) < n);
+		int id = (int)edge.size();
+		adj[u].push_back(id), adj[v].push_back(id), edge.push_back({u, v, w});
+		return id;
+	}
+	int orient(int u, int v, T w = {}){ // insert a directed edge
+		ASSERT(0 <= min(u, v) && max(u, v) < n);
+		int id = (int)edge.size();
+		adj[u].push_back(id), edge.push_back({u, v, w});
+		return id;
+	}
+	auto neighbor(int u, int exclude = -1) const{
+		ASSERT(0 <= u && u < n);
+		return adj[u]
+			| views::filter([this, u, exclude](int id){ return id != exclude && !(ignore && ignore(id)); })
+			| views::transform([this, u](int id){ return (*this)(u, id); });
+	}
+	auto weighted_neighbor(int u, int exclude = -1) const{
+		ASSERT(0 <= u && u < n);
+		return adj[u]
+			| views::filter([this, u, exclude](int id){ return id != exclude && !(ignore && ignore(id)); })
+			| views::transform([this, u](int id){ return pair{(*this)(u, id), edge[id].cost}; });
+	}
+	void clear(){
+		for(auto [u, v, w]: edge){
+			adj[u].clear();
+			adj[v].clear();
+		}
+		edge.clear();
+		ignore = {};
+	}
+	graph transpose() const{ // the transpose of the directed graph
+		graph res(n);
+		for(auto id = 0; id < (int)edge.size(); ++ id){
+			if(ignore && ignore(id)) continue;
+			res.orient(edge[id].to, edge[id].from, edge[id].cost);
+		}
+		return res;
+	}
+	int degree(int u, bool include_ignored_edges = true) const{
+		ASSERT(0 <= u && u < n);
+		if(include_ignored_edges || !ignore) return (int)adj[u].size();
+		else{
+			int deg = 0;
+			for(auto id: adj[u]) deg += !ignore(id);
+			return deg;
+		}
+	}
+	// The adjacency list is sorted for each vertex.
+	vector<vector<int>> get_adjacency_list() const{
+		vector<vector<int>> res(n);
+		for(auto u = 0; u < n; ++ u) for(auto id: adj[u]){
+			if(ignore && ignore(id)) continue;
+			res[(*this)(u, id)].push_back(u);
+		}
+		return res;
+	}
+	void set_ignoration_rule(const function<bool(int)> &f){
+		ignore = f;
+	}
+	void reset_ignoration_rule(){
+		ignore = nullptr;
+	}
+	template<bool has_weight, bool display_edge_index>
+	void _debug_forest(const graph<int> &g, const vector<int> &roots) const{
+		vector<vector<int>> layer{roots};
+		while(!layer.back().empty()){
+			vector<int> next_layer;
+			for(auto u: layer.back()) for(auto v: g.neighbor(u)) next_layer.push_back(v);
+			layer.push_back(next_layer);
+		}
+		vector<vector<string>> res;
+		for(auto li = (int)layer.size() - 2; li >= 0; -- li){
+			vector<vector<string>> res_next;
+			ASSERT((int)res.size() == (int)layer[li + 1].size());
+			for(auto i = 0; auto u: layer[li]){
+				vector<string> cur;
+				cur.push_back(to_string(u));
+				for(auto j = 0; j < (int)g.adj[u].size(); ++ i, ++ j){
+					int max_width = 0;
+					if(j > 0){
+						for(auto s: cur) max_width = max(max_width, (int)s.size());
+						cur[0].resize(max_width, '_');
+						for(auto &s: cur) s.resize(max_width, ' ');
+						cur[0].push_back('.');
+					}
+					ASSERT(i < (int)layer[li + 1].size());
+					int v = layer[li + 1][i], id = g.edge[g.adj[u][j]].cost, k = 1;
+					if constexpr(display_edge_index){
+						if((int)cur.size() == k) cur.push_back(string(max_width, ' '));
+						cur[k ++] += "|E" + to_string(id) + " ";
+					}
+					else if constexpr(!has_weight){
+						if((int)cur.size() == k) cur.push_back(string(max_width, ' '));
+						cur[k ++] += "|";
+					}
+					if constexpr(has_weight){
+						ostringstream oss;
+						oss << edge[id].cost;
+						istringstream iss(oss.str());
+						iss >> ws;
+						for(string buffer; getline(iss, buffer); ){
+							while(!buffer.empty() && buffer.back() == ' ') buffer.pop_back();
+							if((int)cur.size() == k) cur.push_back(string(max_width, ' '));
+							cur[k ++] += "|" + buffer + " ";
+						}
+					}
+					for(auto row: res[i]){
+						if((int)cur.size() == k) cur.push_back(string(max_width, ' '));
+						cur[k ++] += row;
+					}
+				}
+				if(cur[0].back() != ' ') cur[0] += ' ';
+				res_next.push_back(cur);
+			}
+			res = res_next;
+		}
+		vector<string> last;
+		for(auto tree: res){
+			last.resize(max((int)last.size(), (int)tree.size()));
+			int max_width = 0;
+			for(auto row: last) max_width = max(max_width, (int)row.size());
+			for(auto i = 0; i < (int)tree.size(); ++ i) last[i].resize(max_width, ' '), last[i] += tree[i];
+		}
+		cerr << "\033[31m[Spanning Forest]\n\033[34m";
+		for(auto row: last) cerr << row << "\n";
+		cerr << "\033[39m";
+	}
+	template<bool has_weight, bool display_edge_index>
+	void _debug_extra_edges(vector<int> extra_edges) const{
+		if(extra_edges.empty()) return;
+		vector<string> res{{}};
+		for(auto id: extra_edges){
+			int max_width = 0;
+			for(auto s: res) max_width = max(max_width, (int)s.size());
+			for(auto &s: res) s.resize(max_width, ' ');
+			auto [u, v, w] = edge[id];
+			res[0] += to_string(u) + ' ';
+			int k = 1;
+			if((int)res.size() == 1) res.push_back(string(max_width, ' '));
+			if constexpr(display_edge_index){
+				if((int)res.size() == k) res.push_back(string(max_width, ' '));
+				res[k ++] += "|E" + to_string(id) + " ";
+			}
+			else if constexpr(!has_weight){
+				if((int)res.size() == k) res.push_back(string(max_width, ' '));
+				res[k ++] += "|";
+			}
+			if constexpr(has_weight){
+				ostringstream oss;
+				oss << edge[id].cost;
+				istringstream iss(oss.str());
+				iss >> ws;
+				for(string buffer; getline(iss, buffer); ){
+					while(!buffer.empty() && buffer.back() == ' ') buffer.pop_back();
+					if((int)res.size() == k) res.push_back(string(max_width, ' '));
+					res[k ++] += "|" + buffer + " ";
+				}
+			}
+			if((int)res.size() == k) res.push_back(string(max_width, ' '));
+			res[k ++] += to_string(v) + ' ';
+		}
+		cerr << "\033[31m[Extra Edges]\n\033[34m";
+		for(auto row: res) cerr << row << "\n";
+		cerr << "\033[39m";
+	}
+	template<bool has_weight = false, bool display_edge_index = false>
+	void debug_dfs(vector<int> src) const{
+	#ifdef LOCAL
+		graph<int> forest(n);
+		vector<int> roots, extra_edges;
+		set<int> vis_v, vis_e;
+		for(auto s: src){
+			ASSERT(0 <= s && s < n);
+			if(vis_v.contains(s)) continue;
+			roots.push_back(s);
+			auto recurse = [&](auto self, int u)->void{
+				vis_v.insert(u);
+				for(auto id: adj[u]){
+					if(ignore && ignore(id)) continue;
+					int v = operator()(u, id);
+					if(vis_v.contains(v)){
+						if(!vis_e.contains(id)){
+							extra_edges.push_back(id);
+							vis_e.insert(id);
+						}
+					}
+					else{
+						ASSERT(!vis_e.contains(id));
+						forest.orient(u, v, id);
+						vis_e.insert(id);
+						self(self, v);
+					}
+				}
+			};
+			recurse(recurse, s);
+		}
+		cerr << "\033[31m[[---Graph Info---]]\n\033[34m";
+		_debug_forest<has_weight, display_edge_index>(forest, roots);
+		_debug_extra_edges<has_weight, display_edge_index>(extra_edges);
+	#endif
+	}
+	template<bool has_weight = false, bool display_edge_index = false>
+	void debug_bfs(const vector<int> &src) const{
+	#ifdef LOCAL
+		for(auto s: src) ASSERT(0 <= s && s < n);
+		graph<int> forest(n);
+		vector<int> extra_edges;
+		set<int> vis_v, vis_e;
+		for(auto u: src){
+			ASSERT(!vis_v.contains(u));
+			vis_v.insert(u);
+		}
+		for(auto layer = src; !layer.empty(); ){
+			vector<int> layer_next;
+			for(auto u: layer) for(auto id: adj[u]){
+				if(ignore && ignore(id)) continue;
+				int v = operator()(u, id);
+				if(vis_v.contains(v)){
+					if(!vis_e.contains(id)){
+						extra_edges.push_back(id);
+						vis_e.insert(id);
+					}
+				}
+				else{
+					ASSERT(!vis_e.contains(id));
+					forest.orient(u, v, id);
+					vis_v.insert(v);
+					vis_e.insert(id);
+					layer_next.push_back(v);
+				}
+			}
+			layer = layer_next;
+		}
+		cerr << "\033[31m[[---Graph Info---]]\n\033[34m";
+		_debug_forest<has_weight, display_edge_index>(forest, src);
+		_debug_extra_edges<has_weight, display_edge_index>(extra_edges);
+	#endif
+	}
+	template<bool has_weight = false, bool display_edge_index = false>
+	void debug_dfs_all() const{
+	#ifdef LOCAL
+		vector<int> src(n);
+		iota(src.begin(), src.end(), 0);
+		debug_dfs<has_weight, display_edge_index>(src);
+	#endif
+	}
+	template<bool directed = false, bool has_weight = false>
+	static graph read(int n, int m = -1, int offset = 1){
+		ASSERT(n >= 1);
+		if(m == -1) m = n - 1;
+		ASSERT(m >= 0);
+		graph<T> g(n);
+		for(auto id = 0; id < m; ++ id){
+			int u, v;
+			T w = T{1};
+			cin >> u >> v, u -= offset, v -= offset;
+			if constexpr(has_weight) cin >> w;
+			directed ? g.orient(u, v, w) : g.link(u, v, w);
+		}
+		return move(g);
+	}
+#undef ASSERT
+};
