@@ -18,7 +18,7 @@ using namespace std;
 vector<int> LIS(vector<int>& nums) {
     int n = (int)nums.size();
     vector<int> dp(n, 1);
-    vector<int> tails(n, INT_MAX);
+    vector<int> tails(n+1, INT_MAX);
     tails[0] = INT_MIN;
 
     for (int i = 0; i < n; i++) {
@@ -27,7 +27,7 @@ vector<int> LIS(vector<int>& nums) {
 
         if (it != tails.end()) {
             *it = num;
-            dp[i] = it - tails.begin();
+            dp[i] = it - tails.begin() + 1;
         }
     }
 
