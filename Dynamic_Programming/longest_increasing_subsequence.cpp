@@ -5,6 +5,46 @@
 
 using namespace std;
 
+/**
+ * @brief Finds one of the Longest Increasing Subsequences (LIS) in O(n log n).
+ * The function calculates dp[i] (length of LIS ending at nums[i])
+ * in O(n log n) using 'tails' array and binary search.
+ * It then reconstructs the sequence in O(n) time by iterating backwards
+ * from the last element of the LIS found.
+ *
+ * @param nums The input array.
+ * @return vector<int> The reconstrucred LIS.
+ */
+vector<int> LIS(vector<int>& nums) {
+    int n = (int)nums.size();
+    vector<int> dp(n, 1);
+    vector<int> tails(n, INT_MAX);
+    tails[0] = INT_MIN;
+
+    for (int i = 0; i < n; i++) {
+        int num = nums[i];
+        auto it = lower_bound(tails.begin(), tails.end(), num);
+
+        if (it != tails.end()) {
+            *it = num;
+            dp[i] = it - tails.begin();
+        }
+    }
+
+    vector<int> seq;
+    int dp_max = max_element(dp.begin(), dp.end()) - dp.begin();
+    seq.push_back(nums[dp_max]);
+    for (int i = dp_max - 1; i >= 0; i--) {
+        if (nums[i] < seq.back() && dp[i] == dp[dp_max] - 1) {
+            seq.push_back(nums[i]);
+            dp_max = i;
+        }
+    }
+
+    reverse(seq.begin(), seq.end());
+    return seq;
+}
+
 // O(n^2) DP algorithm
 int longestIncreasingSubsequence(vector<int>& nums) {
     if(nums.empty()) return 0;
@@ -60,45 +100,6 @@ int lengthOfLIS(vector<int>& nums) {
     return (int)seq.size();
 }
 
-/**
-  * @brief Finds one of the Longest Increasing Subsequences (LIS) in O(n log n).
-  * The function calculates dp[i] (length of LIS ending at nums[i])
-  * in O(n log n) using 'tails' array and binary search.
-  * It then reconstructs the sequence in O(n) time by iterating backwards
-  * from the last element of the LIS found.
-  *
-  * @param nums The input array.
-  * @return vector<int> The reconstrucred LIS.
-  */
-vector<int> LIS(vector<int>& nums) {
-    int n = (int)nums.size();
-    vector<int> dp(n, 1);
-    vector<int> tails(n, INT_MAX);
-    tails[0] = INT_MIN;
-
-    for (int i = 0; i < n; i++) {
-        int num = nums[i];
-        auto it = lower_bound(tails.begin(), tails.end(), num);
-
-        if (it != tails.end()) {
-            *it = num;
-            dp[i] = it - tails.begin();
-        }
-    }
-
-    vector<int> seq;
-    int dp_max = max_element(dp.begin(), dp.end()) - dp.begin();
-    seq.push_back(nums[dp_max]);
-    for (int i = dp_max - 1; i >= 0; i--) {
-         if (nums[i] < seq.back() && dp[i] == dp[dp_max] - 1) {
-            seq.push_back(nums[i]);
-            dp_max = i;
-         }
-    }
-
-    reverse(seq.begin(), seq.end());
-    return seq;
-}
 
 signed main(void) {
 
