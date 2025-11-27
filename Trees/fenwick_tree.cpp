@@ -27,6 +27,16 @@ public:
         }
     }
 
+    // O(n) Fenwick initialization
+    void init(int n, const vector<int>& nums) {
+        for (int i = 1; i <= n; i++) {
+            tree[i] += nums[i];
+            if (i + LSB(i) <= n) {
+                tree[i + LSB(i)] += tree[i];
+            }
+        }
+    }
+
     void update(int index, int value) {
         index++;
         while(index < (int)tree.size()) {
