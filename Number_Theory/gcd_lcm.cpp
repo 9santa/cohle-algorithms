@@ -1,6 +1,4 @@
 #include <bits/stdc++.h>
-#include <cmath>
-#include <ctime>
 
 #define pb push_back
 #define eb emplace_back
@@ -23,5 +21,5 @@ int gcd(int a, int b) {
 }
 
 int lcm(int a, int b) {
-    return (a*b) / gcd(a, b);
+    return a / gcd(a, b) * b; // (a*b) / gcd(a, b);
 }
