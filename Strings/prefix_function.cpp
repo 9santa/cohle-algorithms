@@ -49,7 +49,7 @@ vector<int> kmp_mem_optimized(const string& text, const string& p) {
         }
         if (j == m) {
             res.push_back(i - m + 1); // starting index of the match
-            j = pi[j-1];
+            j = pi[m-1];
         }
     }
     return res;
