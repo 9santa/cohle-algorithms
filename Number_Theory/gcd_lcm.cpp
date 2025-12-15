@@ -1,18 +1,5 @@
 #include <bits/stdc++.h>
-
-#define pb push_back
-#define eb emplace_back
-#define all(a) (a).begin(), (a).end()
-
-using namespace std;
-
-using i64 = long long;
-using u64 = unsigned long long;
-using u32 = unsigned int;
-using u128 = unsigned __int128;
-using i128 = __int128;
-using ld = long double;
-using pii = pair<int, int>;
+#include "prime_factorization.h"
 
 // GCD and LCM are assosiative, so we can do: gcd(a,b,c,d) = gcd(a, gcd(b, gcd(c, d)))
 int gcd(int a, int b) {
@@ -22,4 +9,16 @@ int gcd(int a, int b) {
 
 int lcm(int a, int b) {
     return a / gcd(a, b) * b; // (a*b) / gcd(a, b);
+}
+
+// function to check if 2 numbers in the array have gcd(a[i], a[j]) > 1
+bool gcd_over_one(const vi& a) {
+    auto divi = pfac[x];
+    for (auto p : divi) {
+        if (cnt[p] > 0) {   // cnt - array or map to count divisors
+            return true;
+        }
+        cnt[p]++;
+    }
+    return false;
 }
