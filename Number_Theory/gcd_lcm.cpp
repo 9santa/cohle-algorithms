@@ -11,7 +11,7 @@ int lcm(int a, int b) {
     return a / gcd(a, b) * b; // (a*b) / gcd(a, b);
 }
 
-// function to check if 2 numbers in the array have gcd(a[i], a[j]) > 1
+// function to check if any 2 numbers in the array have gcd(a[i], a[j]) > 1 (i.e. they are not coprime)
 bool gcd_over_one(const vi& a) {
     auto divi = pfac[x];
     for (auto p : divi) {
