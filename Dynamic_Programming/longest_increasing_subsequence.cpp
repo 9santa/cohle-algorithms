@@ -104,7 +104,8 @@ int lengthOfLIS(vector<int>& nums) {
 signed main(void) {
 
     vector<int> nums = {17, 3, 9, 4, 5, 8};
-    vector<int> lis = LIS(nums);
+    vector<int> nums1 = {3, 5, 7};
+    vector<int> lis = LIS(nums1);
 
     for (auto& el : lis) cout << el << " "; // 3 4 5 8
 
