@@ -1,15 +1,4 @@
-#include <bits/stdc++.h>
-
-#define pb push_back
-#define eb emplace_back
-#define all(a) (a).begin(), (a).end()
-
-using namespace std;
-
-using ll = long long;
-using ull = unsigned long long;
-using ld = long double;
-using pii = pair<int, int>;
+#include "../header.h"
 
 
 // Recursive top-to-bottom
