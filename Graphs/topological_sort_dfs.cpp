@@ -24,6 +24,20 @@ using namespace std;
     return false;
 }
 
+vector<int> graph[10];
+vector<int> topo;
+vector<bool> used;
+void dfs(int v) {
+    used[v] = true;
+    for (auto u : graph[v]) {
+        if (!used[u]) {
+            dfs(u);
+        }
+    }
+    // sort by t-out
+    topo.push_back(v);
+}
+
 
 // test example
 int main(void)

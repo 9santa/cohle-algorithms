@@ -1,6 +1,4 @@
 #include <bits/stdc++.h>
-
-
 using namespace std;
 
 vector<vector<int>> bfs_grid(const vector<vector<int>>& grid, pair<int, int> start) {
@@ -33,19 +31,4 @@ vector<vector<int>> bfs_grid(const vector<vector<int>>& grid, pair<int, int> sta
     }
 
     return dist;
-}
-
-
-int main(void)
-{
-    clock_t start = clock();
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-
-
-
-    double run_time = (double)(clock() - start) / CLOCKS_PER_SEC;
-	cerr << "\nRun Time : " << std::fixed << std::setprecision(6) << run_time << " seconds\n";
-
-    return 0;
 }

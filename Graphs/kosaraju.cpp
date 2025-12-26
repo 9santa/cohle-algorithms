@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include <vector>
 
 using namespace std;
 
@@ -43,6 +42,7 @@ void strongly_connected_components(vector<vector<int>> const& adj,
     reverse(order.begin(), order.end());
 
     vector<int> roots(n, 0); // gives the root vertex of a vertex's SCC
+    int comp_id = 0;
 
     // second series of depth first searches
     for (auto v : order)
@@ -52,7 +52,8 @@ void strongly_connected_components(vector<vector<int>> const& adj,
             components.push_back(component);
             int root = *min_element(begin(component), end(component));
             for (auto u : component)
-                roots[u] = root;
+                roots[u] = comp_id;
+            comp_id++;
         }
 
     // add edges to condensation graph

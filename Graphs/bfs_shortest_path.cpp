@@ -1,6 +1,4 @@
 #include <bits/stdc++.h>
-
-
 using namespace std;
 
 // assuming graph is adjacency list
@@ -37,19 +35,4 @@ vector<int> bfs_shortest_path(const vector<vector<int>>& graph, int start, int e
     }
 
     return {}; // no path found
-}
-
-
-int main(void)
-{
-    clock_t start = clock();
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-
-
-
-    double run_time = (double)(clock() - start) / CLOCKS_PER_SEC;
-	cerr << "\nRun Time : " << std::fixed << std::setprecision(6) << run_time << " seconds\n";
-
-    return 0;
 }

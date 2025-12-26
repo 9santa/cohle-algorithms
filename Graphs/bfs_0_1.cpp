@@ -1,10 +1,8 @@
 #include <bits/stdc++.h>
-#include <climits>
-
-
 using namespace std;
 
-// adjacency list. pair: {neighbor, weight}
+// finds shortest single source shortest path if weights are 0/1
+// O(E). adjacency list. pair: {neighbor, weight}
 vector<int> zero_one_bfs(const vector<vector<pair<int, int>>>& graph, int root) {
     int n = static_cast<int>(graph.size());
     vector<int> dist(n, INT_MAX);
@@ -31,19 +29,4 @@ vector<int> zero_one_bfs(const vector<vector<pair<int, int>>>& graph, int root) 
     }
 
     return dist;
-}
-
-
-int main(void)
-{
-    clock_t start = clock();
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-
-
-
-    double run_time = (double)(clock() - start) / CLOCKS_PER_SEC;
-	cerr << "\nRun Time : " << std::fixed << std::setprecision(6) << run_time << " seconds\n";
-
-    return 0;
 }

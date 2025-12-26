@@ -71,3 +71,39 @@ vector<int> find_path_dfs(int start, int end, const vector<vector<int>>& graph) 
 
     return {};  // no path found
 }
+
+// recursive dfs: find simple path from u to target in the tree
+bool find_path_tree(int u, int p, int target) {
+    if (u == target) {
+        path.pb(u);
+        return true;
+    }
+
+    for (auto v : g[u]) {
+        if (v == p) continue;
+        if (dfs1(v, u, target)) {
+            path.pb(u);
+            return true;
+        }
+    }
+    return false;
+}
+
+// recursive dfs: find simple paths between every 2 nodes in the tree
+bool dfs(int current, int target, int parent, vector<int>& parentMap) {
+        parentMap[current] = parent;
+
+        if (current == target) {
+            return true;
+        }
+
+        for (int neighbor : adj[current]) {
+            if (neighbor != parent) {
+                if (dfs(neighbor, target, current, parentMap)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
