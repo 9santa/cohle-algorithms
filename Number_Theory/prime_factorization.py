@@ -6,7 +6,7 @@ def prime_factorizatio(n):
             ans.append(p)
             n //= p
         p += 1
-    
+
     if n > 1:
         ans.append(n)
 

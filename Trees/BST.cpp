@@ -1,57 +1,207 @@
 #include <bits/stdc++.h>
+#include <execution>
 #include <queue>
+#include <stdexcept>
+#include <unordered_map>
 
 using namespace std;
 
+// Binary Tree Structure
 struct TreeNode {
     int val;
-    TreeNode* left;
-    TreeNode* right;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode* parent;   // optional, for some modifications
 
-    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr), parent(nullptr) {}
 };
 
-class BinarySearchTree {
+class BST {
 private:
     TreeNode* root;
 
-    TreeNode* insert(TreeNode* node, int val) {
-        if(!node) return new TreeNode(val);
-
-        if(val < node->val) {
-            node->left = insert(node->left, val);
-        } else if(val > node->val) {
-            node->right = insert(node->right, val);
+    // Recursive deletion of binary tree
+    void clear(TreeNode* node) {
+        if(node) {
+            clear(node->left);
+            clear(node->right);
+            delete node;
         }
-
-        return node;
     }
 
-    TreeNode* find_min(TreeNode* node) {
-        while(node && node->left) {
-            node = node->left;
-        }
+    // Copying binary tree
+    TreeNode* copy(TreeNode* other) {
+        if(!other) return nullptr;
 
-        return node;
+        TreeNode* new_node = new TreeNode(other->val);
+        new_node->left = copy(other->left);
+        new_node->right = copy(other->right);
+
+        return new_node;
     }
 
-    TreeNode* find_max(TreeNode* node) {
-        while(node && node->right) {
-            node = node->right;
-        }
+    
 
-        return node;
+public:
+    BST() : root(nullptr) {}
+
+    // Rule of 3: destructor, copy constructor, operator=
+    ~BST() {
+        clear(root);
     }
 
-    TreeNode* remove(TreeNode* node, int val) {
+    BST(const BST& other) {
+        root = copy(other.root);
+    }
+
+    BST& operator=(const BST& other) {
+        if(this != &other) {
+            clear(root);
+            root = copy(other.root);
+        }
+        return *this;
+    }
+
+    // Move semantics
+    BST(BST&& other) noexcept : root(other.root) {
+        other.root = nullptr;
+    }
+
+    BST& operator=(BST&& other) noexcept {
+        if(this != &other) {
+            clear(root);
+            root = other.root;
+            other.root = nullptr;
+        }
+        return *this;
+    }
+
+    void insert(int value) {
+        if(!root) {
+            root = new TreeNode(value);
+            return;
+        }
+
+        TreeNode* current = root;
+        TreeNode* parent = nullptr;
+
+        while(current) {
+            parent = current;
+            if(value < current->val) {
+                current = current->left;
+            } else if(value > current->val) {
+                current = current->right;
+            } else {
+                return; // duplicate (already in the tree)
+            }
+        }
+
+        if(value < parent->val) {
+            parent->left = new TreeNode(value);
+        } else {
+            parent->right = new TreeNode(value);
+        }
+    }
+
+    void remove(int value) {
+        root = removeNode(root, value);
+    }
+
+    bool search(int value) const {
+        TreeNode* current = root;
+        while(current) {
+            if(value == current->val) {
+                return true;
+            } else if(value < current->val) {
+                current = current->left;
+            } else {
+                current = current->right;
+            }
+        }
+        return false;
+    }
+
+    int find_min() const {
+        if(!root) throw std::runtime_error("Tree is empty\n");
+
+        TreeNode* current = root;
+        while(current->left) {
+            current = current->left;
+        }
+        return current->val;
+    }
+
+
+    int find_max() const {
+        if(!root) throw std::runtime_error("Tree is empty\n");
+
+        TreeNode* current = root;
+        while(current->right) {
+            current = current->right;
+        }
+        return current->val;
+    }
+
+    int get_height() const {
+        if(!root) return 0;
+
+        std::queue<TreeNode*> q;
+        q.push(root);
+        int height = 0;
+
+        while(!q.empty()) {
+            int level_size = q.size();
+            height++;
+
+            for(int i = 0; i < level_size; i++) {
+                TreeNode* current = q.front();
+                q.pop();
+
+                if(current->left) q.push(current->left);
+                if(current->right) q.push(current->right);
+            }
+        }
+
+        return height;
+    }
+
+    int size() const {
+        if(!root) return 0;
+
+        std::queue<TreeNode*> q;
+        q.push(root);
+        int count = 0;
+
+        while(!q.empty()) {
+            TreeNode* current = q.front();
+            q.pop();
+            count++;
+
+            if(current->left) q.push(current->left);
+            if(current->right) q.push(current->right);
+        }
+        
+        return count;
+    }
+
+    bool is_empty() const {
+        return root == nullptr;
+    }
+
+private:
+    TreeNode* removeNode(TreeNode* node, int value) {
         if(!node) return nullptr;
 
-        if(val < node->val) {
-            node->left = remove(node->left, val);
-        } else if(val > node->val) {
-            node->right = remove(node->right, val);
+        if(value < node->val) {
+            node->left = removeNode(node->left, value);
+        } else if(value > node->val) {
+            node->right = removeNode(node->right, value);
         } else {
-            if(!node->left) {
+            // no children (leaf node)
+            if(!node->left && !node->right) {
+                delete node;
+                return nullptr;
+            } else if(!node->left) {
                 TreeNode* temp = node->right;
                 delete node;
                 return temp;
@@ -59,106 +209,124 @@ private:
                 TreeNode* temp = node->left;
                 delete node;
                 return temp;
-            } 
-
-            TreeNode* temp = find_min(node->right);
-            node->val = temp->val;
-            node->right = remove(node->right, temp->val);
+            } else {
+                // min_right = inorder successor
+                TreeNode* min_right = node->right;
+                while(min_right->left) {
+                    min_right = min_right->left;
+                }
+                node->val = min_right->val;
+                node->right = removeNode(node->right, min_right->val);
+            }
         }
-
         return node;
-    }
-
-    bool search(TreeNode* node, int val) {
-        if(!node) return false;
-        if(node->val == val) return true;
-        if(val < node->val) return search(node->left, val);
-        return search(node->right, val);
-    }
-
-    void destroy(TreeNode* node) {
-        if(!node) return;
-        destroy(node->left);
-        destroy(node->right);
-        delete node;
-    }
-
-public:
-    BinarySearchTree() : root(nullptr) {}
-    ~BinarySearchTree() { destroy(root); }
-
-    void insert(int val) { root = insert(root, val); }
-    void remove(int val) { root = remove(root, val); }
-    bool contains(int val) { return search(root, val); }
-
-    // iterative inorder traversal (in ASC order for BST)
-    vector<int> inorder_iterative() {
-        vector<int> result;
-        stack<TreeNode*> st;
-        TreeNode* curr = root;
-
-        while(curr || !st.empty()) {
-            while(curr) {
-                st.push(curr);
-                curr = curr->left;
-            }
-            curr = st.top(); st.pop();
-            result.push_back(curr->val);
-            curr = curr->right;
-        }
-
-        return result;
-    }
-
-    // level-order traversal
-    vector<vector<int>> level_order() {
-        vector<vector<int>> result;
-        if(!root) return result;
-
-        queue<TreeNode*> q;
-        q.push(root);
-
-        while(!q.empty()) {
-            int size = q.size();
-            vector<int> level;
-            for(int i = 0; i < size; i++) {
-                TreeNode* node = q.front(); q.pop();
-                level.push_back(node->val);
-                if(node->left) q.push(node->left);
-                if(node->right) q.push(node->right);
-            }
-            result.push_back(level);
-        }
-
-        return result;
     }
 };
 
+int isBalancedHelper(TreeNode *node, bool &isBalancedTree) {
+    if (!node || !isBalancedTree)
+      return 0;
+    
+    int left = isBalancedHelper(node->left, isBalancedTree);
+    int right = isBalancedHelper(node->right, isBalancedTree);
 
-// testing example
-int main(void) {
-    vector<int> test1 = {5, 3, 7, 2, 4, 6, 8};
+    if (abs(left - right) > 1)
+      isBalancedTree = false;
+    return 1 + max(left, right); // returns max height of a tree
+}
 
-    vector<int> test2 = {1,2,3,4,5,6,7};
+// Check if a Binary Tree is Balanced
+bool isBalanced(TreeNode *root) {
+    bool isBalancedTree = true;
+    isBalancedHelper(root, isBalancedTree);
 
-    vector<int> test3 = {7,6,5,4,3,2,1};
+    return isBalancedTree;
+}
 
-    vector<int> test4 = {8,3,10,1,6,14,4,7,13};
+// Check if a Binary Tree is a Binary Search Tree
+bool isValidBSTHelper(TreeNode *node, long min_val, long max_val) {
+    if (!node)
+      return true;
 
+    if (node->val <= min_val || node->val >= max_val)
+      return false;
 
-    BinarySearchTree bst;
-    for(int val : test4) {
-        bst.insert(val);
+    return isValidBSTHelper(node->left, min_val, node->val) &&
+           isValidBSTHelper(node->right, node->val, max_val);
+}
+
+bool isValidBST(TreeNode *root) {
+    return isValidBSTHelper(root, LONG_MIN, LONG_MAX);
+}
+
+// First Common Ancestor of 2 nodes in a binary tree
+TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *first, TreeNode *second) {
+    if(!root || root == first || root == second) return root;
+
+    TreeNode *left = lowestCommonAncestor(root->left, first, second);
+    TreeNode *right = lowestCommonAncestor(root->right, first, second);
+
+    if(left && right) return root;  // first and second in different subtrees
+    if(left) return left;           // both in left subtree
+    return right;                   // both in right subtree
+}
+
+// Iterative First Common Ancestor of 2 nodes in a binary tree
+TreeNode *lowestCommonAncestorIterative(TreeNode* root, TreeNode* p, TreeNode* q) {
+    unordered_map<TreeNode*, TreeNode*> parent;
+    parent[root] = nullptr;
+
+    stack<TreeNode*> st;
+    st.push(root);
+
+    while(!parent.count(p) || !parent.count(q)) {
+        TreeNode* node = st.top();
+        st.pop();
+
+        if(node->left) {
+            parent[node->left] = node;
+            st.push(node->left);
+        }
+
+        if(node->right) {
+            parent[node->right] = node;
+            st.push(node->right);
+        }
     }
 
-    vector<int> inorder = bst.inorder_iterative();
-    cout << "Inorder: ";
-    for(int val : inorder) {
-        cout << val << " ";
+    // Find all ancestors of p
+    unordered_set<TreeNode*> ancestors;
+    while(p) {
+        ancestors.insert(p);
+        p = parent[p];
     }
-    cout << "\n";
 
+    // Find first intersection
+    while(!ancestors.count(q)) {
+        q = parent[q];
+    }
 
+    return q;
+}
 
-    return 0;
+// Minimal BST from sorted array
+TreeNode *createMinimalBST(const vector<int> &nums, int start, int end) {
+    if (start > end)
+      return nullptr;
+
+    // To create BST with min height we should use middle element of an array
+    int N = nums.size();
+    int mid = start + (end - start) / 2; // Avoids overflow
+
+    TreeNode *root = new TreeNode(nums[mid]);
+
+    root->left = createMinimalBST(nums, start, mid - 1);
+    root->right = createMinimalBST(nums, mid + 1, end);
+
+    return root;
+}
+
+// Wrapper function (with 1 argument, for the 1st call)
+TreeNode *createMinimalBST(const vector<int> &nums) {
+    return createMinimalBST(nums, 0, nums.size() - 1);
 }
