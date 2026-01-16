@@ -1,7 +1,3 @@
-#include <bits/stdc++.h>
-
-using namespace std;
-using i64 = long long;
 
 i64 bgcd(i64 a, i64 b) {
     if (!a || !b) return a | b; // if one is 0, return the other

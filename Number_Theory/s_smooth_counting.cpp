@@ -1,7 +1,3 @@
-#include <bits/stdc++.h>
-
-using namespace std;
-using ll = long long;
 
 // Count how many numbers in the range [l, r] are good.
 // A good number has only 2-digit primes in its factorization.

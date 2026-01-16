@@ -1,4 +1,3 @@
-#include "../header.h"
 
 // Simple algorithm for prime factorization. Any number can be represented as a product of primes
 vector<i64> prime_factorization(i64 n) {
@@ -34,9 +33,9 @@ constexpr int MAXN = 2e5+2;
 vector<int> pfac[MAXN+1];
 void compute_pfac() {
     for (int i = 2; i <= MAXN; i++) {
-        if (!pfac[i].empty()) continue;
+        if (!pfac[i].empty()) continue; // i is prime
         for (int j = i; j <= MAXN; j += i) {
             pfac[j].push_back(i); 
-        } 
+        }
     }
 }

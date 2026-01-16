@@ -1,4 +1,3 @@
-using ll = long long;
 
 ll binpow(ll a, ll power, ll mod) {
     ll res = 1;

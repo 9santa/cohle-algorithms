@@ -1,7 +1,3 @@
-#include <bits/stdc++.h>
-
-using namespace std;
-using ll = long long;
 
 ll binomial(ll n, ll k) {
     vector<vector<ll>> dp(n+1, vector<ll>(k+1, 0));

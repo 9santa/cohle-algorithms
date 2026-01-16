@@ -1,5 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
 
 // O(sqrt(n))
 int phi(int n) {

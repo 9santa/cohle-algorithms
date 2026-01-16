@@ -1,4 +1,3 @@
-#include <bits/stdc++.h>
 #include "./miller_rabin.cpp"
 #include "./binary_gcd.h"
 

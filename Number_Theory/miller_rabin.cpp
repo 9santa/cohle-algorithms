@@ -1,8 +1,4 @@
-#include <bits/stdc++.h>
 #include "../Number_Theory/binpow.h"
-using namespace std;
-using u64 = unsigned long long;
-using u128 = unsigned __int128;
 
 constexpr u64 mulmod(u64 a, u64 b, const u64 MOD) {
     return u128(a) * u128(b) % MOD;
