@@ -1,7 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-using ll = long long;
-#define sz(x) int((x).size())
 
 template<class T>
 struct Fenwick {

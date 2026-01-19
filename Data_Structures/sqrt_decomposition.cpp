@@ -1,6 +1,6 @@
 #include "../header.h"
 
-struct NaiveSqrtDecomp {
+struct SqrtDecomp {
     int n, len, blocks;
     vi a;     // copy of the input array
     vi b;     // block sums
@@ -10,8 +10,8 @@ struct NaiveSqrtDecomp {
 
     // preprocessing O(n)
     void build(const vi& arr) {
-        n = sz(a);
         a = arr;
+        n = sz(a);
         len = (int)sqrt(n + .0) + 1; // size of the block
         blocks = (n + len - 1) / len;   // number of blocks
         b.resize(blocks);
@@ -74,5 +74,49 @@ struct NaiveSqrtDecomp {
         }
 
         a[i] = val;
+    }
+};
+
+struct LazySqrt {
+    int n, len, blocks;
+    vl a;   // copy of the input array
+    vl add; // lazy add per block
+
+    void build(const vector<ll>& arr) {
+        a = arr;
+        n = sz(a);
+        len = (int)sqrt(n) + 1;
+        blocks = (n + len - 1) / len;
+        add.assign(blocks, 0);
+    }
+
+    void range_add(int l, int r, ll delta) {
+        int bl = l / len;
+        int br = r / len;
+
+        if (bl == br) {
+            for (int i = l; i <= r; i++)
+                a[i] += delta;
+            return;
+        }
+        // left tail
+        int endleft = (bl+1) * len - 1;
+        for (int i = l; i <= min(endleft, n-1); i++) {
+            a[i] += delta;
+        }
+        // right tail
+        int startright = br * len;
+        for (int i = startright; i <= min(r, n-1); i++) {
+            a[i] += delta;
+        }
+        // full blocks between
+        for (int b = bl+1; b <= br-1; b++) {
+            add[b] += delta;
+        }
+    }
+
+    ll point_query(int i) const {
+        int b = i / len;
+        return a[i] + add[b];
     }
 };

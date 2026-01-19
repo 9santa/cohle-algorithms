@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-#include <limits>
-using namespace std;
 
 template<typename T, bool isMin>
 struct Fenwick {
@@ -15,7 +12,6 @@ struct Fenwick {
     }
 
     static int lsb(int i) { return i & -i; }
-
 
     void update(int i, T val) {
         for (++i; i < n; i += lsb(i)) {
@@ -33,7 +29,4 @@ struct Fenwick {
         return res;
     }
 
-    T range(int l, int r) const {
-        return query(r) ^ query(l-1);
-    }
 };

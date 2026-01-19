@@ -58,7 +58,7 @@ public:
         int rootY = find(y);
 
         if (rootX == rootY) return; // already in the same set
-        
+
         // Smaller rank set to larger rank set
         if(rank[rootX] > rank[rootY]) {
             std::swap(rootX, rootY);

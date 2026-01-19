@@ -77,6 +77,19 @@ public:
         if(l < 0 || r > n || l > r) return 0; // correct half-interval check
         return sum_query(l, r, 0, 0, size);
     }
+
+    // Searching for the first element greater than a given 'x' and a given range [l, r]
+    int get_first(int v, int tl, int tr, int l, int r, int x) {
+        if(tl > r || tr < l) return -1;
+        if(tree[v] <= x) return -1;
+
+        if (tl == tr) return tl;
+
+        int tm = tl + (tr-tl)/2;
+        int left = get_first(2*v, tl, tm, l, r, x);
+        if(left != -1) return left;
+        return get_first(2*v+1, tm+1, tr, l ,r, x);
+    }
 };
 
 // Iterative bottom-to-top
@@ -167,7 +180,7 @@ private:
         node->val = node->left->val + node->right->val;
         return node;
     }
-    
+
     void set(Node* node, int i, long long val) {
         if(node->r - node->l == 1) {
             node->val = val;

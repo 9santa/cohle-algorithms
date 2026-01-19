@@ -1,4 +1,3 @@
-#include "../header.h"
 
 struct Node {
     bool end;

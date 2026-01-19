@@ -1,7 +1,3 @@
-#include <iostream>
-#include <climits>
-#include <vector>
-
 
 // Sparse Table for Associative operations
 class SparseTableAssociative {
@@ -32,8 +28,6 @@ public:
 
         k_max = log2_floor(padded_n) + 1;
         table.resize(k_max, std::vector<int>(padded_n, INT_MAX));
-
-
 
         // Level 0: intervals of length 1 (2^0)
         for(int i = 0; i < n; i++) {
@@ -72,15 +66,4 @@ public:
             return sum;
         }
 };
-
-// testing examples
-int main(void) {
-    std::vector<int> arr = {1, 3, 2, 7, 9, 11, 5, 8, 4, 6};
-
-    SparseTableAssociative st(arr);
-
-    std::cout << st.query(3, 8);
-
-    return 0;
-}
 

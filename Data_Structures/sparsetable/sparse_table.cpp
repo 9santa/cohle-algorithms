@@ -1,8 +1,3 @@
-#include <iostream>
-#include <climits>
-#include <vector>
-#include <algorithm>
-
 
 // Sparse Table for Range Minimum Queries
 // For Maximum Queries: just change INT_MAX to INT_MIN, and std::min to std::max
@@ -67,22 +62,4 @@ public:
             return std::min(table[k][l], table[k][r - (1 << k) + 1]);
         }
 };
-
-// testing examples
-int main(void) {
-    std::vector<int> arr = {1, 3, 2, 7, 9, 11, 5, 8, 4, 6};
-
-    SparseTableRMQ st(arr);
-    std::cout << "Array: ";
-    for(int el : arr) std::cout << el << " ";
-    std::cout << "\n\n";
-
-    std::cout << "Minmimum queries:\n";
-    std::cout << "query(2, 7) = " << st.query(2, 7) << " (expected: 2)\n";
-    std::cout << "query(0, 4) = " << st.query(0, 4) << " (expected: 1)\n";
-    std::cout << "query(3, 8) = " << st.query(3, 8) << " (expected: 4)\n";
-    std::cout << "query(0, 9) = " << st.query(0, 9) << " (expected: 1)\n";
-
-    return 0;
-}
 
