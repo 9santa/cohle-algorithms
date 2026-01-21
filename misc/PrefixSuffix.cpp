@@ -36,14 +36,14 @@ public:
     static int query_sum(const vector<int>& prefix_sum, int l, int r) {
         return prefix_sum[r+1] - prefix_sum[l]; 
     }
-    
+
     // 2D Prefix Sum (Integral Image)
     static vector<vector<int>> build_2D_prefix_sum(const vector<vector<int>>& arr) {
         int n = (int)arr.size();
         int m = (int)arr[0].size();
         vector<vector<int>> prefix_sum_2d(n+1, vector<int>(m+1, 0));
         // prefix_sum_2d.assign(n+1, vector<int>(m+1, 0));
-        
+
         for(int i = 1; i <= n; i++) {
             for(int j = 1; j <= m; j++) {
                 prefix_sum_2d[i][j] = arr[i-1][j-1] +
@@ -58,8 +58,8 @@ public:
 
     // Sub-Matrix Sum
     static int query_sum_2d(const vector<vector<int>>& prefix_sum_2d, int x1, int y1, int x2, int y2) {
-        return prefix_sum_2d[x2+1][y2+1] - 
-               prefix_sum_2d[x1][y2+1] - 
+        return prefix_sum_2d[x2+1][y2+1] -
+               prefix_sum_2d[x1][y2+1] -
                prefix_sum_2d[x2+1][y1] +
                prefix_sum_2d[x1][y1];
     }
