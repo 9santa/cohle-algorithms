@@ -1,5 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
 
 // assuming graph is adjacency list
 void bfs_limited_depth(const vector<vector<int>>& graph, int root, int max_depth) {

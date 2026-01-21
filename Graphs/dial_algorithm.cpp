@@ -1,4 +1,3 @@
-#include "../header.h"
 
 /*
    Each bucket stores nodes with current dist = index of that bucket (mod C+1)

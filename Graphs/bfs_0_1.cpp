@@ -1,5 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
 
 // finds shortest single source shortest path if weights are 0/1
 // O(E). adjacency list. pair: {neighbor, weight}

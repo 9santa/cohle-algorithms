@@ -1,9 +1,3 @@
-#include <algorithm>
-#include <bits/stdc++.h>
-#include <vector>
-
-using namespace std;
-
 
 [[nodiscard("cycle detection")]] bool topologicalSortDfs(const vector<vector<int>>& graph, vector<int>& visited, vector<int>& topsort, int v) {
     visited[v] = 1; // currently in recursion stack (visiting)

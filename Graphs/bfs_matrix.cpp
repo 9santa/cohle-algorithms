@@ -1,5 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
 
 vector<vector<int>> bfs_grid(const vector<vector<int>>& grid, pair<int, int> start) {
     int rows = (int)grid.size();

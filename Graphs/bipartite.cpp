@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-
-using namespace std;
 
 // Check if graph is bipartite with BFS
 bool isBipartite(vector<vector<int>>& graph) {

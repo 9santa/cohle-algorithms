@@ -1,9 +1,3 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <queue>
-
-using namespace std;
 
 // infinity
 constexpr int INF = 1e9;

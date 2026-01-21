@@ -1,5 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
 
 vector<vector<int>> multi_source_bfs(const vector<vector<int>>& grid, const vector<pair<int, int>>& sources) {
     int rows = (int)grid.size();

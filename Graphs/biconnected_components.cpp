@@ -1,7 +1,3 @@
-#include <bits/stdc++.h>
-#include <utility>
-
-using namespace std;
 
 // Edge-biconnected components
 vector<vector<int>> components;

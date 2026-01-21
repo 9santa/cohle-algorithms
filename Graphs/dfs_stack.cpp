@@ -1,12 +1,7 @@
-#include <bits/stdc++.h>
-#include <vector>
-
-using namespace std;
 
 constexpr int WHITE = 0;
 constexpr int GREY = 1;
 constexpr int BLACK = 2;
-
 
 std::vector<int> dfs(const std::vector<vector<int>>& graph, int start) {
     std::vector<int> visited(graph.size(), WHITE);

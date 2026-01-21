@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-
-using namespace std;
 
 // This version is able to detect cycles in DAG
 vector<int> topologicalSortKahn(vector<vector<int>>& graph) {

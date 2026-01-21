@@ -1,9 +1,3 @@
-#include <bits/stdc++.h>
-#include <climits>
-#include <functional>
-#include <queue>
-
-using namespace std;
 
 // graph is represented as adj list: pair {to, weight}
 int primMST(int n, vector<vector<pair<int, int>>>& graph, int start = 0) {

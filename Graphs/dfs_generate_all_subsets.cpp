@@ -1,7 +1,3 @@
-#include <bits/stdc++.h>
-#include <vector>
-
-using namespace std;
 
 // Generate The Power Set
 void generate_subsets(const vector<int>& nums) {

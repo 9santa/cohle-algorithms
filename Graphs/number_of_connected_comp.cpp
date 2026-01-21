@@ -1,4 +1,4 @@
-class Solution {
+class NumberOfSCCs {
 private:
     vector<int> parent;
     vector<int> rank;

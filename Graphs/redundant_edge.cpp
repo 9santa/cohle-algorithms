@@ -1,3 +1,4 @@
+
 // Disjoin-Set-Union
 class DSU {
 private:
@@ -50,19 +51,17 @@ public:
 };
 
 
-class Solution {
-public:
-    vector<int> findRedundantConnection(vector<vector<int>>& edges) {
-        int V = (int)edges.size();
-        DSU dsu(V+1);
-        
-        for(auto &e : edges) {
-            if(dsu.isConnected(e[0], e[1])) {
-                return e;
-            }
-            dsu.unionSets(e[0], e[1]);
-        }
 
-        return {};
+vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+    int V = (int)edges.size();
+    DSU dsu(V+1);
+    
+    for(auto &e : edges) {
+        if(dsu.isConnected(e[0], e[1])) {
+            return e;
+        }
+        dsu.unionSets(e[0], e[1]);
     }
-};
+
+    return {};
+}
