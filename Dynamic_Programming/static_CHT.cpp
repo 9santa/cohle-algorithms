@@ -117,7 +117,7 @@ void sample_problem(vector<pair<int, int>> v) {
     ll naive_ans = dp[m];
 
 
-    // CHT solution
+    // CHT solution O(n log n)
     dp.assign(m+1, infty<ll>);
     dp[0] = 0;
     StaticCHT hull(0, 1);
