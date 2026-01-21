@@ -35,7 +35,34 @@ bool outside_circle(Point<T> a, Point<T> b, Point<T> c, Point<T> d) {
 }
 
 
+template<typename T>
+Polygon<T> static_convex_hull(Polygon<T> pts) {
+    sort(pts.begin(), pts.end());
+    pts.erase(unique(pts.begin(), pts.end()), pts.end());
 
+    int n = sz(pts);
+    if (n <= 1) return pts;
+
+    Polygon<T> hull(2 * n);
+    int k = 0;
+
+    // Lower hull
+    for (int i = 0; i < n; i++) {
+        while (k >= 2 && cross(hull[k-2], hull[k-1], pts[i]) <= 0)
+            k--;
+        hull[k++] = pts[i];
+    }
+
+    // Upper hull
+    for (int i = n-2, t = k + 1; i >= 0; i--) {
+        while (k >= t && cross(hull[k-2], hull[k-1], pts[i]) <= 0)
+            k--;
+        hull[k++] = pts[i];
+    }
+
+    hull.resize(k-1);   // last point is same as first
+    return hull;
+}
 
 
 

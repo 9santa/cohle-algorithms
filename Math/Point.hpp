@@ -99,6 +99,8 @@ template<typename T>
 constexpr T dot(const Point<T>& a, const Point<T>& b) noexcept { return a.dot(b); }
 template<typename T>
 constexpr T cross(const Point<T>& a, const Point<T>& b) noexcept { return a.cross(b); }
+template<typename T>
+constexpr T cross(const Point<T>& o, const Point<T>& a, const Point<T>& b) { return (a-o).cross(b-o); }
 
 // Returns: 1 for CCW, -1 for CW, 0 for collinear
 template<typename T>
@@ -106,7 +108,6 @@ int ccw(const Point<T>& a, const Point<T>& b, const Point<T>& c) {
     auto res = cross(b-a, c-a);
     return geoutils::sign(res);
 }
-
 
 
 // Angle between two points

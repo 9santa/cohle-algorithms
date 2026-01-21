@@ -50,11 +50,10 @@ Point<double> lerp(const Point<T>& a, const Point<U>& b, double t) {
     return Point<double>(a) * (1-t) + Point<double>(b) * t;
 }
 
-
-
-
-
-
+// Chords on a circle with points labeled 1..2n, endpoints are distinct.
+bool chord_intersect(int a, int b, int c, int d) {
+    return (a < c && c < b) ^ (a < d && d < b);
+}
 
 
 
