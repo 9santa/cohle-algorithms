@@ -15,7 +15,9 @@ static void solve() {
     vector<ll> dp(N);
 
     // input f[mask]
-    for (auto x : a) dp[x]++;
+    for (auto x : a) dp[x]++;  // frequency version
+    // for (auto x : a) dp[x] += x; // sum of values version
+    // for (auto x : a) dp[x] += weight(x); // any weight version
 
     // SOS DP
     for (int i = 0; i < n; i++) {
