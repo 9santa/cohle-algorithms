@@ -123,7 +123,7 @@ struct fenwick_tree{
 };
 
 template<class T, class F, class I>
-auto make_fenwick_tree(F TT, T T_id, I Tinv){
+fenwick_tree<true, T, F, I> make_fenwick_tree(F TT, T T_id, I Tinv){
 	return fenwick_tree<true, T, F, I>(TT, T_id, Tinv);
 }
 template<class T>

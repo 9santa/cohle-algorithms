@@ -1,4 +1,5 @@
 
+// 'a' should be an 2^n all subsets array
 template<class T>
 void fwt_xor(vector<T>& a, bool inv=false) {
     int n = (int)a.size();

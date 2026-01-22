@@ -11,7 +11,9 @@ Graph problems (cliques, independent sets), Frequency convolution over subsets
 static void solve() {
     int n; cin >> n;
     vector<int> a(n); cin >> a;
-    int N = 1 << n;
+    int B = 0;
+    for (auto x : a) B = max(B, 32 - __builtin_clz(x));
+    int N = 1 << B;
     vector<ll> dp(N);
 
     // input f[mask]
@@ -20,7 +22,7 @@ static void solve() {
     // for (auto x : a) dp[x] += weight(x); // any weight version
 
     // SOS DP
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < B; i++) {
         for (int mask = 0; mask < N; mask++) {
             if (mask & (1 << i)) {
                 dp[mask] += dp[mask ^ (1 << i)];
