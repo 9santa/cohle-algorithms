@@ -33,7 +33,7 @@ pair<ll, ll> get_gcd_lcm(int v, int tl, int tr, int l, int r) {
     if (l == tl && r == tr) return t[v];
     int tm = tl+(tr-tl)/2;
     return cmb(get_gcd_lcm(v*2, tl, tm, l, min(r, tm)),
-            get_gcd_lcm(v*2+1, tm+1, tr, max(l, tm=1), r));
+            get_gcd_lcm(v*2+1, tm+1, tr, max(l, tm+1), r));
 }
 
 void update(int v, int tl, int tr, int pos, int val) {
