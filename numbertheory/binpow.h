@@ -1,14 +1,9 @@
 
-ll binpow(ll a, ll power, ll mod) {
+ll binpow(ll a, ll b, ll MOD) {
     ll res = 1;
-    a %= mod;
-
-    while (power > 0) {
-        if (power & 1) {
-            res = (res * a) % mod;
-        }
-        a = (a * a) % mod;
-        power >>= 1;   // div 2
+    for (a %= MOD; b; b>>=1) {
+        if (b&1) res = (res * a) % MOD;
+        a = (a * a) % MOD;
     }
     return res;
 }
