@@ -1,69 +1,56 @@
+#include "../../header.h"
 
-// Sparse Table for Associative operations
-class SparseTableAssociative {
-private:
-    std::vector<std::vector<int>> table;
-    int n;          // original array size
-    int padded_n;   // padded size (closest power of 2)
-    int k_max;
+/* Sparse Table for associative Monoid
+   Query: O(log n) with binary decomp
+   Preserves order: res = op(res, block), so non-commutative is fine
+   Memory: O(n log n), without padding to power-of-two */
+template<class Monoid>
+struct SparseTable_Monoid_Decomp {
+    using X = typename Monoid::value_type;
+    int n = 0; // original size
+    int LOG = 0; // number of levels
+    vector<vector<X>> st; // st[k][i] = prod of length 2^k starting at i
+    explicit SparseTable_Monoid_Decomp(const vector<X>& a) { build(a); }
 
-    // calculate next power of 2 >= x
-    int next_power_of_2(int x) {
-        if (x <= 0) return 1;
-        if (x == 1) return 2;
-        return 1 << (32 - __builtin_clz(x - 1));
-    }
-
-    // calculate floor(log2(x))
-    int log2_floor(int x) {
-        return 31 - __builtin_clz(x);
-    }
-
-public:
-    SparseTableAssociative(std::vector<int> const& arr) : n((int)arr.size()) {
-        if (n == 0) return;
-
-        // pad to closest power of 2
-        padded_n = next_power_of_2(n);
-
-        k_max = log2_floor(padded_n) + 1;
-        table.resize(k_max, std::vector<int>(padded_n, INT_MAX));
-
-        // Level 0: intervals of length 1 (2^0)
-        for(int i = 0; i < n; i++) {
-            table[0][i] = arr[i];
+    // Build from array
+    void build(const vector<X>& a) {
+        n = (int)a.size();
+        if (n == 0) {
+            LOG = 0;
+            st.clear();
+            return;
         }
-
-        // Pad the rest with INT_MAX
-        for(int i = n; i < padded_n; i++) {
-            table[0][i] = INT_MAX;  // pad with infinity (for not messing up the minimums)
-        }
-
-        // Build table for intervals of length 2^j
-        for(int j = 1; j < k_max; j++) {
-            int step = 1 << (j - 1);    // half the current interval length
-            for(int i = 0; i + (1 << j) <= padded_n; i++) {
-                table[j][i] = table[j-1][i] + table[j-1][i + step];
+        LOG = 32 - __builtin_clz(n);
+        st.assign(LOG, {});
+        st[0] = a;
+        // level k stores segments of length 2^k
+        // so it has size m = n - 2^k + 1
+        for (int k = 1; k < LOG; k++) {
+            int len = 1 << k;
+            int half = len >> 1;
+            int m = n - len + 1;
+            st[k].resize(max(0, m));
+            for (int i = 0; i < m; i++) {
+                st[k][i] = Monoid::op(st[k-1][i], st[k-1][i+half]);
             }
         }
     }
 
-        // Query for sum in range [l, r] (0-indexed, inclusive)
-        int query(int l, int r) {
-            if (l < 0) l = 0;
-            if (r >= n) r = n - 1;
-            if (l > r) return INT_MAX;
+    // Query [l, r). O(log n)
+    X prod(int l, int r) const {
+        if (l < 0) l = 0;
+        if (r > n) r = n;
+        if (l >= r) return Monoid::id();
 
-            long long sum = 0;
-            for(int i = k_max; i >= 0; i--) {
-                int length = r - l + 1;
-                if((1 << i) <= length) {
-                    sum += table[i][l];
-                    l += 1 << i;
-                }
-            }
-
-            return sum;
+        X res = Monoid::id();
+        int len = r - l;
+        while (len > 0) {
+            int k = 31 - __builtin_clz(len); // largest k: 2^k <= len
+            res = Monoid::op(res, st[k][l]);
+            l += 1 << k;
+            len -= 1 << k;
         }
+        return res;
+    }
 };
 

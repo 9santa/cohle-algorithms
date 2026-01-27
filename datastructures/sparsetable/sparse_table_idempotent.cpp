@@ -4,8 +4,8 @@ template<typename T, typename Compare = std::less<T>>
 class GenericSparseTable {
 private:
     int n, K;
-    vector<int> table;
-    vector<T> &a;
+    std::vector<int> table;
+    std::vector<T> &a;
     Compare comp;
     T identity;
 
