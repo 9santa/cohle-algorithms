@@ -29,8 +29,6 @@ public:
         int k_max = log2_floor(padded_n) + 1;
         table.resize(k_max, std::vector<int>(padded_n, INT_MAX));
 
-
-
         // Level 0: intervals of length 1 (2^0)
         for(int i = 0; i < n; i++) {
             table[0][i] = arr[i];
@@ -50,16 +48,16 @@ public:
         }
     }
 
-        // Query for minimum in range [l, r] (0-idexed, inclusive)
-        int query(int l, int r) {
-            if (l < 0) l = 0;
-            if (r >= n) r = n - 1;
-            if (l > r) return INT_MAX;
+    // Query for minimum in range [l, r] (0-idexed, inclusive)
+    int query(int l, int r) {
+        if (l < 0) l = 0;
+        if (r >= n) r = n - 1;
+        if (l > r) return INT_MAX;
 
-            int length = r - l + 1;
-            int k = log2_floor(length);
+        int length = r - l + 1;
+        int k = log2_floor(length);
 
-            return std::min(table[k][l], table[k][r - (1 << k) + 1]);
-        }
+        return std::min(table[k][l], table[k][r - (1 << k) + 1]);
+    }
 };
 
