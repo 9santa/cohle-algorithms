@@ -58,14 +58,4 @@ bool chord_intersect(int a, int b, int c, int d) {
 
 
 
-
-
-
-
-
-
-
-
-
-
 } // namespace geom
