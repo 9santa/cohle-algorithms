@@ -35,6 +35,26 @@ constexpr i64 safeMod(i64 x, i64 mod) {
     return x;
 }
 
+static i64 egcd(i64 a, i64 b, i64 &x, i64 &y) {
+    // returns g=gcd(a,b), and finds x,y such that ax+by=g
+    if (b == 0) { x = 1; y = 0; return a; }
+    i64 x1, y1;
+    i64 g = egcd(b, a % b, x1, y1);
+    x = y1;
+    y = x1 - (a / b) * y1;
+    return g;
+}
+
+static i64 modInv(i64 a, i64 mod) {
+    // inverse exists if gcd(a, mod)=1
+    i64 x, y;
+    i64 g = egcd(a, mod, x, y);
+    if (g != 1) {
+        throw runtime_error("mod_inv: inverse does not exist");
+    }
+    return safeMod(x, mod);
+}
+
 
 // generic modular integer class
 template<std::unsigned_integral U, U P>
@@ -181,8 +201,5 @@ public:
         if (n < k || k < 0) return 0;
         return get_fac(n) * get_invfac(k) * get_invfac(n - k);
     }
-
-
-
-} comb;
+};
 
