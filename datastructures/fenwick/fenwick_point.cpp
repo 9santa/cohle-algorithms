@@ -25,11 +25,6 @@ struct Fenwick {
         }
     }
 
-    void updateRange(int l, int r, T val) {
-        update(l, val);
-        update(r+1, -val);
-    }
-
     T get(int i) {
         T res = 0;
         for (++i; i > 0; i -= lsb(i)) {
@@ -38,14 +33,16 @@ struct Fenwick {
         return res;
     }
 
+    // [l, r)
     T getRange(int l, int r) {
         return get(r) - get(l-1);
     }
 
     // 0-based index of first prefix sum >= x
-    T lower_bound(T x) {
+    // prefix sums have to be monotone for this
+    int lower_bound(T x) {
         int pos = 0;
-        ll sum = 0;
+        T sum = 0;
         for (int i = 31-__builtin_clz(n); i >= 0; i--) {
             int nxt = pos + (1 << i);
             if (nxt < n && sum + fw[nxt] < x) {
