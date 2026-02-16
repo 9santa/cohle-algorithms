@@ -27,7 +27,7 @@ struct SplayTree_ActedMonoid {
     void init(int reserve_n = 0) {
         t.clear();
         t.reserve(max(1, reserve_n) + 3);
-        t.pop_back(Node{}); // dummy node at 0
+        t.push_back(Node{}); // dummy node at 0
         root = 0;
         n = 0;
     }
@@ -62,6 +62,16 @@ struct SplayTree_ActedMonoid {
         push(v);
         t[v].val = x;
         pull(v);
+    }
+
+    void update_range(int l, int r, A a) {
+        assert(0 <= l && l <= r && r <= n);
+        if (l == r) return;
+        auto [L, R] = expose(l, r);
+        int mid = t[R].ch[0];
+        apply_at(mid, a);
+        pull(R);
+        pull(L);
     }
 
     X get(int pos) {
@@ -234,7 +244,9 @@ private:
     // zig / zig-zig / zig-zag
     void splay(int x, int goal = 0) {
         vector<int> st;
+        // collect path x -> ... -> goal
         for (int y = x; y != goal; y = t[y].p) st.push_back(y);
+        st.push_back(goal);
         for (int i = sz(st)-1; i >= 0; i--) push(st[i]);
         while (t[x].p != goal) {
             int p = t[x].p;
@@ -245,7 +257,7 @@ private:
                 // ZIG-ZIG
                 rotate(p);
                 rotate(x);
-            } else if (is_right(p) && is_right(x) == 0) {
+            } else { // is_right(p) && is_right(x) == 0
                 // ZIG-ZAG
                 rotate(x);
                 rotate(x);
@@ -325,7 +337,7 @@ private:
         int L = t[x].ch[0], R = t[x].ch[1];
 
         if (R) {
-            if (!check(MX::op(sm, t[R].prod))) return res + walk_prefix(R, sm, check);
+            if (!check(MX::op(sm, t[R].prod))) return res + walk_suffix(R, sm, check);
             sm = MX::op(sm, t[R].prod);
             res += t[R].siz;
         }
@@ -334,7 +346,7 @@ private:
         res += 1;
 
         if (L) {
-            if (!check(MX::op(sm, t[L].prod))) return walk_prefix(L, sm, check);
+            if (!check(MX::op(sm, t[L].prod))) return walk_suffix(L, sm, check);
             sm = MX::op(sm, t[L].prod);
             res += t[L].siz;
         }
