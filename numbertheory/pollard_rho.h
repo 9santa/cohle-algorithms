@@ -1,4 +1,4 @@
-#include "./miller_rabin.cpp"
+#include "./miller_rabin.h"
 #include "./binary_gcd.h"
 
 u64 f(u64 x, u64 c, u64 mod) {
