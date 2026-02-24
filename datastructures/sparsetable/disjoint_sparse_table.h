@@ -24,7 +24,7 @@ struct DisjointSparseTable {
     void build(int n_, F f) {
         n = n_;
         if (n == 0) { LOG = 0; data.clear(); return; }
-        LOG = (n <= 1) ? 0 : 32 - __builtin_clz((unsigned)(n-1));
+        LOG = (n <= 1) ? 1 : 32 - __builtin_clz((unsigned)(n-1));
         data.assign(LOG, vector<X>(n));
 
         // level 0 holds the original array values

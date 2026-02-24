@@ -13,6 +13,10 @@ double bayesTheorem(double P_B_given_A, double P_A, double P_B) {
     return (P_B_given_A * P_A) / P_B;
 }
 
+double randDouble(double low, double high) {
+    return low + (high - low) * ((double)rand() / RAND_MAX);
+}
+
 // Monte-Carlo's Method
 double monteCarloCircle(int total_rounds) {
     srand(time(0));
@@ -25,9 +29,6 @@ double monteCarloCircle(int total_rounds) {
     return (double)inside / total_rounds;
 }
 
-double randDouble(double low, double high) {
-    return low + (high - low) * ((double)rand() / RAND_MAX);
-}
 
 // EV (мат. ожидание, средне-взвешенное)
 double expectedValue(const vector<double>& values, const vector<double>& probs = {}) {

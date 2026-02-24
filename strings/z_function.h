@@ -35,7 +35,7 @@ void search_substring(string s, const string& p) {
 }
 
 // Same thing just different indexing
-void search_substring2(string s, const string& p) {
+void search_substring_alt(string s, const string& p) {
     s = p + '#' + s;
     vi z = z_function(s);
     int cnt = 0;

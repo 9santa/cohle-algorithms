@@ -3,6 +3,9 @@
 
 // Lazy segment tree over an acted monoid
 // Range updates via ActedMonoid::act(), range query via Monoid_X::op()
+// Monoid X: How do my data nodes combine? (The "Result")
+// Monoid A: How do my updates combine? (The "Lazy Tag")
+// The action act(): How does an update transform a data node?
 template<typename ActedMonoid>
 struct LazySegtree {
     using AM = ActedMonoid;

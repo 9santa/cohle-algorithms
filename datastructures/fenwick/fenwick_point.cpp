@@ -52,4 +52,6 @@ struct Fenwick {
         }
         return pos;
     }
+    /* If at the very start (1..16) was already too big, then reaching index 16 is impossible while keeping sum < x.
+    However, we can still go somewhere between 8 and 16 (like 12, 14, 15…) by taking smaller block. */
 };

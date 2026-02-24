@@ -1,4 +1,4 @@
-#include "../datastructures/segtree/lazy_segtree.h"
+#include "../../datastructures/segtree/lazy_segtree.h"
 
 struct HLD {
     int n;
@@ -55,6 +55,7 @@ struct HLD {
         seg.build(base);
     }
 
+    // O(log^2 n)
     // do path AM::act() on vertices
     void path_update(int u, int v, ll delta) {
         while (head[u] != head[v]) {
@@ -67,6 +68,7 @@ struct HLD {
         seg.apply(pos[u], pos[v] + 1, delta);
     }
 
+    // O(log^2 n)
     // path prod on vertices
     ll path_prod(int u, int v) {
         ll res = 0;

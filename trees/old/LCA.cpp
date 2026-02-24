@@ -1,7 +1,5 @@
 #include "../header.h"
 
-
-
 // binary lifting through dfs
 class LCA {
     int n, LOG;

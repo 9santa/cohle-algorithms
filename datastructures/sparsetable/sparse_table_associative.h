@@ -1,6 +1,6 @@
 #include "../../header.h"
 
-/* Sparse Table for associative Monoid
+/* Sparse Table for associative Monoid (doesn't require idempotency)
    Query: O(log n) with binary decomp
    Preserves order: res = op(res, block), so non-commutative is fine
    Memory: O(n log n), without padding to power-of-two */

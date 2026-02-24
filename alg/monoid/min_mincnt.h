@@ -1,0 +1,16 @@
+#include "../../header.h"
+
+template<typename E>
+struct Monoid_MinMincnt {
+    using value_type = pair<E, E>;
+    using X = value_type;
+    static X op(X x, X y) {
+        auto [xmin, xmincnt] = x;
+        auto [ymin, ymincnt] = y;
+        if (xmin > ymin) return y;
+        if (ymin > xmin) return x;
+        return {xmin, xmincnt + ymincnt};
+    }
+    static constexpr X id() { return {infty<E>, 0}; }
+    static constexpr bool commute = true;
+};

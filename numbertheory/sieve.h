@@ -1,6 +1,6 @@
 
 constexpr int MAXN = 100;
-bool isPrime[MAXN+1];
+static u8 isPrime[MAXN+1];
 vector<int> primes;
 
 // O(N log log N)
@@ -8,24 +8,20 @@ void sieve(void) {
     memset(isPrime, true, sizeof(isPrime));
     isPrime[0] = isPrime[1] = 0;    // 0 and 1 are not primes
 
-    for (int i = 2; i * i <= MAXN; i++) {
+    for (int i = 2; 1LL * i * i <= MAXN; i++) {
         if (isPrime[i]) {
             primes.push_back(i);
-            for (int j = i*i; j <= MAXN; j += i) {
-                isPrime[j] = 0;
+            for (ll j = 1LL * i * i; j <= MAXN; j += i) {
+                 isPrime[(int)j] = 0;
             }
         }
     }
 
-    #ifdef DEBUG
-    std::cout << "Prime numbers up to " << MAX << ":\n";
-        for (int i = 2; i <= MAX; i++) {
-            if (isPrime[i]) {
-                std::cout << i << " ";
-            }
-        }
-        std::cout << "\n";
-    #endif // DEBUG
+    primes.reserve(1e5);
+    for (int i = 2; i <= MAXN; i++) {
+        if (isPrime[i]) primes.push_back(i);
+    }
+
 }
 
 // Segmented Sieve. Less memory + cache friendly. Counts number of primes up to N

@@ -1,5 +1,5 @@
-#include "../datastructures/splay/acted_lazy_implicit_splay.h"
-#include "../alg/acted_monoid/sum_add.h"
+#include "../../datastructures/splay/acted_lazy_implicit_splay.h"
+#include "../../alg/acted_monoid/sum_add.h"
 
 struct HLD_Splay {
     int n;
@@ -69,6 +69,7 @@ struct HLD_Splay {
         }
     }
 
+    // amort O(log n)
     void path_update(int u, int v, ll delta) {
         while (head[u] != head[v]) {
             if (depth[head[u]] < depth[head[v]]) swap(u, v);
@@ -83,6 +84,7 @@ struct HLD_Splay {
         trees[pid].update_range(l, r + 1, delta);
     }
 
+    // amort O(log n)
     ll path_prod(int u, int v) {
         ll res = 0;
         while (head[u] != head[v]) {

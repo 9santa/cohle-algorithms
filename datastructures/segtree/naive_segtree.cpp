@@ -28,7 +28,7 @@ private:
 
     // Sum query in range [l, r)
     long long sum_query(int l, int r, int x, int xl, int xr) {
-        if(xl >= r || xr <= l) return 0;    // no overlap
+        if(xl > r || xr < l) return 0;    // no overlap
         if(xl >= l && xr <= r) return tree[x];  // full overlap
         int xm = (xl + xr) / 2;
         long long suml = sum_query(l, r, 2*x+1, xl, xm);

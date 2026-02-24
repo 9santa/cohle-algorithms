@@ -14,11 +14,9 @@ int phi(int n) {
 }
 
 // O(n log log n)
-void phi_1_to_n(int n) {
+static vector<int> phi_1_to_n(int n) {
     vector<int> phi(n+1);
-    for (int i = 0; i <= n; i++) {
-        phi[i] = i;
-    }
+    iota(all(phi), 0);
 
     for (int i = 2; i <= n; i++) {
         if (phi[i] == i) {
@@ -27,6 +25,5 @@ void phi_1_to_n(int n) {
             }
         }
     }
+    return phi;
 }
-
-
