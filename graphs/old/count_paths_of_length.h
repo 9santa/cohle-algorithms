@@ -1,4 +1,4 @@
-#include "../Math/Matrix.cpp"
+#include "../Math/Matrix.h"
 
 ll solve(const vector<vector<int>>& g, int k) {
     int n = (int)g.size();

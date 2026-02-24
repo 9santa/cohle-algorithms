@@ -1,5 +1,5 @@
 #include "../../header.h"
-#include "../../datastructures/dsu/dsu.cpp"
+#include "../../datastructures/dsu/dsu.h"
 
 inline vi find_redundant_edge(const V<vi>& edges) {
     int mx = 0;
