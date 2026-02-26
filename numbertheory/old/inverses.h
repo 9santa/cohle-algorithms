@@ -1,21 +1,3 @@
-#pragma once
-#include "core.h"
-#include "mod_arith.h"
-
-namespace nt {
-
-// O(n)
-// requires: p is prime, n < p
-inline vl alL_inverses(int n, ll p) {
-    assert(n < p);
-    vl inv(n+1);
-    if (n >= 1) inv[1] = 1;
-    for (int i = 2; i <= n; i++) {
-        inv[i] = (p - (p / i) * inv[p % i] % p) % p;
-    }
-    return inv;
-}
-
 
 /*
 Если p — простое и n < p (тогда у всех чисел 1..n существуют обратные по модулю
@@ -60,12 +42,15 @@ x = x * i % p
 обратный проход = O(n + log p).
 */
 
-inline vl all_inverses(int n, ll p) {
+#include "../header.h"
+#include "free_mod.h"
+
+static vl all_inverses(int n, ll p) {
     assert(n < p);
     vl pref(n+1), inv(n+1, 0);
     for (int i = 1; i <= n; i++) pref[i] = (i128)pref[i-1] * i % p;
 
-    ll x = pow_mod(pref[n], p-2, p); // (n!)^{-1}
+    ll x = modpow(pref[n], p-2, p); // (n!)^{-1}
 
     for (int i = n; i >= 1; i--) {
         inv[i] = (i128)x * pref[i-1] % p; // i^{-1}
@@ -73,5 +58,3 @@ inline vl all_inverses(int n, ll p) {
     }
     return inv; // inv[1..n]
 }
-
-} // namespace nt

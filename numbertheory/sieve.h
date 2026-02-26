@@ -1,31 +1,66 @@
+#pragma once
+#include "core.h"
 
-constexpr int MAXN = 100;
-static u8 isPrime[MAXN+1];
-vector<int> primes;
+namespace nt {
 
-// O(N log log N)
-void sieve(void) {
-    memset(isPrime, true, sizeof(isPrime));
-    isPrime[0] = isPrime[1] = 0;    // 0 and 1 are not primes
+// compile-time sized sieve
+template<int SZ>
+struct StaticSieve {
+    bitset<SZ> is_prime;
+    vi primes;
 
-    for (int i = 2; 1LL * i * i <= MAXN; i++) {
-        if (isPrime[i]) {
-            primes.push_back(i);
-            for (ll j = 1LL * i * i; j <= MAXN; j += i) {
-                 isPrime[(int)j] = 0;
+    StaticSieve() {
+        is_prime.set();
+        if (SZ > 0) is_prime[0] = 0;
+        if (SZ > 1) is_prime[1] = 0;
+        for (int i = 4; i < SZ; i += 2) is_prime[i] = 0;
+
+        for (int i = 3; 1LL * i * i < SZ; i += 2) {
+            if (is_prime[i]) {
+                for (int j = i * i; j < SZ; j += i * 2) is_prime[j] = 0;
+            }
+        }
+
+        primes.clear();
+        if (SZ > 2) primes.pb(2);
+        for (int i = 3; i < SZ; i += 2) if (is_prime[i]) primes.pb(i);
+        if (SZ == 2) primes = {2};
+    }
+};
+
+// linear sieve: primes + lp (least prime)
+struct LinearSieve {
+    int n = 0;
+    vi primes;
+    vi lp; // lp[x] = least prime dividing x
+
+    LinearSieve() {}
+    LinearSieve(int _n) { init(_n); }
+
+    void init(int _n) {
+        n = _n;
+        primes.clear();
+        lp.assign(n+1, 0);
+        for (int i = 2; i <= n; i++) {
+            if (lp[i] == 0) {
+                lp[i] = i;
+                primes.pb(i);
+            }
+            for (auto p : primes) {
+                if (p > lp[i] || 1LL * i * p > n) break;
+                lp[i * p] = p;
             }
         }
     }
 
-    primes.reserve(1e5);
-    for (int i = 2; i <= MAXN; i++) {
-        if (isPrime[i]) primes.push_back(i);
+    bool is_prime_int(int x) const {
+        return x >= 2 && x <= n && lp[x] == x;
     }
+};
 
-}
-
-// Segmented Sieve. Less memory + cache friendly. Counts number of primes up to N
-int count_primes(int n) {
+// segmented sieve. less memory + cache friendly. counts number of primes <= n
+inline int count_primes(int n) {
+    if (n < 2) return 0;
     const int S = 10000; // block size
     vector<int> primes;
     int nsqrt = sqrt(n);
@@ -64,3 +99,5 @@ int count_primes(int n) {
 
     return res;
 }
+
+} // namespace nt
