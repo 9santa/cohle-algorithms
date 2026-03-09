@@ -1,9 +1,10 @@
 
+#include <chrono>
 struct splitmix_hash {
     static u64 splitmix64(u64 x) {
-        x += 0x9e3779b97f4a7c15;
-        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
-        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
+        x += 0x9e3779b97f4a7c15ULL;
+        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9ULL;
+        x = (x ^ (x >> 27)) * 0x94d049bb133111ebULL;
         return x ^ (x >> 31);
     }
 
@@ -14,7 +15,7 @@ struct splitmix_hash {
 
     // hash combine mixing for 64-bit
     static u64 combine(u64 h, u64 x) {
-        x = splitmix64(x);
+        x = splitmix64(x + fixed_random());
         h ^= x + 0x9e3779b97f4a7c15ULL + (h << 6) + (h >> 2);
         return h;
     }
@@ -23,8 +24,8 @@ struct splitmix_hash {
     template<class T>
     requires std::is_integral_v<T>
     size_t operator()(T x) const {
-        u64 R = fixed_random();
-        return (size_t)splitmix64((u64)x + R);
+        using U = std::make_unsigned_t<T>;
+        return (size_t)splitmix64((u64)(U)x + fixed_random());
     }
 
     // Hash pair
@@ -32,8 +33,8 @@ struct splitmix_hash {
     size_t operator()(const pair<A, B>& p) const {
         u64 R = fixed_random();
         u64 h = splitmix64(R);
-        h = combine(h, (u64)splitmix_hash{}(p.first));
-        h = combine(h, (u64)splitmix_hash{}(p.second));
+        h = combine(h, (*this)(p.first));
+        h = combine(h, (*this)(p.second));
         return (size_t)h;
     }
 
@@ -43,7 +44,7 @@ struct splitmix_hash {
         u64 R = fixed_random();
         u64 h = splitmix64(R ^ (u64)N);
         for (const auto& el : a) {
-            h = combine(h, (u64)splitmix_hash{}(el));
+            h = combine(h, (*this)(el));
         }
         return (size_t)h;
     }
@@ -54,13 +55,8 @@ struct splitmix_hash {
         u64 R = fixed_random();
         u64 h = splitmix64(R ^ (u64)v.size());
         for (const auto& el : v) {
-            h = combine(h, (u64)splitmix_hash{}(el));
+            h = combine(h, (*this)(el));
         }
         return (size_t)h;
-    }
-
-    size_t operator()(u64 x) const {
-        static const u64 STATIC_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
-        return splitmix64(x + STATIC_RANDOM);
     }
 };
