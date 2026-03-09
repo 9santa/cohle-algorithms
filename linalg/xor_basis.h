@@ -1,5 +1,14 @@
 #pragma once
 
+/*
+Problems like:
+- maximum subset xor
+- can represent x
+- count subsets with xor x
+- kth element in xor-span
+- merge basis on trees / DSU on tree / divide and conquer
+*/
+
 template<int BITS = 64, typename T = u64>
 struct XorBasis {
     T basis[BITS] = {0};   // basis[i] stores a number whose highest set bit is 'i'
@@ -109,7 +118,7 @@ struct XorBasis {
     }
 
     // returns true if 'x' can be formed as the XOR of some subset of the basis
-    bool can(ll x) const {
+    bool can(T x) const {
         for (int i = BITS-1; i >= 0; i--) {
             if (x & (1LL << i)) {
                 if (!basis[i]) return false;
