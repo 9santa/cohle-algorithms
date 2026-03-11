@@ -3,6 +3,7 @@
 
 namespace nt {
 
+
 // generic modular integer class
 template<std::unsigned_integral U, U P>
 class ModIntBase {
@@ -40,7 +41,7 @@ public:
     }
 
     constexpr ModIntBase &operator*=(const ModIntBase &rhs) & {
-        x = mulMod<mod()>(x, rhs.val());
+        x = mul_mod(x, rhs.val(), mod());
         return *this;
     }
 
@@ -51,8 +52,8 @@ public:
     }
 
     constexpr ModIntBase &operator-=(const ModIntBase &rhs) & {
+        if (x < rhs.val()) x += mod();
         x -= rhs.val();
-        if (x < 0) x += mod();
         return *this;
     }
 
