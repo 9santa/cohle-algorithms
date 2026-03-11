@@ -7,7 +7,7 @@ const double PI = atan2(0, -1);
 /*
     len = current recursion n
     half = n / 2
-    inner j is rec i
+    inner j is recursive i
 */
 inline void fft_iter(vector<cmpl>& a) {
     int n = sz(a); // assumes n is power of two
