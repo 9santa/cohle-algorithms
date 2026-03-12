@@ -1,5 +1,6 @@
 #pragma once
 #include "core.h"
+#include "mod_arith.h"
 
 namespace nt {
 
@@ -61,9 +62,20 @@ public:
         return *this *= rhs.inv();
     }
 
+    constexpr ModIntBase pow(ll e) const {
+        ModIntBase a = *this, res = 1;
+        while (e > 0) {
+            if (e & 1) res *= a;
+            a *= a;
+            e >>= 1;
+        }
+        return res;
+    }
+
     // modular inverse (fermat's little theorem), mod() has to be prime
     constexpr ModIntBase inv() const {
-        return binpow(*this, mod() - 2);
+        // return ModIntBase(pow_mod(this->val(), mod() - 2, mod()));
+        return this->pow(mod()-2);
     }
 
     friend constexpr ModIntBase operator+(ModIntBase lhs, const ModIntBase& rhs) {
@@ -87,11 +99,11 @@ public:
         return lhs;
     }
 
-    friend constexpr std::istream &operator>>(std::istream &is, ModIntBase &a) {
+    friend std::istream &operator>>(std::istream &is, ModIntBase &a) {
         i64 i; is >> i; a = i; return is;
     }
 
-    friend constexpr std::ostream &operator<<(std::ostream &os, const ModIntBase &a) {
+    friend std::ostream &operator<<(std::ostream &os, const ModIntBase &a) {
         return os << a.val();
     }
 
