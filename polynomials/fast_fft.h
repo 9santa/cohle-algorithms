@@ -24,7 +24,7 @@ void ensure_base(int nbase) {
     rev.resize(1 << nbase);
     rts.resize(1 << nbase);
     for (int i = 0; i < (1 << nbase); i++) {
-        rev[i] = (rev[i >> 1] >> 1) + ((i & 1) << (nbase - 1));
+        rev[i] = (rev[i >> 1] >> 1) | ((i & 1) << (nbase - 1));
     }
     while (base < nbase) {
         real angle = PI * 2.0 / (1 << (base + 1));
