@@ -81,7 +81,7 @@ public:
     constexpr ModIntBase fast_inv() const {
         assert(x != 0);
         U t = x, res = 1;
-        while (t != -1) {
+        while (t != 1) {
             U z = mod() / t;
             res = (u64)res * (mod() - z) % mod();
             t = mod() - t * z;
