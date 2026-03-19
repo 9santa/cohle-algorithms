@@ -15,9 +15,22 @@ inline i64 gcd_ll(i64 a, i64 b) {
     return a;
 }
 
+inline u64 gcd_u64(u64 a, u64 b) {
+    while (b) {
+        u64 t = a % b;
+        a = b;
+        b = t;
+    }
+    return a;
+}
+
 inline i64 lcm_ll(i64 a, i64 b) {
     if (a == 0 || b == 0) return 0;
     return a / gcd_ll(a, b) * b; // no overflow
+}
+
+inline u64 lcm_u64(u64 a, u64 b) {
+    return a / gcd_u64(a, b) * b;
 }
 
 inline i64 binary_gcd(i64 a, i64 b) {
