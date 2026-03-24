@@ -104,7 +104,7 @@ inline pair<i64, i64> crt_pair(i64 r1, i64 m1, i64 r2, i64 m2) {
     i64 t = (i64)((i128)safe_mod(dg, m2p) * inv_m1p % m2p);
 
     // combine
-    i128 r = (i128)r + (i128)m1 * t;
+    i128 r = (i128)r1 + (i128)m1 * t;
     i64 lcm = (i64)((i128)m1p * m2); // = m1/g * m2 = lcm(m1, m2)
 
     i64 res = (i64)(r % lcm);

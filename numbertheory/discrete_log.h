@@ -57,4 +57,37 @@ inline ll bsgs_coprime(u64 a, u64 b, u64 m) {
     return -1;
 }
 
+
+// generalized exBSGS for gcd(a, m) != 1
+inline ll exbsgs(u64 a, u64 b, u64 m) {
+    assert(gcd(a, m) != 1);
+    a = safe_mod(a, m);
+    b = safe_mod(b, m);
+    if (m == 1) return 0;
+
+    ll cnt = 0;
+    ll k = 1;
+
+    while (true) {
+        ll g = gcd_ll(a, m);
+        if (g == 1) break;
+        if (b % g != 0) return -1; // need g | b
+
+        b /= g;
+        m /= g;
+        k = (i128)((i128)k * (a / g) % m);
+        cnt++;
+
+        if (k == b) return cnt; // can return early: k*a^0 = k = b' (mod m')
+    }
+
+    ll inv_k = mod_inv(k, m);
+    if (inv_k == -1) return -1;
+
+    ll target = (i64)((i128)b * inv_k % m);
+    ll y = bsgs_coprime(a, target, m);
+    if (y == -1) return -1;
+    return y + cnt;
+}
+
 } // namespace nt
