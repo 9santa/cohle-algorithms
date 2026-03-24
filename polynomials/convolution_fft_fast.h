@@ -2,7 +2,7 @@
 
 using poly = vector<int>;
 
-static vl convolution_ll_naive(const poly& A, const poly& B) {
+inline vl convolution_ll_naive(const poly& A, const poly& B) {
     int n = sz(A), m = sz(B);
     vl C(n + m - 1, 0);
     for (int i = 0; i < n; i++) if (A[i]) {
@@ -13,7 +13,27 @@ static vl convolution_ll_naive(const poly& A, const poly& B) {
     return C;
 }
 
-static vl convolution_ll_fft(const poly& A, const poly& B) {
+inline vl convolution_ll_fft_opt(const poly& A, const poly& B) {
+    int need = sz(A) + sz(B) - 1;
+    int n = 1;
+    while (n < need) n <<= 1;
+    using namespace CFFT;
+
+    vector<cmpl> P(n);
+    for (int i = 0; i < n; i++) {
+        P[i] = cmpl(i < sz(A) ? A[i] : 0, i < sz(B) ? B[i] : 0);
+    }
+    fft(P);
+    for (int i = 0; i < n; i++) P[i] = P[i] * P[i];
+    ifft(P);
+    vl C(need);
+    for (int i = 0; i < need; i++) {
+        C[i] = (ll)llround(P[i].y / 2);
+    }
+    return C;
+}
+
+inline vl convolution_ll_fft(const poly& A, const poly& B) {
     int need = sz(A) + sz(B) - 1;
     int n = 1;
     while (n < need) n <<= 1;
@@ -35,7 +55,7 @@ static vl convolution_ll_fft(const poly& A, const poly& B) {
     return C;
 }
 
-static vl convolution_ll(const poly& A, const poly& B) {
+inline vl convolution_ll(const poly& A, const poly& B) {
     if (A.empty() || B.empty()) return {};
     if (min(sz(A), sz(B)) <= 80) return convolution_ll_naive(A, B);
     return convolution_ll_fft(A, B);
