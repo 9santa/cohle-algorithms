@@ -1,5 +1,9 @@
 #include "../header.h"
 
+
+/* Static/deque CHT = sorted slopes, arbitrary query order, faster
+   Dynamic/multiset CHT = arbitrary slopes, arbitrary query order */
+
 struct Line {
     ll k, b;    // y = k*x + b
     mutable ll p;
@@ -134,3 +138,62 @@ void sample_problem(vector<pair<int, int>> v) {
     ll cht_ans = dp[m];
     assert(naive_ans == cht_ans);
 }
+
+template<bool isMax, bool isInc>
+struct StaticCHT1 {
+    deque<Line> hull;
+    static constexpr bool isMin = !isMax;
+
+    bool better(ll a, ll b) const {
+        if constexpr (isMax) return a >= b;
+        else return a <= b;
+    }
+
+    static bool bad(const Line& l1, const Line& l2, const Line& l3) {
+        // remove l2 if intersection(l1, l2) >= intersection(l2, l3)
+        return (i128)(l1.b - l2.b) * (l3.k - l2.k)
+                >= (i128)(l2.b - l3.b) * (l2.k - l1.k);
+    }
+
+    void add_line(ll k, ll b) {
+        Line newline(k, b);
+
+        if (!hull.empty()) {
+            if constexpr (isInc) {
+                assert(hull.back().k <= k);
+            } else {
+                assert(hull.back().k >= k);
+            }
+        }
+
+        if (!hull.empty() && hull.back().k == newline.k) {
+            if (better(newline.b, hull.back().b)) hull.pop_back();
+            else return;
+        }
+
+        while (hull.size() >= 2 && bad(hull[hull.size() - 2], hull.back(), newline)) {
+            hull.pop_back();
+        }
+        hull.push_back(newline);
+    }
+
+    // O(log n), arbitrary query order
+    ll query(ll x) const {
+        assert(!hull.empty());
+        int lo = 0, hi = sz(hull) - 1;
+        while (lo < hi) {
+            int mid = (lo + hi) >> 1;
+            ll y1 = hull[mid].eval(x);
+            ll y2 = hull[mid+1].eval(x);
+
+            if (better(y1, y2)) hi = mid;
+            else lo = mid + 1;
+        }
+        return hull[lo].eval(x);
+    }
+};
+
+using MinIncCHT = StaticCHT1<false, true>;
+using MinDecCHT = StaticCHT1<false, false>;
+using MaxIncCHT = StaticCHT1<true, true>;
+using MaxDecCHT = StaticCHT1<true, false>;
