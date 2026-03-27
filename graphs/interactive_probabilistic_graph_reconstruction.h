@@ -1,6 +1,6 @@
-#include "../header.h"
+#include "core.h"
 
-struct Edge {
+struct OracleEdge {
     int u, v;
 };
 
@@ -34,7 +34,7 @@ bool query_vertex(int v) {
 }
 
 // Test (probabilistic: ~100%) if edge e is in Spanning Tree
-bool is_bridge_probabilistic(const Edge& e, int id, int T = 48) {
+bool is_bridge_probabilistic(const OracleEdge& e, int id, int T = 48) {
     int seenNo = false;
     for (int t = 0; t < T; t++) {
         int v = (randBit() ? e.u : e.v);
@@ -53,7 +53,7 @@ signed main() {
 
     int n, m; cin >> n >> m;
 
-    vector<Edge> edges(m+1);
+    vector<OracleEdge> edges(m+1);
     for (int i = 1; i <= m; i++) {
         cin >> edges[i].u >> edges[i].v;
     }
@@ -66,7 +66,7 @@ signed main() {
     const int T = 48;
 
     for (int id = 1; id <= m; id++) {
-        const Edge& e = edges[id];
+        const OracleEdge& e = edges[id];
         block_edge(id);
 
         bool bridge = is_bridge_probabilistic(e, id, T);
@@ -137,7 +137,7 @@ signed main() {
     for (int id = 1; id <= m; id++) {
         if (inTree[id]) continue;
 
-        const Edge& e = edges[id];
+        const OracleEdge& e = edges[id];
         unblock_edge(id);
 
         // Path between u and v in spanning tree
@@ -150,7 +150,7 @@ signed main() {
         }
 
         int f_id = path[0];
-        const Edge& f = edges[f_id];
+        const OracleEdge& f = edges[f_id];
         block_edge(f_id);
 
         // Test: is f bridge. If 'e' is real -> spanning + e create a cycle, and f is not a bridge

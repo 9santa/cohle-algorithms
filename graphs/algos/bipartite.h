@@ -1,4 +1,4 @@
-#include "../base.h"
+#include "../core.h"
 
 // Returns {ok, color}, where color[v] is 0/1 if ok empty vector otherwise
 // Intended for undirected graphs

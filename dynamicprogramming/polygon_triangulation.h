@@ -1,4 +1,4 @@
-#include "../header.h"
+#include "core.h"
 
 struct Point {
     double x, y;

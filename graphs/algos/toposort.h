@@ -1,4 +1,4 @@
-#include "../base.h"
+#include "../core.h"
 #include <optional>
 
 // Topsort with cycle detection, Kahn's algorithm
@@ -54,6 +54,6 @@ std::optional<vi> toposort_dfs(const Graph<Cost, true>& G) {
             if (!dfs(dfs, v)) return std::nullopt;
         }
     }
-    reverse(all(topo));
+    reverse(topo.begin(), topo.end());
     return topo;
 }

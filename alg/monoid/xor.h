@@ -1,4 +1,4 @@
-
+#include "../core.h"
 template<typename E>
 struct Monoid_Xor {
     using value_type = E;

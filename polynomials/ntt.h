@@ -1,5 +1,5 @@
 #pragma once
-#include "../header.h"
+#include "core.h"
 #include "../numbertheory/modint.h"
 
 constexpr u32 MOD = 998244353;

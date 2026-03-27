@@ -1,4 +1,4 @@
-#include "../header.h"
+#include "core.h"
 
 
 /* Static/deque CHT = sorted slopes, arbitrary query order, faster

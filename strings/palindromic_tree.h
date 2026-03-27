@@ -1,4 +1,4 @@
-#include "../header.h"
+#include "core.h"
 
 template<int SIG = 26>
 struct Eertree {

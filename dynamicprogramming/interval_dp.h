@@ -1,4 +1,4 @@
-
+#include "core.h"
 /* answer depends on a contiguous segment [l, r], often with a split point k
    build small segments first, then larger ones
    state: dp[l][r] = best to solve interval [l, r]

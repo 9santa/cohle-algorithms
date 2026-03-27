@@ -1,4 +1,4 @@
-#include "../header.h"
+#include "core.h"
 
 int LCS(const vector<int>& a, const vector<int>& b) {
     int n = sz(a), m = sz(b);

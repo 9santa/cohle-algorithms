@@ -1,5 +1,5 @@
 #pragma once
-#include "../header.h"
+#include "core.h"
 
 template<int N>
 struct GF2Matrix {

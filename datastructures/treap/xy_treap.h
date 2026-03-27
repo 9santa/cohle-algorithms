@@ -1,4 +1,4 @@
-#include "../../header.h"
+#include "../core.h"
 #include "../node_pool.h"
 
 // Standard treap for multiset of points (X, Y): BST by X, max-heap by Y.

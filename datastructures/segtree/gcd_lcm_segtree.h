@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../core.h"
+
 constexpr int MAXN = 100005;
 pair<ll, ll> t[4*MAXN];
 

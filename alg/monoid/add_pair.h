@@ -1,4 +1,4 @@
-
+#include "../core.h"
 template<typename E>
 struct Monoid_Add_Pair {
     using value_type = pair<E, E>;

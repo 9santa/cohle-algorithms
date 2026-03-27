@@ -1,4 +1,4 @@
-#include "../base.h"
+#include "../core.h"
 #include <execution>
 
 struct BFSRes {
@@ -64,6 +64,6 @@ inline vi restore_path(int target, const vi& parent, const vi& dist) {
     if (target < 0 || target >= sz(parent) || dist[target] == -1) return {};
     vi path;
     for (int v = target; v != -1; v = parent[v]) path.push_back(v);
-    reverse(all(path));
+    reverse(path.begin(), path.end());
     return path;
 }

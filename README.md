@@ -5,7 +5,7 @@ Header-heavy competitive programming and algorithms library, organized by topic.
 Main directories:
 - `alg/`: algebraic interfaces and reusable monoid / acted-monoid building blocks.
 - `datastructures/`: contest-oriented and reusable data structures.
-- `graphs/`: graph algorithms, plus `graphs/flow/` for max-flow related code.
+- `graphs/`: graph algorithms, plus `graphs/flow/` for max-flow related code. Shared graph infrastructure lives in `graphs/core.h`.
 - `trees/`: tree algorithms and tree DP utilities, with `trees/hld/` for HLD variants and `trees/dp/` for tree-DP patterns.
 - `dynamicprogramming/`: general DP techniques and sequence / interval / digit / optimization DP.
 - `geometry/`: geometric primitives and polygon / segment helpers.

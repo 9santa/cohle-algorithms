@@ -1,4 +1,5 @@
 #pragma once
+#include "../core.h"
 #include "../../linalg/xor_basis.h"
 
 struct SegTree {

@@ -1,4 +1,4 @@
-#include "../../header.h"
+#include "../core.h"
 
 // Value-based version (Ji Driver style) - invariant: max1 and min1 always reflect real values
 // Invariant chain: min1 < min2 <= max2 < max1

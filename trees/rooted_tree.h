@@ -1,5 +1,5 @@
 #pragma once
-#include "../graphs/base.h"
+#include "../graphs/core.h"
 
 struct RootedTree {
     vi parent;      // parent[v] (root has parent[root] = -1)

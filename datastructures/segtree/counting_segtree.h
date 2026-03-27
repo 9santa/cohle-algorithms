@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../core.h"
+
 // Counting SegTree for frequency of some value 'x'
 constexpr int MAXN = 100005;
 vi t(4*MAXN);

@@ -1,4 +1,4 @@
-
+#include "../core.h"
 struct Monoid_StringConcat {
     using value_type = std::string;
     using X = value_type;

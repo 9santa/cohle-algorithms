@@ -1,4 +1,4 @@
-#include "../../header.h"
+#include "../core.h"
 
 // Templated version for different idempotent operations
 // Monoid::op(x, y) -> bool (true if x is strictly better)!!!
@@ -51,4 +51,3 @@ struct SparseTable {
         return (*a)[query_index(l, r)];
     }
 };
-

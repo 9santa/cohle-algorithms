@@ -1,4 +1,4 @@
-#include "../header.h"
+#include "core.h"
 
 // Manacher: O(n)
 // odd[i] = # of chars in radius for odd palindrome centered at i (includes center)

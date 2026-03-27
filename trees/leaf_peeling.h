@@ -1,4 +1,4 @@
-#include "../graphs/base.h"
+#include "../graphs/core.h"
 
 template<class Cost>
 vi tree_centers_by_leaf_peeling(const Graph<Cost, false>& G) {

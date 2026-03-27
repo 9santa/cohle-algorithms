@@ -1,4 +1,4 @@
-#include "../../header.h"
+#include "../core.h"
 
 struct Lazy {
     bool rev;  // toggles order (swap children)

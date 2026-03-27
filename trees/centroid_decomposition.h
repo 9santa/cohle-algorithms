@@ -1,4 +1,4 @@
-#include "../graphs/base.h"
+#include "../graphs/core.h"
 
 struct CentroidDecomposition {
     int N = 0;

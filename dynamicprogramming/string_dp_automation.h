@@ -1,5 +1,5 @@
 #pragma once
-#include "../header.h"
+#include "core.h"
 #include "../strings/prefix_function.h"
 
 /* string construction/counting while avoiding or requiring a pattern

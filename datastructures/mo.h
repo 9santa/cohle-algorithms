@@ -1,4 +1,4 @@
-
+#include "core.h"
 struct Mo {
     vector<pair<int, int>> LR;  // queries [L, R)
     void add(int L, int R) { LR.emplace_back(L, R); }

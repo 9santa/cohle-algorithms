@@ -1,4 +1,4 @@
-#include "../base.h"
+#include "../core.h"
 
 template<class Cost, bool directed>
 vl zero_one_bfs(const Graph<Cost, directed>& G, int src) {

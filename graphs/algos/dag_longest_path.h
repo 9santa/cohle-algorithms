@@ -1,4 +1,4 @@
-#include "../../header.h"
+#include "../core.h"
 
 // with pseudo-topsort first
 namespace first {
@@ -13,7 +13,7 @@ void dfs(int v) {
             dfs(u);
         }
     }
-    topo.pb(v);
+    topo.push_back(v);
 }
 
 void solve(void) {
@@ -23,24 +23,24 @@ void solve(void) {
     while (m--) {
         int u, v; cin >> u >> v;
         u--, v--;
-        graph[u].pb(v);
+        graph[u].push_back(v);
     }
 
-    F0R(i, n) {
+    for (int i = 0; i < n; i++) {
         if (!used[i]) dfs(i);
     }
 
     vi dp(n, 0);
 
-    reverse(all(topo));
+    reverse(topo.begin(), topo.end());
     for (auto u : topo) {
         for (auto v : graph[u]) {
             dp[v] = max(dp[v] , dp[u]+1);
         }
     }
 
-    int ans = *max_element(all(dp));
-    print(ans);
+    int ans = *max_element(dp.begin(), dp.end());
+    cout << ans << "\n";
 
 }
 } // namespace first

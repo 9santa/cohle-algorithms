@@ -1,4 +1,4 @@
-#include "../../graphs/base.h"
+#include "../../graphs/core.h"
 #include "../rooted_tree.h"
 #include "../lca.h"
 

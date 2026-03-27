@@ -1,4 +1,4 @@
-#include "../header.h"
+#include "core.h"
 
 /* Lazy, interval-based ds that uses map
    to store contiguous intervals with the same value
@@ -124,4 +124,3 @@ public:
         return it->second;
     }
 };
-

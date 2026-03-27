@@ -1,4 +1,4 @@
-#include "../../header.h"
+#include "../core.h"
 
 /*
 Hamilton Cycle using subset DP
@@ -65,7 +65,7 @@ static vector<int> hamilton_cycle(const vector<vector<int>>& matrix, bool isDire
         mask &= ~(1 << v);  // set 0 at 'v'
         v = pv;
     }
-    reverse(all(path));
+    reverse(path.begin(), path.end());
     path.push_back(START); // close cycle
 
     return path; // path is like: 0 a b c ... endv 0

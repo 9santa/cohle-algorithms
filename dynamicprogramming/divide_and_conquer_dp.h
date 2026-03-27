@@ -1,4 +1,4 @@
-#include "../header.h"
+#include "core.h"
 
 // Нужна монотонность точки разреза на префиксе (dp на префиксе)
 // Time: O(N * K * log N)

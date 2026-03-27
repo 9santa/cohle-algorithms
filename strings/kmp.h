@@ -1,3 +1,4 @@
+#include "core.h"
 #include "prefix_function.h"
 
 // Knuth-Morris-Prath

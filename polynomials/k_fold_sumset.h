@@ -1,12 +1,14 @@
 // #include "fft.h"
-#include "convolution_fft.h"
+#include "core.h"
+#include "convolution_fft_fast.h"
 
 
 inline vi mul_bool(const vi& A, const vi& B, int S) {
-    auto C = convolution(A, B);
+    auto C = convolution_ll(A, B);
     if (sz(C) > S+1) C.resize(S+1);
-    for (auto& x : C) x = (x != 0);
-    return C;
+    vi res(sz(C));
+    for (int i = 0; i < sz(C); i++) res[i] = (C[i] != 0);
+    return res;
 }
 
 inline vi self_conv(vi base, ll b, ll S) {

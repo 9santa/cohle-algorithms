@@ -1,4 +1,4 @@
-#include "../base.h"
+#include "../core.h"
 
 struct SCCRes {
     int n_comp = 0;

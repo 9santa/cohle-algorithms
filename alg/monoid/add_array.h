@@ -1,4 +1,4 @@
-
+#include "../core.h"
 template<typename E, int K>
 struct Monoid_Add_Array {
     using value_type = array<E, K>;

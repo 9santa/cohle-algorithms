@@ -1,5 +1,7 @@
 #pragma once
 
+#include "core.h"
+
 /*
 For offline-problems:
 - add on time segments

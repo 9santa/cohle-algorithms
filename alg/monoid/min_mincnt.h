@@ -1,4 +1,4 @@
-#include "../../header.h"
+#include "../core.h"
 
 template<typename E>
 struct Monoid_MinMincnt {

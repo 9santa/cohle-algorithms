@@ -1,4 +1,4 @@
-#include "base.h"
+#include "core.h"
 
 // Edmonds-Karp = BFS shortest augmenting paths (basically Ford-Fulkerson but BFS instead of DFS)
 // O(V * E^2)

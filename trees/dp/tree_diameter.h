@@ -1,7 +1,7 @@
 // #pragma GCC optimize("Ofast,inline,unroll-loops")
 // #pragma GCC target("avx2,popcnt")
 
-#include "../../header.h"
+#include "../../graphs/core.h"
 
 constexpr int MOD = 1e9+7;
 

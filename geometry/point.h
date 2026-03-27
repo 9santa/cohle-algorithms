@@ -1,8 +1,4 @@
-#include "../header.h"
-#include <type_traits>
-#include <utility>
-
-using ld = long double;
+#include "core.h"
 
 namespace geom {
 
@@ -130,4 +126,3 @@ struct compare_by_angle {
 
 
 } // namespace geom
-

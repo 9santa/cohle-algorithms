@@ -1,4 +1,4 @@
-#include "../header.h"
+#include "core.h"
 
 static u64 splitmix64(u64 x) {
     x += 0x9e3779b97f4a7c15ULL;

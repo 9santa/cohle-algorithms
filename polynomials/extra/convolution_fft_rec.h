@@ -1,4 +1,5 @@
-#include "fft_recursive.h"
+#include "../core.h"
+#include "fft_rec.h"
 
 inline vector<ll> convolution(const vector<int>& P, const vector<int>& Q) {
     int n = 1;

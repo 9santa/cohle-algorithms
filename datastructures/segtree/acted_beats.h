@@ -1,4 +1,4 @@
-
+#include "../core.h"
 template<typename ActedMonoid>
 struct Beats_Segtree {
     using AM = ActedMonoid;

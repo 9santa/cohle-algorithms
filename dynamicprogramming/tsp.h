@@ -1,4 +1,4 @@
-#include "../header.h"
+#include "core.h"
 
 
 static void tsp(int n, const vector<vector<int>>& dist) {

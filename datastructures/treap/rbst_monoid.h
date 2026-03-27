@@ -1,4 +1,4 @@
-#include "../../header.h"
+#include "../core.h"
 #include "../node_pool.h"
 
 // Randomized Binary Search Tree
@@ -157,5 +157,4 @@ struct RBST_Seq_Monoid {
         return merge(a, merge(c, d));
     }
 };
-
 

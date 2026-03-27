@@ -1,4 +1,4 @@
-#include "../base.h"
+#include "../core.h"
 
 template<class Cost>
 vi dag_paths_ending_at_mod(const Graph<Cost, true>& G, int MOD) {

@@ -1,5 +1,4 @@
-#include "../header.h"
-#include <complex>
+#include "../core.h"
 
 using cmpl = complex<double>;
 const double PI = atan2(0, -1);
@@ -83,4 +82,3 @@ struct FFT {
         for (auto& z : a) z = std::conj(z) / (double)n;
     }
 };
-

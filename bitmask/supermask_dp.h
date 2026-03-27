@@ -1,4 +1,4 @@
-
+#include "core.h"
 /*
 dp[mask] = sum over supersets f[sup] that include mask
 mnemonic: if (mask lacks bit) dp[mask] += dp[mask | bit]
@@ -15,4 +15,3 @@ inline void solve() {
         }
     }
 }
-

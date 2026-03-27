@@ -1,5 +1,5 @@
 #pragma once
-#include "../../header.h"
+#include "../../graphs/core.h"
 
 struct HLDDecomp {
     int n = 0;

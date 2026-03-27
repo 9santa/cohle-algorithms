@@ -1,0 +1,57 @@
+
+template<class T>
+struct Fenwick {
+    int n;
+    vector<T> fw;
+
+    Fenwick(int _n) { n = _n+1; fw.assign(n, 0); }
+
+    static int lsb(int i) { return i & -i; }
+
+    void build(const vector<T>& a) {
+        n = sz(a) + 1;
+        fw.assign(n, 0);
+        for (int i = 1; i < n; i++) {
+            fw[i] += a[i-1];
+            if (i + lsb(i) <= sz(a)) {
+                fw[i + lsb(i)] += fw[i];
+            }
+        }
+    }
+
+    void update(int i, T val) {
+        for (++i; i < n; i += lsb(i)) {
+            fw[i] += val;
+        }
+    }
+
+    T get(int i) {
+        T res = 0;
+        for (++i; i > 0; i -= lsb(i)) {
+            res += fw[i];
+        }
+        return res;
+    }
+
+    // [l, r)
+    T getRange(int l, int r) {
+        return get(r) - get(l-1);
+    }
+
+    // 0-based index of first prefix sum >= x
+    // prefix sums have to be monotone for this
+    int lower_bound(T x) {
+        int pos = 0;
+        T sum = 0;
+        for (int i = 31-__builtin_clz(n); i >= 0; i--) {
+            int nxt = pos + (1 << i);
+            if (nxt < n && sum + fw[nxt] < x) {
+                sum += fw[nxt];
+                pos = nxt;
+            }
+        }
+        return pos;
+    }
+    /* If at the very start (1..16) was already too big, then reaching index 16 is impossible while keeping sum < x.
+    However, we can still go somewhere between 8 and 16 (like 12, 14, 15…) by taking smaller block. */
+};

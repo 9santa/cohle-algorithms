@@ -1,4 +1,4 @@
-#include "../../header.h"
+#include "../core.h"
 
 template<class ActedMonoid>
 struct SplayTree_ActedMonoid {

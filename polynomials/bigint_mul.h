@@ -1,4 +1,5 @@
-#include "fft.h"
+#include "core.h"
+#include "extra/convolution_fft_iter.h"
 
 vi to_base(const string& s, int B, int k) {
     vi a;

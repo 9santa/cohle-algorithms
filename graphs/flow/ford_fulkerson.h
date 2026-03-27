@@ -1,4 +1,4 @@
-#include "base.h"
+#include "core.h"
 
 // Brute force algorithm, we just keep trying to push flow while we can, finds max flow but pretty slow
 // Find any augmenting (improving) path using iterative stack DFS, optionally only edges with cap >= delta

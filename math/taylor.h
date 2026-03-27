@@ -1,6 +1,5 @@
 #pragma once
-#include "../header.h"
-#include <stdexcept>
+#include "core.h"
 
 namespace taylor {
 

@@ -1,4 +1,4 @@
-#include "../../header.h"
+#include "../core.h"
 #include "../node_pool.h"
 
 // Lazy implicit treap with Acted Monoid

@@ -1,5 +1,5 @@
 #pragma once
-#include "../../header.h"
+#include "../../graphs/core.h"
 
 /* the graph is a tree and each subtree is a natural subproblem
    state: dp[u][0] = ans in subtree of u if u is not chosen

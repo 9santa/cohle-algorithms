@@ -1,5 +1,5 @@
 #pragma once
-#include <type_traits>
+#include "../core.h"
 
 template<class T, class = void>
 struct has_fail : std::false_type {};

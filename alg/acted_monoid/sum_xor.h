@@ -1,4 +1,4 @@
-#include "../../header.h"
+#include "../core.h"
 #include "../monoid/sum.h"
 #include "../monoid/xor.h"
 

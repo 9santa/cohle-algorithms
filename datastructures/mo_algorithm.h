@@ -1,4 +1,4 @@
-#include "../header.h"
+#include "core.h"
 
 // Answer static range queries in O((N+Q) * sqrt(N))
 // Queries are offline

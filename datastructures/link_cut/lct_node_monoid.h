@@ -1,4 +1,4 @@
-
+#include "../core.h"
 // Node abstraction from LCT
 // Node will work with templated monoid
 template<class Monoid>

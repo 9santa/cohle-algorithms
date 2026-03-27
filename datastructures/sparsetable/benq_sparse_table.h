@@ -1,4 +1,4 @@
-
+#include "../core.h"
 // 1D range min queries. O(1) time per query, O(N log N) preprocessing, O(N log N) mem
 // immutable array, sparse table
 template<typename T>
@@ -22,4 +22,3 @@ struct RMQ {
     }
     T query(int l, int r) { return v[index(l, r)]; }
 };
-

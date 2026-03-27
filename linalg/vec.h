@@ -1,7 +1,6 @@
 #pragma once
-#include "../header.h"
+#include "core.h"
 #include <cmath>
-#include <vector>
 
 namespace linalg {
 

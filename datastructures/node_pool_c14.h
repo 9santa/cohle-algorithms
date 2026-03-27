@@ -1,4 +1,4 @@
-
+#include "core.h"
 template<class Node, int CHUNK_BITS = 12> // 2^12 = 4096 slots per chunk
 struct NodePool {
     static constexpr int CHUNK_SIZE = 1 << CHUNK_BITS;
@@ -81,4 +81,3 @@ private:
         return &cur[cur_used++];
     }
 };
-

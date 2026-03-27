@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../core.h"
+
 struct data {
     int sum, pref, suf, ans;
 };
@@ -48,4 +50,3 @@ data query(int v, int tl, int tr, int l, int r) {
     return cmb(query(v*2, tl, tm, l, min(r, tm)),
             query(v*2+1, tm+1, tr, max(l, tm+1), r));
 }
-

@@ -1,4 +1,4 @@
-#include "../../header.h"
+#include "../core.h"
 
 ll binpow(ll a, ll b, ll MOD) {
     ll res = 1;
@@ -175,4 +175,3 @@ public:
     }
 
 };
-

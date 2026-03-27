@@ -1,4 +1,4 @@
-#include "../header.h"
+#include "core.h"
 
 // O((n+q) log n) after preprocessing all future update values/positions.
 // This is an offline dynamic-majority structure:

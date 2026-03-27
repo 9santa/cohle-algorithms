@@ -1,4 +1,4 @@
-#include "../base.h"
+#include "../core.h"
 
 // Undirected Eulerian trail/cycle in multigraph using edge ids and Hierholzer algorithm
 // Input: edges list (u, v). Returns vertex sequence of the rtail, or {} if impossible
@@ -47,6 +47,6 @@ inline vi eulerian_trail_undirected(int N, const vpii& edges) {
     }
 
     if (sz(path) != M+1) return {};
-    reverse(all(path));
+    reverse(path.begin(), path.end());
     return path;
 }

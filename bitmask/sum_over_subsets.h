@@ -1,4 +1,4 @@
-#include "../header.h"
+#include "core.h"
 
 /*
 f[mask]: array of all masks 0..(2^n - 1)

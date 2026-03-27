@@ -1,4 +1,4 @@
-#include "../../header.h"
+#include "../core.h"
 
 /*
 Hamilton Path in a directed or undirected path using subset DP
@@ -55,7 +55,7 @@ static vector<int> hamilton_path(const vector<vector<int>>& matrix, bool isDirec
         mask &= ~(1 << v); // set 0 at bit 'v'
         v = pv;
     }
-    reverse(all(path));
+    reverse(path.begin(), path.end());
 
     return path;
 }

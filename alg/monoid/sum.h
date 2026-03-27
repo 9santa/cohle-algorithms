@@ -1,4 +1,4 @@
-
+#include "../core.h"
 template<typename E>
 struct Monoid_Sum {
     using value_type = E;

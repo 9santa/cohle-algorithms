@@ -1,4 +1,4 @@
-#include "../../header.h"
+#include "../../graphs/core.h"
 
 constexpr int MAXN = 100005;
 

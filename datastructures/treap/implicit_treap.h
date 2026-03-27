@@ -1,4 +1,4 @@
-#include "../../header.h"
+#include "../core.h"
 #include "../node_pool.h"
 
 // Sequence treap (indices 0..n-1), Monoid

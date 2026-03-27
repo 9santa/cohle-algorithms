@@ -1,4 +1,4 @@
-#include "../header.h"
+#include "core.h"
 
 // Computes the prefix function (pi array) for string s.
 // pi[i] = the length of the longest proper prefix of s[0..i]
@@ -15,4 +15,3 @@ vector<int> prefix_function(const string& s) {
     }
     return pi;
 }
-

@@ -1,5 +1,5 @@
 #pragma once
-#include "../../header.h"
+#include "../core.h"
 
 template<class Node>
 struct LCT_Monoid {

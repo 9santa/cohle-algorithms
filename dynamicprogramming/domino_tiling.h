@@ -1,5 +1,5 @@
 #pragma once
-#include "../header.h"
+#include "core.h"
 
 constexpr int MOD = 1e9+7;
 

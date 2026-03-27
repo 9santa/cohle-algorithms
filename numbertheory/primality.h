@@ -1,6 +1,6 @@
 #pragma once
 #include "core.h"
-#include <mod_arith.h>
+#include "mod_arith.h"
 
 namespace nt {
 

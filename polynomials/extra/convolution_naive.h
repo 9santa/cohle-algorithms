@@ -1,4 +1,4 @@
-
+#include "../core.h"
 inline vector<int> convolution_naive(const vector<int>& P, const vector<int>& Q) {
     size_t n = P.size() + Q.size() - 1;
     vector<int> R(n, 0);

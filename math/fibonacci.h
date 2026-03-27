@@ -1,5 +1,5 @@
 #pragma once
-#include "../header.h"
+#include "core.h"
 
 static constexpr u64 FIB_MAX_N_U64 = 93; // F(93) fits in u64, F(94) does not
 

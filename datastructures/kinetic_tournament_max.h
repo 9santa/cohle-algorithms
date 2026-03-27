@@ -1,4 +1,4 @@
-#include "../header.h"
+#include "core.h"
 
 struct Line {
     double a = 0.0, b = 0.0; // f(t) = a*t + b

@@ -1,4 +1,4 @@
-#include "../graphs/base.h"
+#include "../graphs/core.h"
 
 // Tree diameter: weighted + unweighted
 // Two DFSs

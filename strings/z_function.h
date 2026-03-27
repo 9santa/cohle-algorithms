@@ -1,4 +1,4 @@
-#include "../header.h"
+#include "core.h"
 
 vector<int> z_function(const string& s) {
     int n = sz(s);

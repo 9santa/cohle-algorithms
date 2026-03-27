@@ -1,5 +1,5 @@
 #pragma once
-#include "../header.h"
+#include "core.h"
 
 /* count or optimize over numbers in a range with digit constraints
    general pattern: answer(L, R) = solve(R) - solve(L-1)

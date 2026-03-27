@@ -1,4 +1,4 @@
-#include "../header.h"
+#include "core.h"
 
 template<class G>
 vi out_degrees(const G& g) {

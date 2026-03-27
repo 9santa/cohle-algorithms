@@ -1,4 +1,4 @@
-
+#include "../core.h"
 // segment tree for associative operation 'cmb'. O(log n) query, O(n) preprocessing
 template<typename T>
 struct SegTree {
@@ -19,4 +19,3 @@ struct SegTree {
         return cmb(ra,rb);
     }
 };
-

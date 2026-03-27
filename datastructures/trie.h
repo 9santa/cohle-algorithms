@@ -1,4 +1,4 @@
-
+#include "core.h"
 struct Node {
     bool end;
     int link[26];

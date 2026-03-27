@@ -1,4 +1,4 @@
-#include "../../header.h"
+#include "../core.h"
 
 /* Sparse Table for associative Monoid (doesn't require idempotency)
    Query: O(log n) with binary decomp
@@ -53,4 +53,3 @@ struct SparseTable_Monoid_Decomp {
         return res;
     }
 };
-

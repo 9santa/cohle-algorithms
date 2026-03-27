@@ -1,4 +1,4 @@
-#include "../graphs/base.h"
+#include "../graphs/core.h"
 
 template<class Cost>
 int tree_centroid(const Graph<Cost, false>& G) {

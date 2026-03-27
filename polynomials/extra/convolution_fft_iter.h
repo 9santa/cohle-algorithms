@@ -1,4 +1,5 @@
-#include "fft.h"
+#include "../core.h"
+#include "fft_iter.h"
 
 inline vl convolution(const vi& A, const vi& B) {
     int n = 1;

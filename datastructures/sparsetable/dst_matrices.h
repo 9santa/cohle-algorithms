@@ -1,4 +1,4 @@
-#include "../../header.h"
+#include "../core.h"
 
 constexpr int MOD = 998244353;
 

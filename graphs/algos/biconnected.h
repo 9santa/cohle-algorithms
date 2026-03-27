@@ -1,4 +1,4 @@
-#include "../base.h"
+#include "../core.h"
 
 // Vertex-biconnected components + acticulation points
 // Returns edge-blocks (components of edges)

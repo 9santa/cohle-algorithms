@@ -1,4 +1,5 @@
 #pragma once
+#include "../core.h"
 
 template<typename E>
 struct Monoid_GCD {

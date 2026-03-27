@@ -1,4 +1,4 @@
-
+#include "plus_minus_one_rmq.h"
 // --- Static RMQ on array via LCA ---
 // array A -> Cartesian tree -> LCA
 // LCA -> RMQ on Euler-depth array (adj diff +-1)

@@ -1,5 +1,5 @@
 #pragma once
-#include "../header.h"
+#include "core.h"
 
 /* n is small, usually <= 20, and the state is a subset.
    state: dp[mask] = number of ways / best value for chosen subset mask

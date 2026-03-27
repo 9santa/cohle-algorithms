@@ -1,4 +1,4 @@
-
+#include "../core.h"
 // Typical usage: RMQ
 template<typename E>
 struct ArgMin {

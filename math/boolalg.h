@@ -1,6 +1,5 @@
 #pragma once
-#include "../header.h"
-#include <sstream>
+#include "core.h"
 
 namespace logic {
 

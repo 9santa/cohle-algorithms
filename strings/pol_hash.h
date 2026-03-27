@@ -1,4 +1,4 @@
-
+#include "core.h"
 // идея простая, мы хотим вместо строки хранить число, и желательно не очень большое
 // the idea is simple, we want to store a number (preferably not a big one) instead of a string
 void pol_hash()

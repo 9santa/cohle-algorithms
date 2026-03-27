@@ -1,4 +1,4 @@
-#include "../header.h"
+#include "core.h"
 
 /*
 Maximum Clique via Meet-in-the-Middle
@@ -136,4 +136,3 @@ static void solve() {
     // also consider clique entirely in B (A empty)
     ans = max(ans, (int)best[FULLB]);
 }
-

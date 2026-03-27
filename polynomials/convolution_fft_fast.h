@@ -1,3 +1,4 @@
+#include "core.h"
 #include "fast_fft.h"
 
 using poly = vector<int>;

@@ -1,5 +1,5 @@
 // Verification: https://codeforces.com/contest/242/problem/E
-#include "../../header.h"
+#include "../core.h"
 
 template<typename E>
 struct Monoid_Sum {

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../core.h"
+
 struct Link_Cut {
     struct Node {
         int ch[2] = {0, 0}; // splay children

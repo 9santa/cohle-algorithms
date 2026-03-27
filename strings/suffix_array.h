@@ -1,5 +1,5 @@
 #pragma once
-#include "../header.h"
+#include "core.h"
 
 struct SuffixArray {
     int n;
@@ -68,4 +68,3 @@ struct SuffixArray {
 
 
 };
-

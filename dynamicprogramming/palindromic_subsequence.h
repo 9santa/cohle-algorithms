@@ -1,4 +1,4 @@
-#include "../header.h"
+#include "core.h"
 
 // Longest Palindromic Subsequence. O(n^2)
 int LPS(const string& s) {
@@ -98,4 +98,3 @@ int count_distinct_PS(const string& s) {
 
     return dp[0][n-1] % MOD;
 }
-

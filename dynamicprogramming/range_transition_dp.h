@@ -1,5 +1,5 @@
 #pragma once
-#include "../header.h"
+#include "core.h"
 
 /* naive transition is "some invertible func over a range of previous states"
    shape: ndp[i] = sum(dp[j]) for j in [L(i), R(i)]

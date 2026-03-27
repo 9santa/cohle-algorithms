@@ -1,4 +1,4 @@
-#include "../base.h"
+#include "../core.h"
 
 template<class Cost>
 struct BellmanFordRes {
@@ -52,7 +52,6 @@ inline vi restore_path(int target, const vi& parent) {
     vi path;
     if (target < 0 || target >= sz(parent)) return {};
     for (int v = target; v != -1; v = parent[v]) path.push_back(v);
-    reverse(all(path));
+    reverse(path.begin(), path.end());
     return path;
 }
-

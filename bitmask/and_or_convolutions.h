@@ -1,4 +1,4 @@
-#include "../header.h"
+#include "core.h"
 
 template<class T>
 void fwt_or(vector<T>& a, bool inverse=false) {

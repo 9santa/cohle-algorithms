@@ -1,4 +1,4 @@
-
+#include "../core.h"
 // Sparse Table for Range Minimum Queries
 // For Maximum Queries: just change INT_MAX to INT_MIN, and std::min to std::max
 // Prep: O(n log n), Queries: O(1)
@@ -61,4 +61,3 @@ public:
         return std::min(table[k][l], table[k][r - (1 << k) + 1]);
     }
 };
-

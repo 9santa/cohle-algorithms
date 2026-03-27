@@ -1,4 +1,4 @@
-
+#include "../core.h"
 template<class Monoid>
 struct PST {
     using X = typename Monoid::value_type;

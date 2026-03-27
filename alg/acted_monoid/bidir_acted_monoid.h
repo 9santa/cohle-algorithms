@@ -1,4 +1,5 @@
 #pragma once
+#include "../core.h"
 #include "../monoid/bidir_monoid.h"
 
 template<class AM>

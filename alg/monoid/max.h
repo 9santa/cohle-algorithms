@@ -1,5 +1,5 @@
 #pragma once
-#include "numeric"
+#include "../core.h"
 
 template<typename E>
 struct Monoid_Max {

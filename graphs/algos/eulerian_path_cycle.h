@@ -1,4 +1,4 @@
-#include "../../header.h"
+#include "../core.h"
 #include <type_traits>
 
 /*
@@ -137,7 +137,7 @@ Euler euler_undirected(int n, const vector<pair<int, int>>& edges) {
         res.ok = false;
         return res;
     }
-    reverse(all(path));
+    reverse(path.begin(), path.end());
 
     res.ok = true;
     res.is_cycle = (odd.size() == 0);
@@ -235,7 +235,7 @@ Euler euler_directed(int n, const vector<pair<int, int>>& edges) {
         res.ok = false;
         return res;
     }
-    reverse(all(path));
+    reverse(path.begin(), path.end());
 
     res.ok = true;
     res.is_cycle = is_cycle;

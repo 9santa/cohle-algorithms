@@ -1,4 +1,4 @@
-
+#include "core.h"
 template<typename STRING>
 bool is_subseq(const STRING& S, const STRING& T) {
     int p = 0;

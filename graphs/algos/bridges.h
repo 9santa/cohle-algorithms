@@ -1,4 +1,4 @@
-#include "../base.h"
+#include "../core.h"
 
 template<class Cost>
 struct BridgeRes {

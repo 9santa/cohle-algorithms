@@ -1,4 +1,4 @@
-#include "../base.h"
+#include "../core.h"
 
 // Enumerate all paths from s to t in a DAG
 // Number of paths can be exponential
