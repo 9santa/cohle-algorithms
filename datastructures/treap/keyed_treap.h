@@ -42,12 +42,12 @@ struct TreapKeyed {
     int size() const { return size(root); }
     X prod_all() const { return prod(root); }
 
-    Node* build_cartesian(const vector<X>& a) {
+    Node* build_cartesian(const vector<pair<Key, X>>& a) {
         if (a.empty()) return nullptr;
         vector<Node*> st;
         st.reserve(a.size());
         for (int i = 0; i < (int)a.size(); i++) {
-            Node* cur = pool.create(a[i], splitmix64());
+            Node* cur = pool.create(a[i].first, a[i].second, splitmix64());
             Node* last = nullptr;
             while (!st.empty() && st.back()->pri > cur->pri) {
                 last = st.back();
@@ -130,8 +130,8 @@ struct TreapKeyed {
     }
 
     // multiset insert: rotation-based
-    void insert(const Key& k, const X& v) { root = ins(root, k, v, (u32)splitmix64()); }
-    void insert_with_pri(const Key& k, const X& v, u32 p) { root = ins(root, k, v, p); }
+    void insert(const Key& k, const X& v) { root = insert(root, k, v, (u32)splitmix64()); }
+    void insert_with_pri(const Key& k, const X& v, u32 p) { root = insert(root, k, v, p); }
 
     void add(Node*& root, const Key& key, const X& delta) {
         Node *a, *bc, *b, *c;
@@ -140,17 +140,18 @@ struct TreapKeyed {
         if (!b) {
             b = pool.create(key, delta, splitmix64());
         } else {
-            b->cnt++;
             b->x = Monoid::op(b->x, delta);
             pull(b);
         }
         root = merge(a, merge(b, c));
     }
 
+    void add(const Key& key, const X& delta) { add(root, key, delta); }
+
     // Erase one occurrence by key. Returns whether erased
     bool erase_one(const Key& k) {
         bool erased = false;
-        root = era(root, k, erased);
+        root = erase_one(root, k, erased);
         return erased;
     }
 
@@ -166,10 +167,10 @@ struct TreapKeyed {
 
     int count_leq(Node* t, const Key& key) {
         if (!t) return 0;
-        if (key < t->key) {
+        if (comp(key, t->key)) {
             return count_leq(t->l, key);
         } else {
-            return size(t->l) + t->cnt + count_leq(t->r, key);
+            return size(t->l) + 1 + count_leq(t->r, key);
         }
     }
 
@@ -192,7 +193,7 @@ struct TreapKeyed {
         int res = 0;
         while (t) {
             if (comp(t->key, k)) { // t->key < k
-                res += size(t->l) + t->cnt;
+                res += size(t->l) + 1;
                 t = t->r;
             } else {
                 t = t->l;
@@ -287,17 +288,17 @@ private:
             // both children exist: rotate the higher-priority child up
             if (t->l->pri > t->r->pri) {
                 t = rotR(t);
-                t->r = era(t->r, k, erased);
+                t->r = erase_one(t->r, k, erased);
             } else {
                 t = rotL(t);
-                t->l = era(t->l, k, erased);
+                t->l = erase_one(t->l, k, erased);
             }
             pull(t);
             return t;
         }
         // standard BST-descent
-        if (leq(k, t->key)) t->l = era(t->l, k, erased);
-        else t->r = era(t->r, k, erased);
+        if (leq(k, t->key)) t->l = erase_one(t->l, k, erased);
+        else t->r = erase_one(t->r, k, erased);
         pull(t);
         return t;
     }
@@ -343,7 +344,7 @@ private:
             auto [a, b] = split_by_order(t->l, k);
             t->l = b;
             pull(t);
-            return {a, b};
+            return {a, t};
         } else {
             auto [a, b] = split_by_order(t->r, k - size(t->l) - 1);
             t->r = a;

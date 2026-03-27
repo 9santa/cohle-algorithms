@@ -347,7 +347,7 @@ struct Implicit_Treap_Beats {
         if (!t || lo >= siz(t) || hi <= 0) return;
         if (t->agg.can_break(z)) return;
 
-        if (lo <= 0 && siz(t) <= hi && t->agg.can_tag()) {
+        if (lo <= 0 && siz(t) <= hi && t->agg.can_tag(z)) {
             apply_at(t, z);
             return;
         }

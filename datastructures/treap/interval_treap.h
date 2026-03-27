@@ -167,6 +167,6 @@ private:
         if (overlap_one(t, L, R)) return true;
         // prune right subtree: if t->L >= R, everything on right starts even later -> no overlap
         if (!comp(t->L, R)) return false;
-        return any_overlap_rec(t->R, L, R);
+        return any_overlap_rec(t->r, L, R);
     }
 };
