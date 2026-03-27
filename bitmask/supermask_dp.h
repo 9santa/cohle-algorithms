@@ -4,7 +4,7 @@ dp[mask] = sum over supersets f[sup] that include mask
 mnemonic: if (mask lacks bit) dp[mask] += dp[mask | bit]
 */
 
-static void solve() {
+inline void solve() {
     int B;
     vector<ll> dp(1<<B, 0);
     for (int i = 0; i < B; i++) {
