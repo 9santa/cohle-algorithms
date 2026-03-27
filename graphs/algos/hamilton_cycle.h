@@ -1,4 +1,4 @@
-#include "../header.h"
+#include "../../header.h"
 
 /*
 Hamilton Cycle using subset DP
@@ -33,7 +33,7 @@ static vector<int> hamilton_cycle(const vector<vector<int>>& matrix, bool isDire
 
             for (int nxt = 0; nxt < n; nxt++) {
                 if (mask & (1 << nxt)) continue; // already visited
-                if (!matrix[mask][v]) continue; // no edge v -> nxt
+                if (!matrix[v][nxt]) continue; // no edge v -> nxt
 
                 int nmask = mask | (1 << nxt);
                 if (!dp[nmask][nxt]) {

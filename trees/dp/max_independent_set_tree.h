@@ -1,4 +1,4 @@
-#include "../header.h"
+#include "../../header.h"
 
 constexpr int MAXN = 100005;
 

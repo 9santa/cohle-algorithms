@@ -1,6 +1,6 @@
 /* ===== Graph for Flow algorithms base structure ===== */
 
-#include "../header.h"
+#include "../../header.h"
 
 // Residual edge (mutable)
 template<class Cap>
