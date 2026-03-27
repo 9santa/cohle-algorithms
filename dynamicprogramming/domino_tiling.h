@@ -1,3 +1,4 @@
+#pragma once
 #include "../header.h"
 
 constexpr int MOD = 1e9+7;
@@ -5,6 +6,7 @@ constexpr int MOD = 1e9+7;
 // O(n * m * 2^m) time and memory
 // N, M should be small. M is the smaller one (number of rows)
 inline int domino_tiling(int n, int m) {
+    if (m > n) swap(m, n);
     // dp[i][j][p] -> number of ways to fill i first columns, j cells from above at i+1 column, with a broken profile p
     V<V<vi>> dp(n+1, V<vi>(m+1, vi(1<<m, 0)));
     dp[0][0][0] = 1;
@@ -51,7 +53,13 @@ inline int domino_tiling_with_blocks(vector<string> g) {
 
     ll n = C; // columns
     int m = R; // rows (profile size)
-    if ((n * 1LL * m) & 1LL) return 0;
+    int free_cells = 0;
+    for (int r = 0; r < R; r++) {
+        for (int c = 0; c < C; c++) {
+            if(g[r][c] == '.') free_cells++;
+        }
+    }
+    if (free_cells & 1) return 0;
     int S = 1 << m;
 
     // blocked[i] - mask of blocked cells in column i (bit = 1 if '#')

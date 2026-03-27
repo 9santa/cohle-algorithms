@@ -3,6 +3,44 @@
 // Нужна монотонность точки разреза на префиксе (dp на префиксе)
 // Time: O(N * K * log N)
 
+
+/* partition first i items into g groups, with transition: dp[g][i] = min over j < i of dp[g-1][j] + cost(j+1, i)
+   and the optimal split point is monotone */
+
+namespace {
+
+vector<ll> prevdp;
+vector<ll> curdp;
+
+// Define for your problem
+// j is split point, computing segment (j+1 ... i)
+ll cost(int j, int i);
+
+void compute(int l, int r, int optL, int optR) {
+    if (l > r) return;
+    int mid = (l+1) >> 1;
+
+    pair<ll, int> best = {infty<ll>, -1};
+    for (int j = optL; j <= min(mid-1, optR); j++) {
+        ll cand = prevdp[j] + cost(j, mid);
+        if (cand < best.first) best = {cand, j};
+    }
+
+    curdp[mid] = best.first;
+    int opt = best.second;
+    compute(l, mid-1, optL, opt);
+    compute(mid+1, r, opt, optR);
+
+    // usage:
+    for (int group = 1; group <= K; group++) {
+        compute(1, n, 0, n-1);
+        swap(prevdp, curdp);
+    }
+}
+
+} // namespace
+
+
 namespace not_optimized_mem {   // O(N * K) memory (full dp table)
 constexpr int MAXN = 100005;
 int N, K; // N - number of elements, K - number of groups or partitions

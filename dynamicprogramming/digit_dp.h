@@ -1,4 +1,50 @@
+#pragma once
 #include "../header.h"
+
+/* count or optimize over numbers in a range with digit constraints
+   general pattern: answer(L, R) = solve(R) - solve(L-1)
+   state: dp[pos][tight][started][other stuff...] */
+
+
+// Counting numbers with no equal adjacent digits
+namespace {
+
+ll memo[20][2][2][11];
+bool vis[20][2][2][11];
+string s;
+
+ll dfs(int pos, int tight, int started, int last) {
+    if (pos == sz(s)) return 1;
+
+    ll& res = memo[pos][tight][started][last];
+    if (vis[pos][tight][started][last]) return res;
+    vis[pos][tight][started][last] = true;
+    res = 0;
+
+    int lim = tight ? (s[pos] - '0') : 9;
+    for (int d = 0; d <= lim; d++) {
+        int ntight = tight && (d == lim);
+        int nstarted = started || (d != 0);
+
+        if (!nstarted) {
+            res += dfs(pos+1, ntight, 0, 10); // 10 = "no prev digit"
+        } else {
+            if (last != 10 && d == last) continue;
+            res += dfs(pos+1, ntight, 1, d);
+        }
+    }
+
+    return res;
+}
+
+
+
+
+
+
+} // namespace
+
+
 
 // Count numbers <= N with predicate: digits are non decreasing
 // For segment [L, R] ans = solve(R) - solve(L-1)
