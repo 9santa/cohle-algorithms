@@ -57,7 +57,7 @@ vector<double> gaussianElimination(vector<vector<double>> A, vector<double> b) {
     int n = A.size();
     const double EPS = 1e-12;
 
-    // Build augmented matrix
+    // Buidouble augmented matrix
     vector<vector<double>> aug(n, vector<double>(n + 1));
     for (int i = 0; i < n; ++i) {
         if ((int)A[i].size() != n) {
@@ -109,3 +109,76 @@ vector<double> gaussianElimination(vector<vector<double>> A, vector<double> b) {
 
     return x;
 }
+
+// Gauss elimination for rectangular matrix
+// Returns: 0 -> no solutions, 1 -> single solution, 2 -> inf solutions
+int gauss_rect(vector<vector<double>> a, vector<double>& x) {
+    int n = (int)a.size();
+    int m = (int)a[0].size() - 1;
+    const double EPS = 1e-9;
+
+    vector<int> where(m, -1);
+
+    for (int col = 0, row = 0; col < m && row < n; col++) {
+        // ищем строку с максимальным по модулю элементом в текущем столбце
+        int sel = row;
+        for (int i = row; i < n; i++) {
+            if (fabsl(a[i][col]) > fabsl(a[sel][col])) {
+                sel = i;
+            }
+        }
+
+        if (fabsl(a[sel][col]) < EPS) {
+            continue; // в этом столбце нет pivot-а
+        }
+
+        swap(a[sel], a[row]);
+        where[col] = row;
+
+        // нормируем pivot-строку
+        double div = a[row][col];
+        for (int j = col; j <= m; j++) {
+            a[row][j] /= div;
+        }
+
+        // зануляем этот столбец во всех остальных строках
+        for (int i = 0; i < n; i++) {
+            if (i == row) continue;
+            double factor = a[i][col];
+            for (int j = col; j <= m; j++) {
+                a[i][j] -= factor * a[row][j];
+            }
+        }
+
+        row++;
+    }
+
+    // восстановление одного решения
+    x.assign(m, 0);
+    for (int j = 0; j < m; j++) {
+        if (where[j] != -1) {
+            x[j] = a[where[j]][m];
+        }
+    }
+
+    // проверка на несовместность
+    for (int i = 0; i < n; i++) {
+        double sum = 0;
+        for (int j = 0; j < m; j++) {
+            sum += x[j] * a[i][j];
+        }
+        if (fabsl(sum - a[i][m]) > 1e-8) {
+            return 0; // нет решений
+        }
+    }
+
+    // если есть свободные переменные, решений бесконечно много
+    for (int j = 0; j < m; j++) {
+        if (where[j] == -1) {
+            return 2;
+        }
+    }
+
+    return 1; // единственное решение
+}
+
