@@ -3,6 +3,7 @@
 #include <stdexcept>
 
 
+// O(n^3)
 bool gaussian_elimination(vector<vector<double>>& a, vector<double>& x) {
     int n = (int)a.size();    // # rows
     const double EPS = 1e-9;
