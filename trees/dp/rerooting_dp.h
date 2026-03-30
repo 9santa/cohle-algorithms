@@ -4,7 +4,7 @@
 /* you need the answer for every node as root.
    the idea is:
     1. compute child-to-parent values
-    2. compute parent-to-child values using prefix/suffix products 
+    2. compute parent-to-child values using prefix/suffix products
    answer for child = everything from parent side except that child */
 
 // https://atcoder.jp/contests/dp/tasks/dp_v
