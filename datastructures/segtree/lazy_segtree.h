@@ -13,8 +13,8 @@ struct LazySegtree {
     using X = typename MX::value_type;
     using A = typename MA::value_type;
     int n, log, size;   // n = array size, size = actual segtree size
-    V<X> data;
-    V<A> lazy;
+    vector<X> data;
+    vector<A> lazy;
 
     LazySegtree() {}
     LazySegtree(int n) { build(n); }

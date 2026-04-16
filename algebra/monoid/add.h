@@ -1,6 +1,7 @@
 #include "../core.h"
+
 template<typename E>
-struct Monoid_Sum {
+struct Monoid_Add {
     using value_type = E;
     using X = value_type;
     static constexpr X op(const X& x, const X& y) { return x + y; }
