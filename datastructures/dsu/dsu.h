@@ -38,10 +38,10 @@ public:
         return (parent[x] = find(parent[x]));
     }
 
-    // Union smaller set to larger (small-to-large)
+    // Union by rank heuristic
     void unionSets(u64 x, u64 y) {
-        int root_x = find(x);
-        int root_y = find(y);
+        u64 root_x = find(x);
+        u64 root_y = find(y);
         if (root_x == root_y) return; // already in the same set
 
         // smaller rank set to larger rank set
@@ -52,8 +52,8 @@ public:
         if (rank[root_x] == rank[root_y]) rank[root_y]++;
         set_size[root_y] += set_size[root_x];
 
-        min_el[root_y] = std::min(min_el[x], min_el[y]);
-        max_el[root_y] = std::max(max_el[x], max_el[y]);
+        min_el[root_y] = std::min(min_el[root_x], min_el[root_y]);
+        max_el[root_y] = std::max(max_el[root_x], max_el[root_y]);
         set_count--;
     }
 
