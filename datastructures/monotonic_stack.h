@@ -7,7 +7,7 @@ namespace monotonic_stack {
 template<typename T>
 vector<int> next_greater_index(const vector<T>& a) {
     int n = (int)a.size();
-    vector<int> nge(n, -1);
+    vector<int> nge(n, n);
     stack<int> stk;
 
     for (int i = 0; i < n; i++) {
@@ -24,7 +24,7 @@ vector<int> next_greater_index(const vector<T>& a) {
 template<typename T>
 vector<int> next_smaller_array(const vector<T>& a) {
     int n = (int)a.size();
-    vector<int> nse(n, -1);
+    vector<int> nse(n, n);
     stack<int> stk;
 
     for (int i = 0; i < n; i++) {
