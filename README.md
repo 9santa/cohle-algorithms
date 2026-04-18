@@ -13,7 +13,3 @@ Main directories:
 - `legacy/`: older superseded implementations kept for reference.
 - `benchmarks/`: performance experiments and comparisons.
 
-Conventions:
-- Prefer reusable header-only code.
-- Demo-only programs should not live in reusable headers.
-- Legacy implementations belong under `legacy/`, not mixed with current files.
