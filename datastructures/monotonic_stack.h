@@ -5,10 +5,10 @@ namespace monotonic_stack {
 
 // For each element, find the first greater element to its right.
 template<typename T>
-vector<T> next_greater_array(const vector<T>& a) {
+vector<int> next_greater_index(const vector<T>& a) {
     int n = (int)a.size();
-    vector<T> nge(n, -1);
-    stack<T> stk;
+    vector<int> nge(n, -1);
+    stack<int> stk;
 
     for (int i = 0; i < n; i++) {
         while (!stk.empty() && a[stk.top()] < a[i]) {
@@ -22,10 +22,10 @@ vector<T> next_greater_array(const vector<T>& a) {
 
 // For each element, find the first smaller element to its right.
 template<typename T>
-vector<T> next_smaller_array(const vector<T>& a) {
+vector<int> next_smaller_array(const vector<T>& a) {
     int n = (int)a.size();
-    vector<T> nse(n, -1);
-    stack<T> stk;
+    vector<int> nse(n, -1);
+    stack<int> stk;
 
     for (int i = 0; i < n; i++) {
         while (!stk.empty() && a[stk.top()] > a[i]) {
@@ -39,10 +39,10 @@ vector<T> next_smaller_array(const vector<T>& a) {
 
 // For each element, find the first smaller element to its left.
 template<typename T>
-vector<T> prev_smaller_array(const vector<T>& a) {
+vector<int> prev_smaller_array(const vector<T>& a) {
     int n = (int)a.size();
-    vector<T> pse(n, -1);
-    stack<T> stk;
+    vector<int> pse(n, -1);
+    stack<int> stk;
 
     for (int i = 0; i < n; i++) {
         while (!stk.empty() && a[stk.top()] >= a[i]) {
@@ -57,10 +57,10 @@ vector<T> prev_smaller_array(const vector<T>& a) {
 
 // For each element, find the first greater element to its left.
 template<typename T>
-vector<T> prev_greater_array(const vector<T>& a) {
+vector<int> prev_greater_array(const vector<T>& a) {
     int n = (int)a.size();
-    vector<T> pge(n, -1);
-    stack<T> stk;
+    vector<int> pge(n, -1);
+    stack<int> stk;
 
     for (int i = 0; i < n; i++) {
         while (!stk.empty() && a[stk.top()] <= a[i]) {
