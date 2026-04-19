@@ -17,7 +17,7 @@ public:
         rank.assign(size, 0);
         min_el.assign(size, 0);
         max_el.assign(size, 0);
-        set_size.assign(size, 0);
+        set_size.assign(size, 1);
         set_count = size;
 
         // each node is its own parent at the beginning
