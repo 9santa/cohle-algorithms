@@ -3,7 +3,12 @@
 
 namespace nt {
 
-// O(nk), good when n,k small
+/**
+ * Returns C(n, k) using dynamic programming.
+ * @param n Total number of items.
+ * @param k Number of chosen items.
+ * Time: O(nk). Space: O(nk).
+ */
 inline ll binom_dp(int n, int k) {
     if (k < 0 || k > n) return 0;
     vector<vector<ll>> dp(n+1, vector<ll>(k+1, 0));

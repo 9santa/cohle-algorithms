@@ -3,6 +3,7 @@
 #include <numeric>
 
 // Dynamic bitset for W >= 10^8
+/** Returns maximum reachable weight up to W using dynamic bitset. Time: O(nW/word). */
 ll knapsack_dynamic_bitset(const vector<int>& weights, int W) {
     const int BITS = 64;
 
@@ -90,6 +91,7 @@ ll knapsack_dynamic_bitset(const vector<int>& weights, int W) {
 }
 
 // Bitset knapsack. Checks all the weights we can achieve (subset sum). O(n * W / 64)
+/** Demonstrates bitset subset-sum DP. Time: O(nS/word). */
 void knapsack_bitset(const vector<int>& weights, int S) {
     constexpr int MAXW = 100000;
     bitset<MAXW+1> dp;
@@ -125,6 +127,7 @@ void knapsack_bitset(const vector<int>& weights, int S) {
 
 
 // The most basic: no costs. Goal: find the maximum weight you can get
+/** Basic subset-sum knapsack over weights only. Time: O(nW). Space: O(W). */
 int basic_knapsack(const vector<int>& w, int W) {
     int n = sz(w);
     V<vi> dp(n+1, vi(W+1, 0));
@@ -142,6 +145,7 @@ int basic_knapsack(const vector<int>& w, int W) {
 }
 
 // Subset sum variant for knapsack problem. Finds all the weights we can achieve
+/** Alternative basic subset-sum knapsack. Time: O(nW). Space: O(W). */
 int basic_knapsack1(const vector<int>& w, int W){
     int n = sz(w);
     V<vb> dp(n+1, vector<bool>(W+1, false));
@@ -167,6 +171,7 @@ int basic_knapsack1(const vector<int>& w, int W){
 }
 
 // 0/1 knapsack. sqrt(W) trick. O(n * sqrt(W) + 2 ^ sz(heavy)). Works when most items are small, only few large
+/** 0/1 knapsack using weight DP. Time: O(nW). Space: O(W). */
 int knapsack_sqrt(vector<int>& weights, vector<int>& costs, int W) {
     vector<int> lightw, lightv, heavyw, heavyv;
     int sqrtW = sqrt(W);
@@ -196,6 +201,7 @@ int knapsack_sqrt(vector<int>& weights, vector<int>& costs, int W) {
 }
 
 // 0/1 knapsack. MITM for small n <= 40. O(2^(n/2) * log(2^(n/2)))
+/** Meet-in-the-middle 0/1 knapsack. Time: O(2^(n/2) log 2^(n/2)). */
 int knapsack_mitm(vector<int>& weights, vector<int>& costs, int W) {
     int n = sz(weights);
     int n1 = n/2, n2 = n-n1;
@@ -239,6 +245,7 @@ int knapsack_mitm(vector<int>& weights, vector<int>& costs, int W) {
 }
 
 // 0/1 knapsack. O(n * W). Costs, weights. Goal: maximize the total cost. Answer reconstruction
+/** 0/1 knapsack with cost c and weight w. Time: O(nW). Space: O(W). */
 int knapsack0_1(const vector<int>& c, const vector<int>& w, int W) {
     int n = sz(w);
     V<vi> dp(n+1, vi(W+1, 0));
@@ -272,6 +279,7 @@ int knapsack0_1(const vector<int>& c, const vector<int>& w, int W) {
 }
 
 // 0/1 knapsack. DP by value. O(n * V). Best when costs are small, W is large
+/** Value-DP knapsack minimizing weight per value. Time: O(n sumValue). */
 ll knapsack_dp_value(vector<int>& weights, vector<int>& costs, int W) {
     int n = sz(weights);
     ll V = accumulate(all(costs), 0LL);
@@ -291,6 +299,7 @@ ll knapsack_dp_value(vector<int>& weights, vector<int>& costs, int W) {
 }
 
 // 0/1 knapsack. O(n * W). Space optimized knapsack. O(W) memory
+/** Memory-optimized 0/1 knapsack. Time: O(nW). Space: O(W). */
 int knapsack_mem_optimized(const vector<int>& c, const vector<int>& w, int W) {
     int n = sz(w);
     vector<int> dp(W+1, 0);
@@ -305,6 +314,7 @@ int knapsack_mem_optimized(const vector<int>& c, const vector<int>& w, int W) {
 }
 
 // 0/1 knapsack. O(n * W). 2*W memory. Alternating arrays approach. Keeping only 2 rows.
+/** Alternative memory-optimized 0/1 knapsack. Time: O(nW). Space: O(W). */
 int knapsack_mem_optimized1(const vector<int>& c, const vector<int>& w, int W) {
     int n = sz(w);
     vector<int> odp(W+1, 0), ndp(W+1, 0);
@@ -320,6 +330,7 @@ int knapsack_mem_optimized1(const vector<int>& c, const vector<int>& w, int W) {
 }
 
 // 0/1 knapsack. O(n * W). Answer reconstruction
+/** Returns best value and chosen item indices. Time: O(nW). Space: O(nW). */
 pair<int, vector<int>> knapsack_reconstruction(const vector<int>& c, const vector<int>& w, int W) {
     int n = sz(w);
     vector<int> dp(W+1, 0);
@@ -350,6 +361,7 @@ pair<int, vector<int>> knapsack_reconstruction(const vector<int>& c, const vecto
 }
 
 // 0/1 knapsack. Naive recursion. O(2^n)
+/** Naive recursive 0/1 knapsack. Time: O(2^n). */
 int knapsack01_naive(int n, int W, vector<int>& weights, vector<int>& costs) {
     if (n == 0 || W == 0) return 0;
     if (weights[n-1] > W) return knapsack01_naive(n-1, W, weights, costs);
@@ -360,6 +372,7 @@ int knapsack01_naive(int n, int W, vector<int>& weights, vector<int>& costs) {
 
 // --- Unbounded Knapsack ---
 // Unbounded knapsack. Naive recursion. O(n ^ W) terrible
+/** Naive recursive unbounded knapsack. Time: exponential. */
 int unbounded_naive(int i, int W, vector<int>& weights, vector<int>& costs) {
     if (i == 0 || W == 0) return 0;
     if (weights[i-1] > W) return unbounded_naive(i-1, W, weights, costs);
@@ -369,6 +382,7 @@ int unbounded_naive(int i, int W, vector<int>& weights, vector<int>& costs) {
 }
 
 // Unbounded knapsack. O(n * W). Forward iteration for unbounded knapsack
+/** Unbounded knapsack DP. Time: O(nW). Space: O(W). */
 int unbounded_dp(vector<int>& weights, vector<int>& costs, int W) {
     int n = sz(weights);
     vector<int> dp(W+1, 0);
@@ -382,6 +396,7 @@ int unbounded_dp(vector<int>& weights, vector<int>& costs, int W) {
 
 // --- Bounded Knapsack ---
 // Bounded knapsack. O(n * W * k_max). Can only take up to cnt[i] item i. Naive recursion
+/** Naive recursive bounded knapsack. Time: exponential. */
 int bounded_naive(int i, int W, vector<int>& weights, vector<int>& costs, vector<int>& cnt) {
     if (i == 0 || W == 0) return 0;
     int ans = bounded_naive(i-1, W, weights, costs, cnt);   // don't take
@@ -392,6 +407,7 @@ int bounded_naive(int i, int W, vector<int>& weights, vector<int>& costs, vector
 }
 
 // Bounded knapsack. Binary decomposition DP. O(W * sum(log(Ki)))
+/** Bounded knapsack via binary splitting. Time: O(W sum log cnt_i). */
 int bounded_dp_binary(int W, vector<int>& weights, vector<int>& costs, vector<int>& cnt) {
     int n = sz(weights);
     vector<int> new_wt, new_val;

@@ -3,6 +3,7 @@
 // Tree diameter: weighted + unweighted
 // Two DFSs
 
+/** Returns the farthest vertex and distance from src in a tree. Time: O(n). Space: O(n). */
 template<class Cost>
 pair<int, Cost> farthest_from(const Graph<Cost, false>& G, int src) {
     const int N = G.N;
@@ -31,6 +32,7 @@ pair<int, Cost> farthest_from(const Graph<Cost, false>& G, int src) {
     return {best_v, dist[best_v]};
 }
 
+/** Returns tree diameter length. Time: O(n). Space: O(n). */
 template<class Cost>
 Cost tree_diameter(const Graph<Cost, false>& G) {
     auto [a, _] = farthest_from(G, 0);

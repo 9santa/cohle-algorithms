@@ -4,6 +4,7 @@ static constexpr int DX4[4] = {1, -1, 0, 0};
 static constexpr int DY4[4] = {0, 0, 1, -1};
 
 // Single-source BFS on grid. passable(x, y) decides if cell can be entered
+/** Runs 4-neighbor BFS on a grid from one source. Time: O(HW). Space: O(HW). */
 template<class Passable>
 V<vi> bfs_grid_4(int H, int W, pii start, Passable passable) {
     V<vi> dist(H, vi(W, -1));
@@ -31,6 +32,7 @@ V<vi> bfs_grid_4(int H, int W, pii start, Passable passable) {
 }
 
 // Multi-source BFS on grid
+/** Runs 4-neighbor multi-source BFS on a grid. Time: O(HW). Space: O(HW). */
 template<class Passable>
 V<vi> multi_source_bfs_grid_4(int H, int W, const V<pii>& sources, Passable passable) {
     V<vi> dist(H, vi(W, -1));

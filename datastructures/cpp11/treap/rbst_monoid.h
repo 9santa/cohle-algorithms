@@ -5,6 +5,7 @@
 // sequence, random merge + Monoid + optional persistence + reverse
 // merge(a, b) chooses root from a with prob |a| / (|a| + |b|) else from b
 
+/** Randomized binary search tree sequence over a monoid. Space: O(n). */
 template<class Monoid, bool PERSISTENT = false>
 struct RBST_Seq_Monoid {
     typedef typename Monoid::value_type X;
@@ -30,21 +31,28 @@ struct RBST_Seq_Monoid {
         return w = (w * (w >> 19)) ^ (t ^ (t >> 8));
     }
 
+    /** Clears pooled state. Time: O(1). */
     void reset() { pool.reset_keep_memory(); }
 
     // pass root, get new root if persistent,
     // or same pointer mutated if not persistent
+    /** Allocates a node. Amortized time: O(1). */
     np new_node(const X& x) { return pool.create(x); }
 
+    /** Returns subtree size. Time: O(1). */
     static int size(np t) { return t ? t->size : 0; }
+    /** Returns subtree product. Time: O(1). */
     static X prod(np t) { return t ? t->prod : Monoid::id(); }
+    /** Returns reversed-order subtree product. Time: O(1). */
     static X rprod(np t) { return t ? t->rev_prod : Monoid::id(); }
 
+    /** Clones a node when persistence is enabled. Amortized time: O(1). */
     np clone(np t) {
         if (!t || !PERSISTENT) return t;
         return pool.clone(t);
     }
 
+    /** Toggles subtree reversal. Time: O(1). */
     static void apply_rev(np t) {
         if (!t) return;
         t->rev ^= 1; // reverse lazy reverse flag
@@ -70,6 +78,7 @@ struct RBST_Seq_Monoid {
     }
 
     // split by index: [0..k) and [k..)
+    /** Splits into [0, k) and [k, n). Expected time: O(log n). */
     pair<np, np> split(np t, int k) {
         if (!t) return { nullptr, nullptr };
         t = clone(t);
@@ -94,6 +103,7 @@ struct RBST_Seq_Monoid {
     }
 
     // merge: random root by sizes
+    /** Merges two consecutive sequences. Expected time: O(log n). */
     np merge(np a, np b) {
         if (!a) return b;
         if (!b) return a;
@@ -114,6 +124,7 @@ struct RBST_Seq_Monoid {
     }
 
     // sequence ops (all expected O(log n))
+    /** Inserts x before pos and returns the new root. Expected time: O(log n). */
     np insert(np t, int pos, const X& x) {
         pair<np, np> ab = split(t, pos);
         np a = ab.first;
@@ -121,6 +132,7 @@ struct RBST_Seq_Monoid {
         return merge(merge(a, new_node(x)), b);
     }
 
+    /** Erases a[pos] and returns the new root. Expected time: O(log n). */
     np erase(np t, int pos) {
         pair<np, np> ab = split(t, pos);
         np a = ab.first;
@@ -133,6 +145,7 @@ struct RBST_Seq_Monoid {
         return merge(a, d);
     }
 
+    /** Returns a[pos]. Expected time: O(log n). */
     X get(np t, int pos) {
         pair<np, np> ab = split(t, pos);
         np a = ab.first;
@@ -145,6 +158,7 @@ struct RBST_Seq_Monoid {
         return res;
     }
 
+    /** Sets a[pos] = x and returns the new root. Expected time: O(log n). */
     np set(np t, int pos, const X& x) {
         pair<np, np> ab = split(t, pos);
         np a = ab.first;
@@ -159,6 +173,7 @@ struct RBST_Seq_Monoid {
     }
 
     // range prod on [l, r)
+    /** Returns the monoid product on [l, r). Expected time: O(log n). */
     X prod(np t, int l, int r) {
         pair<np, np> ab = split(t, l);
         np a = ab.first;
@@ -172,6 +187,7 @@ struct RBST_Seq_Monoid {
     }
 
     // reverse [l, r)
+    /** Reverses [l, r) and returns the new root. Expected time: O(log n). */
     np reverse(np t, int l, int r) {
         pair<np, np> ab = split(t, l);
         np a = ab.first;

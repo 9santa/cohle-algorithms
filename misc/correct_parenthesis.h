@@ -2,6 +2,7 @@
 
 using namespace std;
 
+/** Returns whether parentheses/brackets string is balanced. Time: O(n). */
 bool is_valid(const string& s) {
     stack<char> st;
     unordered_map<char, char> brackets = {

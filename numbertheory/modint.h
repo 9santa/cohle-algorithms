@@ -5,7 +5,12 @@
 namespace nt {
 
 
-// generic modular integer class
+/**
+ * Modular integer with compile-time modulus P.
+ * @param U Unsigned storage type.
+ * @param P Positive modulus.
+ * Space: O(1) per value.
+ */
 template<std::unsigned_integral U, U P>
 class ModIntBase {
 private:
@@ -13,10 +18,12 @@ private:
 
 public:
     constexpr ModIntBase() : x(0) {}
+
+    /** Constructs from an unsigned value and reduces modulo P. Time: O(1). */
     template<std::unsigned_integral T>
     constexpr ModIntBase(T x_) : x(x_ % mod()) {} // reduce modulo P
 
-    // handle negative numbers
+    /** Constructs from a signed value and reduces into [0, P). Time: O(1). */
     template<std::signed_integral T>
     constexpr ModIntBase(T x_) {
         using S = std::make_signed_t<U>; // convert modulus to signed
@@ -27,41 +34,49 @@ public:
         x = v; // safe now
     }
 
+    /** Returns the compile-time modulus. Time: O(1). */
     constexpr static U mod() {
         return P;
     }
 
+    /** Returns the stored residue in [0, P). Time: O(1). */
     constexpr U val() const {
         return x;
     }
 
+    /** Returns the additive inverse. Time: O(1). */
     constexpr ModIntBase operator-() const {
         ModIntBase res;
         res.x = (x == 0 ? 0 : mod() - x);
         return res;
     }
 
+    /** Multiplies by rhs modulo P. Time: O(1). */
     constexpr ModIntBase &operator*=(const ModIntBase &rhs) & {
         x = mul_mod(x, rhs.val(), mod());
         return *this;
     }
 
+    /** Adds rhs modulo P. Time: O(1). */
     constexpr ModIntBase &operator+=(const ModIntBase &rhs) & {
         x += rhs.val();
         if (x >= mod()) x -= mod();
         return *this;
     }
 
+    /** Subtracts rhs modulo P. Time: O(1). */
     constexpr ModIntBase &operator-=(const ModIntBase &rhs) & {
         if (x < rhs.val()) x += mod();
         x -= rhs.val();
         return *this;
     }
 
+    /** Divides by rhs using modular inverse. Time: O(log P). */
     constexpr ModIntBase &operator/=(const ModIntBase &rhs) & {
         return *this *= rhs.inv();
     }
 
+    /** Returns this value raised to e. Time: O(log e). */
     constexpr ModIntBase pow(ll e) const {
         ModIntBase a = *this, res = 1;
         while (e > 0) {
@@ -72,12 +87,13 @@ public:
         return res;
     }
 
-    // modular inverse (fermat's little theorem), mod() has to be prime
+    /** Returns the modular inverse using Fermat's theorem. Requires prime modulus. Time: O(log P). */
     constexpr ModIntBase inv() const {
         // return ModIntBase(pow_mod(this->val(), mod() - 2, mod()));
         return this->pow(mod()-2);
     }
 
+    /** Returns the modular inverse using Euclidean-style recurrence. Requires x != 0. Time: O(log P). */
     constexpr ModIntBase fast_inv() const {
         assert(x != 0);
         U t = x, res = 1;
@@ -118,7 +134,7 @@ public:
         return os << a.val();
     }
 
-    // three-way comparasion, all six relations
+    /** Compares residues by their stored value. Time: O(1). */
     friend constexpr std::strong_ordering operator<=>(const ModIntBase &lhs, const ModIntBase &rhs) {
         return lhs.val() <=> rhs.val();
     }

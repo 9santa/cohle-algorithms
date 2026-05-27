@@ -1,5 +1,6 @@
 #include "../core.h"
 
+/** Returns a^b modulo MOD. Time: O(log b). */
 ll binpow(ll a, ll b, ll MOD) {
     ll res = 1;
     for (a %= MOD; b; b>>=1) {
@@ -12,7 +13,7 @@ ll binpow(ll a, ll b, ll MOD) {
 bool isPrime[MAXN+1];
 vector<int> primes;
 
-// O(N log log N)
+/** Computes primes up to MAXN. Time: O(MAXN log log MAXN). */
 void sieve(void) {
     memset(isPrime, true, sizeof(isPrime));
     isPrime[0] = isPrime[1] = 0;
@@ -27,6 +28,7 @@ void sieve(void) {
     }
 }
 
+/** Precomputes prime-divisor masks for values up to MAXN. Time: O(MAXN * pi(MAXN)). */
 vector<u64> compute_masks() {
     vector<u64> masks(MAXN+1, 0);
     for (int num = 1; num <= MAXN; num++) {
@@ -41,6 +43,7 @@ vector<u64> compute_masks() {
 
 vector<u64> masks;
 
+/** Lazy segment tree for range prime-mask OR updates and queries. Space: O(n). */
 struct PrimeSeg {
 private:
     int n;
@@ -86,6 +89,7 @@ private:
 
 
 public:
+    /** Builds from a 0-indexed array of values. Time: O(n). */
     PrimeSeg(const vector<ll>& arr) : n(arr.size()) {
         int size = 1; while (size < n) size <<= 1;
         n = size;
@@ -94,7 +98,7 @@ public:
         build(arr);
     }
 
-    // Range OR update: add prime divisors of x to range [l, r]
+    /** Adds prime divisors of x to every mask in [l, r]. Time: O(log n). */
     void range_or(int l, int r, ll x) {
         u64 xmask = get_mask(x);
         if (xmask == 0) return; // no primes
@@ -121,7 +125,7 @@ public:
         }
     }
 
-    // Range query: get union of prime divisors in range [l, r]
+    /** Returns the union of prime divisors in [l, r]. Time: O(log n). */
     u64 range_query(int l, int r) {
         l += n, r += n;
         push_path(l), push_path(r);
@@ -134,31 +138,31 @@ public:
         return res;
     }
 
-    // Point query: get prime mask at index idx
+    /** Returns the prime mask at index idx. Time: O(log n). */
     u64 point_query(int idx) {
         idx += n;
         push_path(idx);
         return data[idx];
     }
 
-    // Check if range [l, r] has all primes in mask
+    /** Checks whether [l, r] contains all primes in mask. Time: O(log n). */
     bool has_all(int l, int r, u64 mask) {
         u64 range_mask = range_query(l, r);
         return (range_mask & mask) == mask;
     }
 
-    // Check if range [l, r] has any prime in mask
+    /** Checks whether [l, r] contains any prime in mask. Time: O(log n). */
     bool has_any(int l, int r, u64 mask) {
         u64 range_mask = range_query(l, r);
         return (range_mask & mask) != 0 ;
     }
 
-    // Count distinct primes in range [l, r]
+    /** Counts distinct primes present in [l, r]. Time: O(log n). */
     int count_primes(int l, int r) {
         return __builtin_popcountll(range_query(l, r));
     }
 
-    // Get list of primes from mask
+    /** Converts a prime mask to its prime list. Time: O(pi(MAXN)). */
     vector<int> mask_to_primes(u64 mask) {
         vector<int> res;
         for (int i = 0; i < sz(primes); i++) {
@@ -169,7 +173,7 @@ public:
         return res;
     }
 
-    // Get primes in range [l, r]
+    /** Returns distinct primes present in [l, r]. Time: O(log n + pi(MAXN)). */
     vector<int> get_primes_in_range(int l, int r) {
         return mask_to_primes(range_query(l, r));
     }

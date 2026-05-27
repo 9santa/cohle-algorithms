@@ -6,6 +6,12 @@
 namespace nt {
 
 
+/**
+ * Returns Carmichael's lambda for p^e.
+ * @param p Prime base.
+ * @param e Positive exponent.
+ * Time: O(e). Space: O(1).
+ */
 inline u64 carmichael_prime_power(u64 p, int e) {
     if (p == 2) {
         if (e == 1) return 1;   // lambda(2)=1
@@ -19,6 +25,10 @@ inline u64 carmichael_prime_power(u64 p, int e) {
     return pe_1 * (p - 1);
 }
 
+/**
+ * Returns Carmichael's lambda function lambda(n).
+ * Time: dominated by factorization. Space: O(number of prime factors).
+ */
 inline u64 carmichael_lambda(u64 n) {
     if (n == 0) return 0; // technically undefined
     if (n == 1) return 1;

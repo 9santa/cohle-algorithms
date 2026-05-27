@@ -1,5 +1,6 @@
 #include "hld_decomp.h"
 
+/** HLD wrapper for commutative path/subtree queries over an underlying data structure. Space: O(n). */
 template<class Monoid, class DS>
 struct HLD_Comm {
     using X = typename Monoid::value_type;
@@ -15,6 +16,7 @@ struct HLD_Comm {
     HLD_Comm() {}
     explicit HLD_Comm(int n_) { init(n_); }
 
+    /** Initializes storage for n vertices. Time: O(n). */
     void init(int n_) {
         n = n_;
         hld.init(n);
@@ -22,6 +24,7 @@ struct HLD_Comm {
         base.assign(n, Monoid::id());
     }
 
+    /** Builds HLD and underlying DS from vertex values. Time: O(n + DS build). */
     void build(const vector<vector<int>>& G, const vector<X>& values_by_vertex, int root_ = 0) {
         root = root_;
         n = sz(G);
@@ -35,12 +38,14 @@ struct HLD_Comm {
     }
 
     // ----- subtree (vertex mode) -----
+    /** Returns aggregate over subtree vertices of u. Time: O(DS query). */
     X subtree_prod(int u) {
         pair<int, int> it = hld.subtree_interval(u);
         return ds.prod(it.first, it.second);
     }
 
     // ----- subtree (edge mode, edge stored at child vertex pos) -----
+    /** Returns aggregate over subtree edges below u. Time: O(DS query). */
     X subtree_prod_edge(int u) {
         pair<int, int> it =hld.subtree_interval(u);
         int l = it.first + 1, r = it.second;
@@ -49,6 +54,7 @@ struct HLD_Comm {
     }
 
     // ----- path query (commute combine) -----
+    /** Returns aggregate over path vertices u-v. Time: O(log n * DS query). */
     X path_prod(int u, int v) {
         X res = Monoid::id();
         hld.for_each_path_unordered(u, v, [&](int l, int r) {
@@ -57,6 +63,7 @@ struct HLD_Comm {
         return res;
     }
 
+    /** Returns aggregate over path edges u-v. Time: O(log n * DS query). */
     X path_prod_edge(int u, int v) {
         X res = Monoid::id();
         hld.for_each_path_edge_unordered(u, v, [&](int l, int r) {
@@ -66,12 +73,14 @@ struct HLD_Comm {
     }
 
     // ----- point set (requires DS::set) -----
+    /** Sets vertex value at u. Time: O(DS set). */
     void point_set(int u, const X& x) {
         value[u] = x;
         ds.set(hld.pos[u], x);
     }
 
     // ----- range updates (requires DS::apply) -----
+    /** Applies action a to path vertices u-v. Time: O(log n * DS apply). */
     template<class A>
     void path_apply(int u, int v, const A& a) {
         hld.for_each_path_unordered(u, v, [&](int l, int r) {
@@ -79,6 +88,7 @@ struct HLD_Comm {
         });
     }
 
+    /** Applies action a to path edges u-v. Time: O(log n * DS apply). */
     template<class A>
     void path_apply_edge(int u, int v, const A& a) {
         hld.for_each_path_edge_unordered(u, v, [&](int l, int r) {
@@ -86,12 +96,14 @@ struct HLD_Comm {
         });
     }
 
+    /** Applies action a to subtree vertices of u. Time: O(DS apply). */
     template<class A>
     void subtree_apply(int u, const A& a) {
         pair<int, int> it = hld.subtree_interval(u);
         ds.apply(it.first, it.second, a);
     }
 
+    /** Applies action a to subtree edges below u. Time: O(DS apply). */
     template<class A>
     void subtree_apply_edge(int u, const A& a) {
         pair<int, int> it = hld.subtree_interval(u);
@@ -145,4 +157,3 @@ C) Non-commutative + lazy updates:
 
 =====================================================================================
 */
-

@@ -1,7 +1,9 @@
 #include "core.h"
 
+/** Static K-dimensional KD-tree for nearest-neighbor and orthogonal range queries. Space: O(nK). */
 template<int K, typename T = long long>
 struct KDTree {
+    /** Point with original input id. */
     struct Point {
         array<T, K> x{};
         int id = -1; // original index
@@ -17,6 +19,8 @@ struct KDTree {
     vector<Point> pts;
 
     KDTree() = default;
+
+    /** Builds from points. Time: O(n log n) average. */
     KDTree(vector<Point> points) {
         build(points);
     }
@@ -29,8 +33,7 @@ struct KDTree {
         return true;
     }
 
-    // ---------- L2 (squared Euclidean) ----------
-    // dist2 & box_dist2 use Euclidean medatic p=2
+    /** Returns squared Euclidean distance between two points. Time: O(K). */
     static ll dist2(const Point& a, const Point& b) {
         ll res = 0;
         for (int i = 0; i < K; i++) {
@@ -40,9 +43,7 @@ struct KDTree {
         return res;
     }
 
-    /* returns the min possible squared distance from q to any point inside the subdatee box.
-        the bounding box is: minimum coords 'mn', maximum coords 'mx'.
-        so it computes dist from the query to the hyperrectangle */
+    /** Returns minimum possible squared L2 distance from q to subtree bounding box v. Time: O(K). */
     ll box_dist2(int v, const Point& q) const {
         ll res = 0;
         for (int i = 0; i < K; i++) {
@@ -94,6 +95,7 @@ struct KDTree {
 
     int root = -1;
 
+    /** Builds the tree from points. Time: O(n log n) average. */
     void build(vector<Point> points) {
         pts = std::move(points);
         dat.clear();
@@ -105,7 +107,7 @@ struct KDTree {
         root = build_rec(0, (int)pts.size()-1, 0);
     }
 
-    // nearest neighbor
+    /** Returns {squared L2 distance, id} of the nearest point to q. Expected time: O(log n), worst O(n). */
     pair<ll, int> nearest_l2(const Point& q, bool allow_same_id = false) const {
         pair<ll, int> best = {LLONG_MAX, INT_MAX};
         nearest_l2_rec(root, q, best, allow_same_id);
@@ -141,7 +143,7 @@ struct KDTree {
         }
     }
 
-    // ---------- L1 (Manhattan) ----------
+    /** Returns Manhattan distance between two points. Time: O(K). */
     static ll dist1(const Point& a, const Point& b) {
         ll res = 0;
         for (int i = 0; i < K; i++) {
@@ -150,6 +152,7 @@ struct KDTree {
         return res;
     }
 
+    /** Returns minimum possible L1 distance from q to subtree bounding box v. Time: O(K). */
     ll box_dist1(int v, const Point& q) const {
         ll res = 0;
         for (int i = 0; i < K; i++) {
@@ -183,13 +186,14 @@ struct KDTree {
         }
     }
 
+    /** Returns {L1 distance, id} of the nearest point to q. Expected time: O(log n), worst O(n). */
     pair<ll, int> nearest_l1(const Point& q, bool allow_same_id = false) const {
         pair<ll, int> best = {LLONG_MAX, INT_MAX};
         nearest_l1_rec(root, q, best, allow_same_id);
         return best;
     }
 
-    // k nearest neighbors
+    /** Returns up to k nearest neighbors by squared L2 distance. Expected time: O(k log n), worst O(n log k). */
     vector<pair<ll, int>> k_nearest(const Point& q, int k, bool allow_same_id = false) const {
         priority_queue<pair<ll, int>> pq; // max-heap by distance
         k_nearest_rec(root, q, k, pq, allow_same_id);
@@ -263,6 +267,7 @@ struct KDTree {
         range_query_rec(dat[v].r, lo, hi, ans);
     }
 
+    /** Returns ids of points inside the inclusive axis-aligned box [lo, hi]. Time: O(output + visited nodes). */
     vector<int> range_query(const array<T, K>& lo, const array<T, K>& hi) const {
         vector<int> ans;
         range_query_rec(root, lo, hi, ans);

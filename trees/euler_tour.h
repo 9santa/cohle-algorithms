@@ -1,11 +1,13 @@
 #include "rooted_tree.h"
 
+/** Euler tour metadata; subtree of v is [tin[v], tout[v]). Space: O(n). */
 struct EulerTour {
     vi tin;   // time in
     vi tout;  // time out
     vi euler; // euler order, subtree of v is the range: [tin[v], tout[v]]
 };
 
+/** Builds an Euler tour from a rooted tree. Time: O(n). Space: O(n). */
 template<class G>
 EulerTour euler_tour(const G& g, const RootedTree& t, int root = 0) {
     int N = g.N;

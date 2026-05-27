@@ -4,6 +4,7 @@
 static constexpr u64 FIB_MAX_N_U64 = 93; // F(93) fits in u64, F(94) does not
 
 // 1) O(n) iterative
+/** Returns F(n) by iteration. Time: O(n). Space: O(1). */
 inline u64 fib_iter(u64 n) {
     u64 a = 0, b = 1;
     for (u64 i = 0; i < n; i++) {
@@ -15,6 +16,7 @@ inline u64 fib_iter(u64 n) {
 }
 
 // 2) O(log n) Lucas squaring
+/** Returns F(n) using Lucas squaring. Time: O(log n). Space: O(1). */
 inline u64 fib_lucas(u64 n) {
     if (n < 2) return n;
     if (n <= 10) return fib_iter(n); // for small n simple loop is good
@@ -38,6 +40,7 @@ inline u64 fib_lucas(u64 n) {
 
 // 3) O(log n) fast doubling
 // Returns (F(n), F(n+1))
+/** Returns {F(n), F(n+1)} by fast doubling. Time: O(log n). Space: O(log n). */
 inline pair<u64, u64> fib_doubling_pair(u64 n) {
     if (n == 0) return {0, 1};
     auto [a, b] = fib_doubling_pair(n >> 1); // a=F(k), b = F(k+1)
@@ -53,10 +56,12 @@ inline pair<u64, u64> fib_doubling_pair(u64 n) {
 
 // 4) O(log n) matrix exponentiation
 // M = [[1, 1], [1, 0]]; M^n = [[F(n+1), F(n)], [F(n), F(n-1)]]
+/** 2x2 matrix used for Fibonacci exponentiation. Space: O(1). */
 struct Mat2 {
     u64 a, b, c, d; // [[a,b], [c,d]]
 };
 
+/** Multiplies two 2x2 matrices. Time: O(1). */
 inline Mat2 mul(const Mat2& x, const Mat2& y) {
     u128 A = (u128)x.a * y.a + (u128)x.b * y.c;
     u128 B = (u128)x.a * y.b + (u128)x.b * y.d;
@@ -65,6 +70,7 @@ inline Mat2 mul(const Mat2& x, const Mat2& y) {
     return {(u64)A, (u64)B, (u64)C, (u64)D};
 }
 
+/** Returns F(n) by matrix exponentiation. Time: O(log n). Space: O(1). */
 inline u64 fib_matrix(u64 n) {
     if (n == 0) return 0;
     Mat2 base{1, 1, 1, 0};
@@ -80,6 +86,7 @@ inline u64 fib_matrix(u64 n) {
 }
 
 // 5) Floating Binet formula (drifts at some point)
+/** Returns F(n) using floating-point Binet formula. Time: O(1). Space: O(1). */
 inline u64 fib_binet(u64 n) {
     long double sqrt5 = sqrtl(5.0L);
     long double golden_ratio = (1.0L + sqrt5) / 2.0L;

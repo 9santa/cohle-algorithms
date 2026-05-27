@@ -156,6 +156,7 @@ struct PlusMinusOneRMQ {
 // array A -> Cartesian tree -> LCA
 // LCA -> RMQ on Euler-depth array (adj diff +-1)
 // +-1 RMQ via Four Russians -> O(1) queries
+/** Static RMQ via Cartesian tree, Euler tour, and plus-minus-one RMQ. Space: O(n). */
 struct FastRMQ {
     int n = 0;
     vector<ll> a;
@@ -179,6 +180,7 @@ struct FastRMQ {
         return i < j;
     }
 
+    /** Builds the Cartesian tree. Time: O(n). */
     void build_cartesian() {
         parent.assign(n, -1);
         lc.assign(n, -1);
@@ -210,6 +212,7 @@ struct FastRMQ {
         }
     }
 
+    /** Builds the Euler tour of the Cartesian tree. Time: O(n). */
     void build_euler_tour() {
         euler.clear(), depth.clear();
         first.assign(n, -1);
@@ -261,6 +264,7 @@ struct FastRMQ {
         }
     }
 
+    /** Builds all RMQ structures from a 0-indexed immutable array. Time: O(n). */
     void build(const vector<ll>& arr) {
         a = arr;
         n = sz(a);
@@ -270,6 +274,7 @@ struct FastRMQ {
         rmqDepth.build(depth);
     }
 
+    /** Returns the Cartesian-tree LCA node for indices u and v. Time: O(1). */
     int lcaIndex(int u, int v) const {
         int L = first[u];
         int R = first[v];
@@ -277,11 +282,13 @@ struct FastRMQ {
         return euler[pos];
     }
 
+    /** Returns the index of the minimum value in [l, r]. Time: O(1). */
     int rmqIndex(int l, int r) const {
         if (l > r) swap(l, r);
         return lcaIndex(l, r);
     }
 
+    /** Returns the minimum value in [l, r]. Time: O(1). */
     ll rmqValue(int l, int r) const {
         return a[rmqIndex(l, r)];
     }

@@ -2,6 +2,7 @@
 
 constexpr ll MAX_X = 1e18+1;
 
+/** Interactive query helper. Time: O(1) plus judge latency. */
 ll ask(ll a) {
     cout << "? " << a << "\n";
     cout.flush();
@@ -12,6 +13,7 @@ ll ask(ll a) {
     return resp;
 }
 
+/** Returns decimal digit sum. Time: O(log n). */
 int sumDigits(ll a) {
     int s = 0;
     if (a < 0) a = -a;
@@ -22,6 +24,7 @@ int sumDigits(ll a) {
     return s;
 }
 
+/** Solves the digit-sum guessing interaction. */
 void solve(void) {
     constexpr int MAXD = 19;
     vector<int> digits(MAXD, 0);

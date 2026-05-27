@@ -2,6 +2,7 @@
 
 // Enumerate all paths from s to t in a DAG
 // Number of paths can be exponential
+/** Enumerates all directed paths from s to t in a DAG. Time: O(total output length). */
 template<class Cost>
 V<vi> all_paths_dag(const Graph<Cost, true>& G, int s, int t) {
     V<vi> all;

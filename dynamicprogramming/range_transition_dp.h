@@ -9,6 +9,7 @@
 
 constexpr int MOD = 1e9 + 7;
 
+/** Applies range-sum transitions over the previous DP array. Time: O(n). Space: O(n). */
 vector<int> rangeTransitionDP(const vector<int>& dp, const vector<pair<int, int>>& ranges) {
     int n = sz(dp);
     vector<int> pref(n+1, 0);

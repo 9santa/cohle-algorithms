@@ -8,6 +8,7 @@ Time: O(2^n * n^2). Works only for n <= 25
 Memory: O(2^n * n)
 */
 
+/** Returns one Hamiltonian path, or empty if none is found. Time: O(2^n n^2). */
 static vector<int> hamilton_path(const vector<vector<int>>& matrix, bool isDirected) {
     int n = (int)matrix.size();
     const int FULL = (1 << n) - 1;

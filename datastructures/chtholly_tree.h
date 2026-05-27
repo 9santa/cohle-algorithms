@@ -1,9 +1,6 @@
 #include "core.h"
 
-/* Lazy, interval-based ds that uses map
-   to store contiguous intervals with the same value
-   Efficient for certain types of randomized array ops */
-
+/** Ordered-disjoint-interval tree for range assign/add and interval queries. Space: O(number of intervals). */
 template<typename T>
 struct Chtholly {
 private:
@@ -19,7 +16,7 @@ private:
     }
 
 public:
-    // Init from array
+    /** Builds from a 0-indexed array by compressing equal adjacent values. Time: O(n log n). */
     Chtholly(const vector<T>& arr) : n((int)arr.size()) {
         for (int i = 0; i < n;) {
             int j = i;
@@ -30,7 +27,7 @@ public:
         mp[n] = T(); // sentinel
     }
 
-    // Init with all 'initial'
+    /** Builds size elements initialized to initial. Time: O(log n). */
     Chtholly(int size, T initial = 0) : n(size) {
         mp[0] = initial;
         mp[n] = -1;
@@ -47,7 +44,7 @@ private:
     }
 
 public:
-    // Range add: add x to [l, r)
+    /** Adds x to every element in [l, r). Time: O(k log n), where k is touched intervals. */
     void range_add(int l, int r, T x) {
         if (l >= r) return;
         split(l);
@@ -57,6 +54,7 @@ public:
         }
     }
 
+    /** Assigns x to every element in [l, r). Time: O(k log n), where k is erased intervals. */
     void range_assign(int l, int r, T x) {
         if (l >= r) return;
         split(l);
@@ -67,7 +65,7 @@ public:
         mp[l] = x;
     }
 
-    // Get k-th smallest element in [l, r) (0-idx)
+    /** Returns the 0-indexed k-th smallest value in [l, r). Time: O(k log k). */
     T range_kth(int l, int r, int k) {
         if (l >= r || k < 0) return T();
         split(l);
@@ -88,7 +86,7 @@ public:
         return T(); // k out of range
     }
 
-    // Get sum of (a[i]^x mod M) over [l, r)
+    /** Returns sum of a[i]^x mod M over [l, r). Time: O(k log x). */
     i64 range_power_sum(int l, int r, int x, int M) {
         if (l >= r) return 0;
         split(l);
@@ -103,7 +101,7 @@ public:
         return ans;
     }
 
-    // Get all values in [l, r) as vector of pairs {value, length}
+    /** Returns compressed {value, length} segments inside [l, r). Time: O(k). */
     vector<pair<T, i64>> get_range(int l, int r) {
         if (l >= r) return 0;
         split(l);
@@ -117,7 +115,7 @@ public:
         return res;
     }
 
-    // Get value at position i
+    /** Returns a[i]. Time: O(log n). */
     T get(int i) {
         if (i < 0 || i >= n) return T();
         auto it = prev(mp.upper_bound(i));

@@ -1,8 +1,7 @@
 #include "../core.h"
 #include "../node_pool.h"
 
-// Standard treap for multiset of points (X, Y): BST by X, max-heap by Y.
-// Duplicate policy: left <= X0, right > X0, (duplicates go LEFT).
+/** Treap with explicit key x and priority y. Space: O(n). */
 template<typename T, class Comp = std::less<T>>
 struct TreapXY {
     struct Node {
@@ -27,11 +26,13 @@ struct TreapXY {
         return x ^ (x >> 31);
     }
 
+    /** Clears the tree while keeping pooled memory. Time: O(1). */
     void reset() {
         root = nullptr;
         pool.reset_keep_memory();
     }
 
+    /** Returns number of keys. Time: O(1). */
     int size() const { return size(root); }
 
     // helpers
@@ -99,17 +100,16 @@ struct TreapXY {
         }
     }
 
-    // O(log n)
-    // insert (X with optional Y). Random priority if Y isn't provided
+    /** Inserts x with priority y. Expected time: O(log n). */
     void insert(const T& x, u32 y) {
         Node* nd = pool.create(x, y);
         auto [a, b] = split_leq(root, x); // dups go left
         root = merge(merge(a, nd), b);
     }
+    /** Inserts x with generated priority. Expected time: O(log n). */
     void insert(const T& x) { insert(x, splitmix64()); }
 
-    // O(log n)
-    // erase one occurence of key (multiset erase-one)
+    /** Erases one occurrence of key, if present. Expected time: O(log n). */
     bool erase_one(const T& key) {
         auto [a, bc] = split_lt(root, key); // a < key, bc >= key
         auto [b, c] = split_leq(bc, key);   // b == key, c > key
@@ -124,9 +124,7 @@ struct TreapXY {
         return true;
     }
 
-    // O(log n)
-    // lower_bound: first element with x >= key
-    // Returns pointer to node (do not store if treap will change)
+    /** Returns first node with x >= key, or nullptr. Expected time: O(log n). */
     Node* lower_bound(const T& key) const {
         Node* t = root;
         Node* ans = nullptr;
@@ -141,7 +139,7 @@ struct TreapXY {
         return ans;
     }
 
-    // count occurences (multiset)
+    /** Counts occurrences of key. Expected time: O(log n). */
     int count(const T& key) {
         auto [a, bc] = split_lt(root, key);
         auto [b, c] = split_leq(bc, key);

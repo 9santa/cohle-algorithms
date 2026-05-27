@@ -2,6 +2,7 @@
 
 constexpr int MOD = 998244353;
 
+/** Binary exponentiation by repeated squaring. Time: O(log b). */
 template<typename T>
 T binpow(T a, u64 b) {
     T res = 1;
@@ -13,13 +14,13 @@ T binpow(T a, u64 b) {
     return res;
 }
 
+/** Multiplies two 32-bit residues modulo P. Time: O(1). */
 template<u32 P>
 constexpr u32 mulMod(u32 a, u32 b) {
     return u64(a) * b % P;
 }
 
-/* this is some tricky stuff, intentionally overflows u64
-   but recovers the correct value using lond double approx */
+/** Multiplies two 64-bit residues modulo P using long double reduction. Time: O(1). */
 template<u64 P>
 constexpr u64 mulMod(u64 a, u64 b) {
     u64 res = a * b - u64(1.L * a * b / P - 0.5L) * P;
@@ -27,13 +28,14 @@ constexpr u64 mulMod(u64 a, u64 b) {
     return res;
 }
 
-// signed modulo fix
+/** Returns x modulo mod in [0, mod). Time: O(1). */
 i64 safeMod(i64 x, i64 mod) {
     x %= mod;
     if (x < 0) x += mod;
     return x;
 }
 
+/** Extended gcd; writes x,y such that ax + by = gcd(a,b). Time: O(log min(a,b)). */
 static i64 egcd(i64 a, i64 b, i64 &x, i64 &y) {
     // returns g=gcd(a,b), and finds x,y such that ax+by=g
     if (b == 0) { x = 1; y = 0; return a; }
@@ -44,6 +46,7 @@ static i64 egcd(i64 a, i64 b, i64 &x, i64 &y) {
     return g;
 }
 
+/** Returns the modular inverse of a modulo mod. Time: O(log mod). */
 static i64 modInv(i64 a, i64 mod) {
     // inverse exists if gcd(a, mod)=1
     i64 x, y;
@@ -54,8 +57,7 @@ static i64 modInv(i64 a, i64 mod) {
     return safeMod(x, mod);
 }
 
-
-// generic modular integer class
+/** Fixed-modulus modular integer. Space: O(1). */
 template<typename U, U P>
 class ModIntBase {
 private:
@@ -113,7 +115,7 @@ public:
         return *this *= rhs.inv();
     }
 
-    // modular inverse (fermat's little theorem), mod() has to be prime
+    /** Returns the modular inverse; mod() must be prime. Time: O(log mod). */
     ModIntBase inv() const {
         return binpow(*this, mod() - 2);
     }
@@ -192,6 +194,7 @@ struct MatDyn {
     inline Z& operator()(int i, int j) { return a[i * MAXN + j]; }
     inline const Z& operator()(int i, int j) const { return a[i * MAXN + j]; }
 
+    /** Returns the n x n identity matrix. Time: O(n). */
     static MatDyn identity(int n) {
         MatDyn m(n);
         for (int i = 0; i < n; i++) m(i, i) = 1;
@@ -199,6 +202,7 @@ struct MatDyn {
     }
 
     // Multiply: C = A * B. O(n^3)
+    /** Multiplies two active n x n matrices. Time: O(n^3). */
     friend MatDyn operator*(const MatDyn& A, const MatDyn& B) {
         const int n = A.n;
         MatDyn C(n);
@@ -215,6 +219,7 @@ struct MatDyn {
     }
 };
 
+/** Matrix multiplication monoid for disjoint sparse tables. Space: O(1). */
 template<int MAXN, class ModInt>
 struct Monoid_MatDyn {
     using value_type = MatDyn<MAXN, ModInt>;
@@ -226,6 +231,7 @@ struct Monoid_MatDyn {
     X id() const { return X::identity(n); }
 };
 
+/** Disjoint sparse table for associative, non-idempotent range products. Space: O(n log n). */
 template<class Monoid>
 struct DisjointSparseTable {
     using MX = Monoid;
@@ -241,11 +247,13 @@ struct DisjointSparseTable {
     DisjointSparseTable(int n_, F f, MX mx_ = MX()) : mx(std::move(mx_)) { build(n_, f); }
 
     // Build from vector
+    /** Builds from values. Time: O(n log n). */
     void build(const vector<X>& a) {
         build((int)a.size(), [&](int i) -> X { return a[i]; });
     }
 
     // Build from function f(i). O(n log n)
+    /** Builds from generator f(i). Time: O(n log n). */
     template<class F>
     void build(int n_, F f) {
         n = n_;
@@ -280,6 +288,7 @@ struct DisjointSparseTable {
     }
 
     // Query [l, r). O(1)
+    /** Returns the product on [l, r). Time: O(1). */
     X prod(int l, int r) const {
         if (l >= r) return mx.id();
         if (r - l == 1) return data[0][l];
@@ -296,6 +305,7 @@ using Mat = MatDyn<MAXK, Z>;
 using MX = Monoid_MatDyn<MAXK, Z>;
 
 // Build character matrix T(ch)
+/** Builds the transition matrix for one character. Time: O(K). */
 template<int MAXK>
 static Mat char_matrix(const string& pat, char ch) {
     int K = (int)pat.size();

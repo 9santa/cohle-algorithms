@@ -4,6 +4,7 @@ using namespace std;
 
 // Basic Kadane's algorithm for Maximum Subarray Sum
 // Time: O(n), Space: O(1)
+/** Returns maximum subarray sum. Time: O(n). Space: O(1). */
 int maxSubArraySum(vector<int>& nums) {
     int max_so_far = nums[0];
     int max_ending_here = nums[0];
@@ -18,6 +19,7 @@ int maxSubArraySum(vector<int>& nums) {
 
 
 // With indices, return the actual subarray
+/** Returns one maximum-sum subarray as values. Time: O(n). Space: O(answer size). */
 vector<int> maxSubArrayWithIndices(vector<int>& nums) {
     int max_so_far = nums[0];
     int max_ending_here = nums[0];

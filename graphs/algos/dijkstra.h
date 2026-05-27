@@ -1,11 +1,13 @@
 #include "../core.h"
 
+/** Dijkstra distances and parent tree. Space: O(n). */
 template<class Cost>
 struct DijkstraRes {
     V<Cost> dist;
     vi parent; // prev vertex
 };
 
+/** Runs Dijkstra from src on a nonnegative weighted graph. Time: O((n + m) log n). */
 template<class Cost, bool directed>
 DijkstraRes<Cost> dijkstra(const Graph<Cost, directed>& G, int src) {
     const int N = G.N;

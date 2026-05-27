@@ -5,6 +5,7 @@
    C -> max edge weight, small integer, if C = 1 -> its just 0-1 BFS
    O(V + E + C)
 */
+/** Dial shortest paths for integer weights in [0, C]. Time: O(m + Cn). Space: O(n + C). */
 template<class Cost, bool directed>
 vl dial_shortest_paths(const Graph<Cost, directed>& G, int src, int C) {
     static_assert(std::is_integral<Cost>::value, "Dial expects integral costs");

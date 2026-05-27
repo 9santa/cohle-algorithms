@@ -2,6 +2,7 @@
 
 // Undirected Eulerian trail/cycle in multigraph using edge ids and Hierholzer algorithm
 // Input: edges list (u, v). Returns vertex sequence of the rtail, or {} if impossible
+/** Returns an undirected Eulerian trail/cycle as vertex order, or empty. Time: O(n + m). */
 inline vi eulerian_trail_undirected(int N, const vpii& edges) {
     int M = sz(edges);
     V<vpii> adj(N); // (to, eid)

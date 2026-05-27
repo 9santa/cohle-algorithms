@@ -1,5 +1,6 @@
 #include "../graphs/core.h"
 
+/** Returns one or two centers of a tree by leaf peeling. Time: O(n). Space: O(n). */
 template<class Cost>
 vi tree_centers_by_leaf_peeling(const Graph<Cost, false>& G) {
     const int N = G.N;

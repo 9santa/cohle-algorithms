@@ -1,5 +1,6 @@
 #include "../core.h"
 
+/** Computes shortest paths for edge weights 0 or 1. Time: O(n + m). Space: O(n). */
 template<class Cost, bool directed>
 vl zero_one_bfs(const Graph<Cost, directed>& G, int src) {
     static_assert(std::is_integral<Cost>::value, "0-1 BFS expects integral edge costs");

@@ -15,6 +15,7 @@ Space: O(1) in-place
 По сути очень тупой алгоритм, два цикла, и для каждого элемента первого цикла ищем минимум справа, после чего меняем их
 */
 
+/** Selection sort. Time: O(n^2). */
 void selection_sort(vector<int>& arr) {
     int n = (int)arr.size();
     for(int i = 0; i < n; i++) {
@@ -36,6 +37,7 @@ Space: O(1) in-place
 В конце каждой итерации внутреннего цикла, 1 элемент встает на свое место
 */
 
+/** Bubble sort. Time: O(n^2). */
 void bubble_sort(vector<int>& arr) {
     int n = (int)arr.size();
 
@@ -60,6 +62,7 @@ Time complexity: O(n^2)
 Space: O(1)
 */
 
+/** Insertion sort. Time: O(n^2). */
 void insertion_sort(vector<int>& arr) {
     int n = (int)arr.size();
 
@@ -83,6 +86,7 @@ Space: O(n)
 */
 
 namespace MergeSortRecursive {
+/** Merges two sorted halves. Time: O(r-l). */
 void merge(vector<int>& arr, int left, int mid, int right, vector<int>& temp) {
     int i = left, j = mid + 1, k = left;
 
@@ -115,6 +119,7 @@ void merge(vector<int>& arr, int left, int mid, int right, vector<int>& temp) {
     }
 }
 
+/** Recursive merge-sort helper. Time: O(n log n). */
 void merge_sort_helper(vector<int>& arr, int left, int right, vector<int>& temp) {
     if(left >= right) return;
 
@@ -126,6 +131,7 @@ void merge_sort_helper(vector<int>& arr, int left, int right, vector<int>& temp)
     merge(arr, left, mid, right, temp);
 }
 
+/** Recursive merge sort. Time: O(n log n). */
 void merge_sort_recursive(vector<int>& arr) {
     if(arr.empty()) return;
     vector<int> temp(arr.size());
@@ -168,6 +174,7 @@ void merge(vector<int>& arr, int left, int mid, int right, vector<int>& temp) {
     }
 }
 
+/** Iterative merge sort. Time: O(n log n). */
 void merge_sort_iterative(vector<int>& arr) {
     int n = (int)arr.size();
     if (n <= 1) return;

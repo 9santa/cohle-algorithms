@@ -3,12 +3,14 @@
 #include <assert.h>
 using namespace std;
 
+/** Merge-sort tree for order-statistics style range counting queries. Space: O(n log n). */
 template<typename T, class Compare = std::less<>>
-struct mergesort_tree {
+struct MergeSortTree {
     int n;
     Compare cmp;
     vector<vector<T>> t;
 
+    /** Builds sorted segment lists from a 0-indexed array. Time: O(n log n). */
     void build(const vector<int>& a, Compare _cmp = std::less<>()) {
         n = (int)a.size();
         t.resize(2 * n);
@@ -24,7 +26,7 @@ struct mergesort_tree {
         }
     }
 
-    // count elements <= x in [l, r). O(log^2(n))
+    /** Counts elements <= x in [l, r). Time: O(log^2 n). */
     int count_less_or_equal(int l, int r, T x) const {
         assert(0 <= l && l <= r && r <= n);
         int res = 0;
@@ -41,7 +43,7 @@ struct mergesort_tree {
         return res;
     }
 
-    // O(log^2(n))
+    /** Counts elements < x in [l, r). Time: O(log^2 n). */
     int count_less(int l, int r, T x) const {
         assert(0 <= l && l <= r && r <= n);
         int res = 0;
@@ -58,7 +60,7 @@ struct mergesort_tree {
         return res;
     }
 
-    // O(log^2(n))
+    /** Counts elements >= x in [l, r). Time: O(log^2 n). */
     int count_greater_or_equal(int l, int r, T x) const {
         assert(0 <= l && l <= r && r <= n);
         int res = 0;
@@ -75,7 +77,7 @@ struct mergesort_tree {
         return res;
     }
 
-    // O(log^2(n))
+    /** Counts elements > x in [l, r). Time: O(log^2 n). */
     int count_greater(int l, int r, T x) const {
         assert(0 <= l && l <= r && r <= n);
         int res = 0;
@@ -92,7 +94,7 @@ struct mergesort_tree {
         return res;
     }
 
-    // O(log^2(n))
+    /** Counts elements in [xl, xr) within index range [l, r). Time: O(log^2 n). */
     int count_within(int l, int r, T xl, T xr) const {
         assert(0 <= l && l <= r && r <= n);
         int res = 0;
@@ -109,7 +111,7 @@ struct mergesort_tree {
 
     }
 
-    // O(SZ * log n) where SZ is the size of the answer
+    /** Returns the sorted values from [l, r). Time: O(k log n), where k is the answer size. */
     vector<T> get_sorted_list(int l, int r) const {
         assert(0 <= l && l <= r && r <= n);
         vector<T> res;

@@ -1,5 +1,6 @@
 #include "../core.h"
 
+/** Generic iterative segment tree over an associative monoid. Space: O(n). */
 template<class Monoid>
 struct SegTree {
     using X = typename Monoid::value_type;
@@ -14,12 +15,17 @@ struct SegTree {
     }
     SegTree(const V<X>& v) { build(v); }
 
+    /** Builds a tree of size m filled with the monoid identity. Time: O(n). */
     void build(int m) {
         build(m, [](int i) -> X { return Monoid::id(); });
     }
+
+    /** Builds the tree from a 0-indexed array. Time: O(n). */
     void build(const V<X>& v) {
         build(sz(v), [&](int i) -> X { return v[i]; });
     }
+
+    /** Builds the tree from values f(i). Time: O(n). */
     template<typename F>
     void build(int m, F f) {
         n = m, log = 1;
@@ -30,17 +36,22 @@ struct SegTree {
         ROF(i, 1, size) update(i);
     }
 
+    /** Returns a[i]. Time: O(1). */
     X get(int i) const { return dat[size+i]; }
+
+    /** Returns all stored values in index order. Time: O(n). */
     V<X> get_all() const { return {dat.begin() + size, dat.begin() + size + n}; }
 
     void update(int i) { dat[i] = Monoid::op(dat[2*i], dat[2*i+1]); }
+
+    /** Sets a[i] to x. Time: O(log n). */
     void set(int i, const X& x) {
         assert(i < n);
         dat[i += size] = x;
         while (i >>= 1) update(i);
     }
 
-    // [L, R)
+    /** Returns the monoid product over [L, R). Time: O(log n). */
     X prod(int L, int R) {
         assert(0 <= L && L <= R && R <= n);
         X vl = Monoid::id(), vr = Monoid::id();

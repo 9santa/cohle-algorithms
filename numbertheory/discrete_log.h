@@ -5,21 +5,11 @@
 
 namespace nt {
 
-/*
-Discrete logarithm (extended Baby-Steps-Giant-Steps):
-Find smallest x >= 0 such that a^x ≡ b (mod m), or return -1 if none.
-
-Handles non-coprime case by repeatedly factoring out g = gcd(a, m):
-- If b is not divisible by g, no solution.
-- Otherwise reduce (b, m) by g and track how many steps we removed.
-
-After reduction we have gcd(a, m) = 1 and can run standard BSGS.
-
-Time:  O(sqrt(m)) expected
-Mem:   O(sqrt(m))
-*/
-
-// standard BSGS for gcd(a,m) = 1
+/**
+ * Solves a^x = b (mod m) using BSGS when gcd(a, m) = 1.
+ * @return Smallest x >= 0, or -1 if no solution is found.
+ * Time: O(sqrt m) expected. Space: O(sqrt m).
+ */
 inline ll bsgs_coprime(u64 a, u64 b, u64 m) {
     a %= m, b %= m;
     if (m == 1) return 0;
@@ -58,7 +48,11 @@ inline ll bsgs_coprime(u64 a, u64 b, u64 m) {
 }
 
 
-// generalized exBSGS for gcd(a, m) != 1
+/**
+ * Solves a^x = b (mod m) using extended BSGS for non-coprime cases.
+ * @return Smallest x >= 0, or -1 if no solution exists.
+ * Time: O(sqrt m) expected. Space: O(sqrt m).
+ */
 inline ll exbsgs(u64 a, u64 b, u64 m) {
     assert(gcd(a, m) != 1);
     a = safe_mod(a, m);

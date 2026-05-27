@@ -1,15 +1,6 @@
 #include "../sparsetable/sparse_table_idempotent.h"
 
-/*
-    RMQ for any array D[] using "block + mask-in-block + sparse table over blocks"
-    D[] will be Euler depths (adj diffs = +-1), but mask trick work any values
-    Block size B is chosen ~log2(n), must be <= 63 (we use u64 masks)
-    In-block small range RMQ(l, r) is answered in O(1) via:
-        m = mask[r] & ((1ULL << len) - 1), pos = msb(m), ans = r - pos
-    // Can be used with: farach-colton-bender algo
-*/
-
-// RMQ-TYPE MONOIDS ONLY (min, max, argmin, argmax...)
+/** Block-mask RMQ for idempotent min/max-like monoids. Space: O(n). */
 template<class Monoid, template<class> class SPARSE = SparseTable>
 struct BlockMaskRMQ {
     using MX = Monoid;
@@ -29,12 +20,12 @@ struct BlockMaskRMQ {
     BlockMaskRMQ() = default;
     explicit BlockMaskRMQ(const vector<X>& arr) { build(arr); }
 
-    // choose better index among i, j using MX::op()
+    /** Returns the better index under MX::op. Time: O(1). */
     inline int better_idx(int i, int j) const {
         return MX::op(a[i], a[j]) ? i : j;
     }
 
-    // in-block query, assumes l and r in same block
+    /** Returns the best index in one block over [l, r]. Time: O(1). */
     int queryInBlock(int l, int r) const {
         int len = r - l + 1;
         u64 bits;
@@ -45,12 +36,13 @@ struct BlockMaskRMQ {
         return r - pos;
     }
 
-    // query best among full blocks [L..R] inclusive block indices, returns global index
+    /** Returns the best global index among full blocks [L, R]. Time: O(1). */
     int queryBlocks(int L, int R) const {
         int bi = st.query_index(L, R); // index in blockBestVal
         return blockBestPos[bi]; // global index in a
     }
 
+    /** Builds from a 0-indexed immutable array. Time: O(n). */
     void build(const vector<X>& arr) {
         a = arr;
         n = sz(a);
@@ -97,7 +89,7 @@ struct BlockMaskRMQ {
         st.build(blockBestVal);
     }
 
-    // RMQ on D[l..r], returns global index of best
+    /** Returns the best index in [l, r]. Time: O(1). */
     int query_index(int l, int r) const {
         if (l > r) swap(l, r);
         int bl = l / B;
@@ -114,6 +106,7 @@ struct BlockMaskRMQ {
         return ans;
     }
 
+    /** Returns the best value in [l, r]. Time: O(1). */
     X query_value(int l, int r) const {
         return a[query_index(l, r)];
     }

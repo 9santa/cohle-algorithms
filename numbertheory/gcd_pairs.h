@@ -4,6 +4,11 @@
 
 namespace nt {
 
+/**
+ * Returns whether any pair in a shares a prime factor.
+ * @param spf Precomputed SPF table covering all values in a.
+ * Time: O(total number of prime factors). Space: O(number of seen primes).
+ */
 inline bool exists_non_coprime_pair(const vi& a, const SPF& spf) {
     unordered_set<int> seen;
     seen.reserve(a.size() * 2);
@@ -18,7 +23,7 @@ inline bool exists_non_coprime_pair(const vi& a, const SPF& spf) {
     return false;
 }
 
-// counts pairs with gcd exactly g for g=1..maxa
+/** Counts unordered pairs by exact gcd value for g in [1, maxa]. Space: O(maxa). */
 struct GcdPairsCounter {
     int maxa = 0;
     vi freq;
@@ -28,6 +33,7 @@ struct GcdPairsCounter {
     GcdPairsCounter() {}
     GcdPairsCounter(int _maxa) { init(_maxa); }
 
+    /** Initializes arrays up to _maxa. Time: O(maxa). */
     void init(int _maxa) {
         maxa = _maxa;
         freq.assign(maxa+1, 0);
@@ -35,12 +41,14 @@ struct GcdPairsCounter {
         exact.assign(maxa+1, 0);
     }
 
+    /** Adds values into the frequency table. Time: O(a.size()). */
     void add_values(const vi& a) {
         for (auto x : a) {
             if (0 <= x && x <= maxa) freq[x]++;
         }
     }
 
+    /** Computes exact[g] = number of pairs with gcd exactly g. Time: O(maxa log maxa). */
     void compute() {
         fill(all(cnt), 0);
         fill(all(exact), 0);

@@ -1,13 +1,7 @@
 #include "../core.h"
 #include "../node_pool.h"
 
-/*
-    --- Keyed treap, max-heap by priority ---
-    Inorder sorted by key (Comp)
-    Heap by pri (larget pri closer to root)
-    Duplicate policy: keys <= node go LEFT, keys > node go RIGHT
-    Ops Time complexity: O(log n)
-*/
+/** Keyed treap with monoid aggregates in sorted key order. Space: O(n). */
 template<typename Key, class Monoid, class Comp = std::less<Key>>
 struct TreapKeyed {
     using X = typename Monoid::value_type;
@@ -37,9 +31,13 @@ struct TreapKeyed {
         return x ^ (x >> 31);
     }
 
-    // --- basic ---
+    /** Clears the treap while keeping pooled memory. Time: O(1). */
     void reset() { root = nullptr; pool.reset_keep_memory(); }
+
+    /** Returns number of nodes. Time: O(1). */
     int size() const { return size(root); }
+
+    /** Returns aggregate over all keys. Time: O(1). */
     X prod_all() const { return prod(root); }
 
     Node* build_cartesian(const vector<pair<Key, X>>& a) {
@@ -68,8 +66,7 @@ struct TreapKeyed {
         return rt;
     }
 
-    // O(log n)
-    // Range aggregate over keys in [l, r)
+    /** Returns aggregate over keys in [L, R). Expected time: O(log n). */
     X prod_range(const Key&L, const Key& R) {
         Node *a, *b, *c;
         tie(a, b) = split_lt(root, L); // a: < L, b: >= L
@@ -79,7 +76,7 @@ struct TreapKeyed {
         return ans;
     }
 
-    // Range aggregate over keys in [l, r]
+    /** Returns aggregate over keys in [L, R]. Expected time: O(log n). */
     X prod_range_inclusive(Node*& root, const Key& L, const Key& R) {
         if (comp(R, L)) return Monoid::id();
         Node* a, *b, *c;
@@ -90,7 +87,7 @@ struct TreapKeyed {
         return ans;
     }
 
-    // Prefix prod: nodes with key <= k
+    /** Returns aggregate over keys <= k. Expected time: O(log n). */
     X prod_leq(const Key& k) const {
         Node* t = root;
         X res = Monoid::id();
@@ -129,8 +126,10 @@ struct TreapKeyed {
         return r - take;
     }
 
-    // multiset insert: rotation-based
+    /** Inserts key k with value v. Expected time: O(log n). */
     void insert(const Key& k, const X& v) { root = insert(root, k, v, (u32)splitmix64()); }
+
+    /** Inserts key k with value v and explicit priority p. Expected time: O(log n). */
     void insert_with_pri(const Key& k, const X& v, u32 p) { root = insert(root, k, v, p); }
 
     void add(Node*& root, const Key& key, const X& delta) {
@@ -146,16 +145,17 @@ struct TreapKeyed {
         root = merge(a, merge(b, c));
     }
 
+    /** Applies Monoid::op at key, inserting it if absent. Expected time: O(log n). */
     void add(const Key& key, const X& delta) { add(root, key, delta); }
 
-    // Erase one occurrence by key. Returns whether erased
+    /** Erases one occurrence of key k. Expected time: O(log n). */
     bool erase_one(const Key& k) {
         bool erased = false;
         root = erase_one(root, k, erased);
         return erased;
     }
 
-    // Count occurrences by key
+    /** Counts occurrences of key k. Expected time: O(log n). */
     int count(const Key& k) {
         Node* a, *bc, *b, *c;
         tie(a, bc) = split_lt(root, k); // < k, >= k
@@ -174,7 +174,7 @@ struct TreapKeyed {
         }
     }
 
-    // lower_bound: first key >= k
+    /** Returns first node with key >= k, or nullptr. Expected time: O(log n). */
     Node* lower_bound(const Key& k) const {
         Node* t = root;
         Node* ans = nullptr;
@@ -187,7 +187,7 @@ struct TreapKeyed {
         return ans;
     }
 
-    // #keys < k
+    /** Returns number of keys < k. Expected time: O(log n). */
     int order_of_key(const Key& k) const {
         Node* t = root;
         int res = 0;

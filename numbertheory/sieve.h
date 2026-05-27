@@ -3,12 +3,13 @@
 
 namespace nt {
 
-// compile-time sized sieve
+/** Compile-time sized sieve of Eratosthenes. Space: O(SZ). */
 template<int SZ>
 struct StaticSieve {
     bitset<SZ> is_prime;
     vi primes;
 
+    /** Builds primality table and prime list. Time: O(SZ log log SZ). */
     StaticSieve() {
         is_prime.set();
         if (SZ > 0) is_prime[0] = 0;
@@ -28,7 +29,7 @@ struct StaticSieve {
     }
 };
 
-// linear sieve: primes + lp (least prime)
+/** Linear sieve storing primes and least prime factors. Space: O(n). */
 struct LinearSieve {
     int n = 0;
     vi primes;
@@ -37,6 +38,7 @@ struct LinearSieve {
     LinearSieve() {}
     LinearSieve(int _n) { init(_n); }
 
+    /** Builds primes and least-prime-factor table up to _n. Time: O(n). */
     void init(int _n) {
         n = _n;
         primes.clear();
@@ -53,12 +55,13 @@ struct LinearSieve {
         }
     }
 
+    /** Returns whether x is prime, for x in the initialized range. Time: O(1). */
     bool is_prime_int(int x) const {
         return x >= 2 && x <= n && lp[x] == x;
     }
 };
 
-// segmented sieve. less memory + cache friendly. counts number of primes <= n
+/** Counts primes <= n using a segmented sieve. Time: O(n log log n). Space: O(sqrt n + block size). */
 inline int count_primes(int n) {
     if (n < 2) return 0;
     const int S = 10000; // block size

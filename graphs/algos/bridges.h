@@ -1,5 +1,6 @@
 #include "../core.h"
 
+/** Bridges and lowlink arrays for an undirected graph. Space: O(n + m). */
 template<class Cost>
 struct BridgeRes {
     vi tin, low;
@@ -7,6 +8,7 @@ struct BridgeRes {
     vi bridges_id;
 };
 
+/** Finds all bridges in an undirected graph. Time: O(n + m). */
 template<class Cost>
 BridgeRes<Cost> bridges(const Graph<Cost, false>& G) {
     const int N = G.N;
@@ -51,6 +53,7 @@ BridgeRes<Cost> bridges(const Graph<Cost, false>& G) {
 
 // 2-edge-connected components: components after removing bridges
 // Returns comp_id per vertex, and number of components
+/** Returns number of 2-edge-connected components and component ids. Time: O(n + m). */
 template<class Cost>
 pair<int, vi> two_edge_connected_components(const Graph<Cost, false>& G) {
     auto br = bridges(G);

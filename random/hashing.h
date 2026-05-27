@@ -1,6 +1,8 @@
 
 #include <chrono>
+/** General SplitMix64 hash functor for integral values and common containers. Space: O(1). */
 struct splitmix_hash {
+    /** Mixes a 64-bit value. Time: O(1). */
     static u64 splitmix64(u64 x) {
         x += 0x9e3779b97f4a7c15ULL;
         x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9ULL;
@@ -8,12 +10,14 @@ struct splitmix_hash {
         return x ^ (x >> 31);
     }
 
+    /** Returns a process-local random seed. Time: O(1). */
     static u64 fixed_random() {
         static const u64 R = (u64)chrono::steady_clock::now().time_since_epoch().count();
         return R;
     }
 
     // hash combine mixing for 64-bit
+    /** Combines h with x. Time: O(1). */
     static u64 combine(u64 h, u64 x) {
         x = splitmix64(x + fixed_random());
         h ^= x + 0x9e3779b97f4a7c15ULL + (h << 6) + (h >> 2);
@@ -21,6 +25,7 @@ struct splitmix_hash {
     }
 
     // Hash any integral type (int, long long, size_t, u64, ...)
+    /** Hashes an integral value. Time: O(1). */
     template<class T>
     requires std::is_integral_v<T>
     size_t operator()(T x) const {
@@ -29,6 +34,7 @@ struct splitmix_hash {
     }
 
     // Hash pair
+    /** Hashes a pair. Time: O(hash(first) + hash(second)). */
     template<class A, class B>
     size_t operator()(const pair<A, B>& p) const {
         u64 R = fixed_random();
@@ -39,6 +45,7 @@ struct splitmix_hash {
     }
 
     // Hash std::array
+    /** Hashes an array. Time: O(N * hash(element)). */
     template<class T, size_t N>
     size_t operator()(const array<T, N>& a) const {
         u64 R = fixed_random();
@@ -50,6 +57,7 @@ struct splitmix_hash {
     }
 
     // Hash std::vector
+    /** Hashes a vector. Time: O(n * hash(element)). */
     template<class T>
     size_t operator()(const vector<T>& v) const {
         u64 R = fixed_random();

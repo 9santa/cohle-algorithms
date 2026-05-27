@@ -34,6 +34,7 @@ namespace logic {
     f[mask] is stored as 0/1.
 */
 
+/** Truth table for n boolean variables. Space: O(2^n). */
 struct TruthTable {
     int n = 0;      // number of variables
     vector<u8> f;   // size = 2^nm each in {0,1}
@@ -41,12 +42,16 @@ struct TruthTable {
     TruthTable() = default;
     explicit TruthTable(int n_vars) : n(n_vars), f((size_t)1 << n_vars, 0) {}
 
+    /** Returns number of assignments. Time: O(1). */
     size_t size() const { return f.size(); }
 
+    /** Returns f(mask). Time: O(1). */
     u8 get(int mask) const { return f[(size_t)mask] & 1u; }
+    /** Sets f(mask) to v modulo 2. Time: O(1). */
     void set(int mask, u8 v) { f[(size_t)mask] = (v & 1u); }
 
     // Constructor from a list of minterms (indices where f=1).
+    /** Builds a truth table from minterm indices. Time: O(2^n + |mins|). */
     static TruthTable from_minterms(int n_vars, const vector<int>& mins) {
         TruthTable tt(n_vars);
         for (auto m : mins) {
@@ -55,12 +60,14 @@ struct TruthTable {
         return tt;
     }
 
+    /** Returns indices where f = 1. Time: O(2^n). */
     vector<int> minterms() const {
         vector<int> ms;
         for (int i = 0; i < (int)size(); i++) if (get(i)) ms.push_back(i);
         return ms;
     }
 
+    /** Returns indices where f = 0. Time: O(2^n). */
     vector<int> maxterms() const {
         vector<int> zs;
         for (int i = 0; i < (int)size(); i++) if (!get(i)) zs.push_back(i);
@@ -68,6 +75,7 @@ struct TruthTable {
     }
 };
 
+/** Returns the displayed variable name for index i. Time: O(1). */
 inline string var_name(int i) { return "x" + to_string(i + 1); }
 
 
@@ -86,6 +94,7 @@ inline string var_name(int i) { return "x" + to_string(i + 1); }
       - if bit=0 -> xi
       - if bit=1 -> !xi
 */
+/** Builds canonical SDNF/SOP string. Time: O(n 2^n). Space: O(n 2^n) output. */
 inline string to_SDNF(const TruthTable& tt) {
     auto ms = tt.minterms();
     if (ms.empty()) return "0";
@@ -106,6 +115,7 @@ inline string to_SDNF(const TruthTable& tt) {
     return out.str();
 }
 
+/** Builds canonical SKNF/POS string. Time: O(n 2^n). Space: O(n 2^n) output. */
 inline string to_SKNF(const TruthTable& tt) {
     auto zs = tt.maxterms();
     if (zs.empty()) return "0";
@@ -141,11 +151,14 @@ inline string to_SKNF(const TruthTable& tt) {
     Coverage test:
       implicant covers minterm m if (m & mask) == (value & mask)
 */
+/** Boolean implicant represented by fixed value and fixed-bit mask. Space: O(1). */
 struct Implicant {
     u32 value = 0;
     u32 mask = 0;
 
+    /** Returns whether this implicant covers minterm m. Time: O(1). */
     bool covers(int m) const { return (u32(m) & mask) == (value & mask); }
+    /** Returns the number of fixed literals. Time: O(1). */
     int literals() const { return popcnt(mask); } // literal count = number of fixes bits
 };
 
@@ -168,6 +181,7 @@ struct Implicant {
     Complexity: O(n * 2^n)
 */
 
+/** Returns the Zhegalkin polynomial / ANF. Time: O(n 2^n). Space: O(2^n + output). */
 inline string zhegalkin_anf(const TruthTable& tt) {
     int n = tt.n;
     int N = 1 << n;

@@ -1,6 +1,7 @@
 #pragma once
 #include "core.h"
 
+/** Fixed-size matrix over GF(2). Space: O(N^2 / word bits). */
 template<int N>
 struct GF2Matrix {
     array<bitset<N>, N> a{};
@@ -8,12 +9,14 @@ struct GF2Matrix {
     bitset<N>& operator[](int i) { return a[i]; }
     const bitset<N>& operator[](int i) const { return a[i]; }
 
+    /** Returns the identity matrix. Time: O(N). */
     static GF2Matrix id() {
         GF2Matrix I;
         for (int i = 0; i < N; i++) I[i][i] = 1;
         return I;
     }
 
+    /** Returns base^exp. Time: O(N^3 / word bits * log exp). */
     static GF2Matrix power(GF2Matrix base, ll exp) {
         GF2Matrix res = id();
         while (exp > 0) {
@@ -24,11 +27,13 @@ struct GF2Matrix {
         return res;
     }
 
+    /** Returns this matrix raised to exp. Time: O(N^3 / word bits * log exp). */
     GF2Matrix operator^(ll exp) const {
         return power(*this, exp);
     }
 
     // matrix * vector
+    /** Multiplies this matrix by vector v over GF(2). Time: O(N^2 / word bits). */
     bitset<N> mul_vec(const bitset<N>& v) const {
         bitset<N> res;
         for (int i = 0; i < N; i++) {
@@ -39,6 +44,7 @@ struct GF2Matrix {
         return res;
     }
 
+    /** Multiplies two GF(2) matrices. Time: O(N^3 / word bits). */
     GF2Matrix operator*(const GF2Matrix& other) const {
         GF2Matrix res;
         array<bitset<N>, N> col{};
@@ -57,6 +63,7 @@ struct GF2Matrix {
         return res;
     }
 
+    /** Returns the rank over GF(2). Time: O(N^3 / word bits). */
     int rank() const {
         auto tmp = a;
         int row = 0;
@@ -82,6 +89,7 @@ struct GF2Matrix {
     }
 
     // determinant in GF(2): 0 or 1
+    /** Returns determinant over GF(2). Time: O(N^3 / word bits). */
     int det() const {
         return rank() == N ? 1 : 0;
     }

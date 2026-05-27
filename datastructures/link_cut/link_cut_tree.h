@@ -2,6 +2,7 @@
 
 #include "../core.h"
 
+/** Link-cut tree with vertex values, path add, and path sum queries. Space: O(n). */
 struct Link_Cut {
     struct Node {
         int ch[2] = {0, 0}; // splay children
@@ -17,8 +18,10 @@ struct Link_Cut {
     int n;
     vector<Node> t;
 
+    /** Initializes n isolated vertices. Time: O(n). */
     Link_Cut(int n_ = 0) { init(n_); }
 
+    /** Builds from 1-indexed vertex values a[1..n]. Time: O(n). */
     Link_Cut(const vector<ll>& a) {
         init(sz(a) - 1); // expect 1-indexed a[1..n]
         for (int i = 1; i <= n; i++) {
@@ -26,6 +29,7 @@ struct Link_Cut {
         }
     }
 
+    /** Initializes n isolated vertices. Time: O(n). */
     void init(int n_) {
         n = n_;
         t.assign(n+1, Node{});
@@ -147,19 +151,23 @@ struct Link_Cut {
         return last;
     }
 
+    /** Accesses x and makes the represented root-to-x path preferred. Amortized time: O(log n). */
     int access(int x) {
         return expose(x);
     }
 
+    /** Makes x the represented-tree root. Amortized time: O(log n). */
     void evert(int x) {
         expose(x);
         apply_rev(x);
     }
 
+    /** Makes x the represented-tree root. Amortized time: O(log n). */
     void makeroot(int x) {
         evert(x);
     }
 
+    /** Returns the represented-tree root containing x. Amortized time: O(log n). */
     int findroot(int x) {
         expose(x);
         while (t[x].ch[0]) {
@@ -170,12 +178,13 @@ struct Link_Cut {
         return x;
     }
 
+    /** Returns whether u and v are connected. Amortized time: O(log n). */
     bool connected(int u, int v) {
         if (u == v) return true;
         return findroot(u) == findroot(v);
     }
 
-    // after split(u, v), the whole path u-v is exactly the aux splay rooted at v
+    /** Exposes path u-v as the auxiliary tree rooted at v. Amortized time: O(log n). */
     bool split(int u, int v) {
         if (!connected(u, v)) return false;
         evert(u);
@@ -183,6 +192,7 @@ struct Link_Cut {
         return true;
     }
 
+    /** Adds edge u-v if it connects two different trees. Amortized time: O(log n). */
     bool link(int u, int v) {
         evert(u);
         if (findroot(v) == u) return false; // alrady in one tree
@@ -190,6 +200,7 @@ struct Link_Cut {
         return true;
     }
 
+    /** Removes edge u-v if it exists. Amortized time: O(log n). */
     bool cut(int u, int v) {
         evert(u);
         expose(v);
@@ -206,37 +217,41 @@ struct Link_Cut {
 
     // ===== values / queries =====
 
+    /** Returns vertex value at x. Amortized time: O(log n). */
     ll get_value(int x) {
         expose(x);
         return t[x].val;
     }
 
+    /** Sets vertex value at x. Amortized time: O(log n). */
     void set_value(int x, ll val) {
         expose(x);
         t[x].val = val;
         pull(x);
     }
 
+    /** Adds delta to vertex x. Amortized time: O(log n). */
     void update_value(int x, ll delta) {
         expose(x);
         t[x].val += delta;
         pull(x);
     }
 
+    /** Adds delta to every vertex on path u-v. Amortized time: O(log n). */
     bool path_add(int u, int v, ll delta) {
         if (!split(u, v)) return false;
         apply_add(v, delta);
         return true;
     }
 
+    /** Returns the sum on path u-v. Amortized time: O(log n). */
     ll path_sum(int u, int v) {
         bool ok = split(u, v);
         assert(ok);
         return t[v].sum;
     }
 
-    // LCA for rooted interpretation of current represented tree
-    // works when u, v are connected
+    /** Returns LCA of u and v in the current rooted represented tree, or 0 if disconnected. Amortized time: O(log n). */
     int lca(int u, int v) {
         if (!connected(u, v)) return 0;
         expose(u);

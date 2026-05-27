@@ -29,6 +29,7 @@ static constexpr uint64_t power10[] = {1,
                                        1000000000000000000,
                                        10000000000000000000u};
 
+/** Buffered input scanner. Space: O(buffer size). */
 struct Scanner
 {
   private:
@@ -120,6 +121,7 @@ struct Scanner
     }
 };
 
+/** Buffered output printer. Space: O(buffer size). */
 struct Printer
 {
   private:

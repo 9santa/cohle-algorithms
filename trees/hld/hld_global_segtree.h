@@ -1,5 +1,6 @@
 #include "../../datastructures/segtree/lazy_segtree.h"
 
+/** HLD with one global lazy segment tree for path add/sum. Space: O(n). */
 struct HLD {
     int n;
     V<vi> g;
@@ -20,6 +21,7 @@ struct HLD {
                     head(n, 0), pos(n, 0), siz(n, 0), value(n, 0) {}
 
     // picks heavy edges and sizes
+    /** Computes subtree sizes and heavy children. Time: O(subtree size). */
     int dfs1(int u, int p) {
         parent[u] = p;
         siz[u] = 1;
@@ -35,6 +37,7 @@ struct HLD {
     }
 
     // assigns heads and positions
+    /** Assigns heads and segment-tree positions. Time: O(subtree size). */
     void dfs2(int u, int h) {
         head[u] = h;
         pos[u] = curPos++;
@@ -46,6 +49,7 @@ struct HLD {
         }
     }
 
+    /** Builds HLD and segment tree from graph. Time: O(n). */
     void build(const V<vi>& G, int root = 0) {
         g = G;
         curPos = 0;
@@ -57,6 +61,7 @@ struct HLD {
 
     // O(log^2 n)
     // do path AM::act() on vertices
+    /** Adds delta to all vertices on path u-v. Time: O(log^2 n). */
     void path_update(int u, int v, ll delta) {
         while (head[u] != head[v]) {
             if (depth[head[u]] < depth[head[v]]) swap(u, v);
@@ -70,6 +75,7 @@ struct HLD {
 
     // O(log^2 n)
     // path prod on vertices
+    /** Returns sum over vertices on path u-v. Time: O(log^2 n). */
     ll path_prod(int u, int v) {
         ll res = 0;
         while (head[u] != head[v]) {

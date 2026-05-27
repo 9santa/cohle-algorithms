@@ -1,8 +1,8 @@
 
-/* Fixed-capacity, runtime-dimension matrix
-   Storage is MAXN*MAXN no heap allocs. Flat 1D array
-   Actual active dimension is n (<= MAXN)
-   Multiplication loops only over [0..n) */
+/** Fixed-capacity, runtime-dimension matrix.
+Storage is MAXN*MAXN no heap allocs. Flat 1D array
+Actual active dimension is n (<= MAXN)
+Multiplication loops only over [0..n) */
 template<int MAXN, class ModInt>
 struct MatDyn {
     using Z = ModInt;
@@ -15,13 +15,14 @@ struct MatDyn {
     inline Z& operator()(int i, int j) { return a[i * MAXN + j]; }
     inline const Z& operator()(int i, int j) const { return a[i * MAXN + j]; }
 
+    /** Returns the n x n identity matrix. Time: O(n). */
     static MatDyn identity(int n) {
         MatDyn m(n);
         for (int i = 0; i < n; i++) m(i, i) = 1;
         return m;
     }
 
-    // Multiply: C = A * B. O(n^3)
+    /** Multiplies two active n x n matrices. Time: O(n^3). */
     friend MatDyn operator*(const MatDyn& A, const MatDyn& B) {
         const int n = A.n;
         MatDyn C(n);

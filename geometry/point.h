@@ -2,6 +2,7 @@
 
 namespace geom {
 
+/** 2D point/vector with common geometry operations. Space: O(1). */
 template<typename T>
 struct Point {
     T x{}, y{};
@@ -99,6 +100,7 @@ template<typename T>
 constexpr T cross(const Point<T>& o, const Point<T>& a, const Point<T>& b) { return (a-o).cross(b-o); }
 
 // Returns: 1 for CCW, -1 for CW, 0 for collinear
+/** Returns orientation sign of triangle abc. Time: O(1). */
 template<typename T>
 int ccw(const Point<T>& a, const Point<T>& b, const Point<T>& c) {
     auto res = cross(b-a, c-a);
@@ -107,12 +109,14 @@ int ccw(const Point<T>& a, const Point<T>& b, const Point<T>& c) {
 
 
 // Angle between two points
+/** Returns angle between vectors a and b. Time: O(1). */
 template<typename T>
 double angle_between(const Point<T>& a, const Point<T>& b) {
     return std::atan2(a.cross(b), a.dot(b));
 }
 
 // Angle sorting comparator
+/** Comparator that orders points by polar angle. Space: O(1). */
 template<typename T>
 struct compare_by_angle {
     Point<T> origin;

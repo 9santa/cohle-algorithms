@@ -2,6 +2,7 @@
 using namespace std;
 using u64 = uint64_t;
 
+/** Disjoint-set union with component size, min, and max tracking. Space: O(n). */
 struct DSU {
 private:
     vector<u64> parent;
@@ -12,6 +13,7 @@ private:
     u64 set_count;
 
 public:
+    /** Initializes n singleton sets. Time: O(n). */
     void build(u64 size) {
         parent.resize(size);
         rank.assign(size, 0);
@@ -30,7 +32,7 @@ public:
         }
     }
 
-    // Find operation: Go up the tree to the root of a component (set)
+    /** Returns the representative of x with path compression. Amortized time: O(alpha n). */
     u64 find(u64 x) {
         // path compression
         if (parent[x] == x) return x;
@@ -38,7 +40,7 @@ public:
         return (parent[x] = find(parent[x]));
     }
 
-    // Union by rank heuristic
+    /** Merges the sets containing x and y. Amortized time: O(alpha n). */
     void unionSets(u64 x, u64 y) {
         u64 root_x = find(x);
         u64 root_y = find(y);
@@ -57,10 +59,12 @@ public:
         set_count--;
     }
 
+    /** Returns whether x and y are in the same set. Amortized time: O(alpha n). */
     bool isConnected(u64 x, u64 y) {
         return find(x) == find(y);
     }
 
+    /** Returns the parent chain from x to its representative. Time: O(tree height). */
     vector<u64> getParents(u64 x) {
         vector<u64> res;
         while (parent[x] != x) { // while not at the root of this set
@@ -71,11 +75,12 @@ public:
         return res;
     }
 
-    // Returns size of the set 'x' is in
+    /** Returns the size of the set containing x. Amortized time: O(alpha n). */
     u64 size(u64 x) { return set_size[find(x)]; }
-    // Returns min element in the set 'x' is in
+
+    /** Returns the minimum index in the set containing x. Amortized time: O(alpha n). */
     u64 getMin(u64 x) { return min_el[find(x)]; }
-    // Returns max element in the set 'x' is in
+
+    /** Returns the maximum index in the set containing x. Amortized time: O(alpha n). */
     u64 getMax(u64 x) { return max_el[find(x)]; }
 };
-

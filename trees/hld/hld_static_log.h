@@ -2,6 +2,7 @@
 #include "../rooted_tree.h"
 #include "../lca.h"
 
+/** HLD variant with weighted-centroid BSTs for O(log n) path sums. Space: O(n). */
 template<class Cost = int>
 struct StaticLogHLD {
     using G = Graph<Cost, false>;
@@ -45,6 +46,7 @@ struct StaticLogHLD {
 
     // ----- build helpers -----
 
+    /** Computes heavy child and light-subtree weights. Time: O(n). */
     void build_heavy() {
         // subtree sizes bottom-up using rt.order
         for (int i = sz(rt.order)-1; i >= 0; i--) {
@@ -71,6 +73,7 @@ struct StaticLogHLD {
         }
     }
 
+    /** Splits the tree into heavy paths. Time: O(n). */
     void build_paths() {
         paths.clear();
         pathHead.clear();
@@ -104,6 +107,7 @@ struct StaticLogHLD {
     }
 
     // build BST for one path (vertices in pv[l..r], order is path order)
+    /** Builds weighted-centroid BST for one heavy path. Time: O(path length log path length). */
     int build_aux(const vi& pv, const vl& pref, int l, int r, int parent_node) {
         if (l > r) return -1;
 
@@ -138,6 +142,7 @@ struct StaticLogHLD {
         return v;
     }
 
+    /** Builds auxiliary BSTs for all heavy paths. Time: O(n log n). */
     void build_all_aux() {
         // safety reset
         for (int v = 0; v < n; v++) {
@@ -157,6 +162,7 @@ struct StaticLogHLD {
     }
 
     // build everything.
+    /** Builds all static-log HLD structures from vertex values. Time: O(n log n). */
     void build(const vl& a) {
         assert(sz(a) == n);
         val = a;
@@ -177,9 +183,11 @@ struct StaticLogHLD {
 
     // ----- queries on centroid BST -----
 
+    /** Returns left-subtree sum in an auxiliary BST. Time: O(1). */
     inline ll sum_left(int v) const { return (auxL[v] == -1 ? 0LL : auxSum[auxL[v]]); }
 
     // prefix sum on a heavy path from its head to vertex v (inclusive)
+    /** Returns sum from heavy-path head to v. Time: O(log n). */
     ll prefix_sum_in_path(int v) const {
         ll res = sum_left(v) + val[v];
         int cur = v;
@@ -194,6 +202,7 @@ struct StaticLogHLD {
     }
 
     // sum from root to vertex v (inclusive) using heavy-path jumps + centroid prefix sums
+    /** Returns vertex sum from root to v. Time: O(log n). */
     ll root_sum(int v) const {
         ll res = 0;
         while (v != -1) {
@@ -206,17 +215,20 @@ struct StaticLogHLD {
 
     // ----- public API -----
 
+    /** Sets vertex value. Time: O(log n). */
     void point_set_vertex(int v, ll x) {
         ll delta = x - val[v];
         val[v] = x;
         for (int cur = v; cur != -1; cur = auxPar[cur]) auxSum[cur] += delta;
     }
 
+    /** Adds delta to vertex value. Time: O(log n). */
     void point_add_vertex(int v, ll delta) {
         val[v] += delta;
         for (int cur = v; cur != -1; cur = auxPar[cur]) auxSum[cur] += delta;
     }
 
+    /** Returns vertex-value sum on path u-v. Time: O(log n). */
     ll path_sum_vertex(int u, int v) const {
         int w = lca.lca(u, v);
         return root_sum(u) + root_sum(v) - 2LL * root_sum(w) + val[w];
@@ -225,18 +237,21 @@ struct StaticLogHLD {
     // ----- edge mode: store each edge (parent[v]-v) at vertex v -----
     // val[root] must be 0 for pure edge sums
 
+    /** Sets edge value by edge id. Time: O(log n). */
     void point_set_edge(int eid, ll x) {
         int v = eid_to_child[eid];
         assert(v != -1);
         point_set_vertex(v, x);
     }
 
+    /** Adds delta to edge value by edge id. Time: O(log n). */
     void point_add_edge(int eid, ll delta) {
         int v = eid_to_child[eid];
         assert(v != -1);
         point_add_vertex(v, delta);
     }
 
+    /** Returns edge-value sum on path u-v. Time: O(log n). */
     ll path_sum_edge(int u, int v) const {
         int w = lca.lca(u, v);
         // with edge weights stored at child vertices, no +val[w] is needed

@@ -1,6 +1,7 @@
 #include "../header.h"
 
 // Cyclic replacements approach in-place. O(1) space
+/** Rotates array right by k using reverse. Time: O(n). */
 void rotate1(vector<int>& nums, int k) {
     int n = static_cast<int>(nums.size());
 
@@ -26,6 +27,7 @@ void rotate1(vector<int>& nums, int k) {
 }
 
 // Manual approach with O(n) space
+/** Rotates array right by k using cyclic replacements. Time: O(n). */
 void rotate2(vector<int>& nums, int k) {
     int n = static_cast<int>(nums.size());
     vector<int> rotated = nums;

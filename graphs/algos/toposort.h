@@ -2,6 +2,7 @@
 #include <optional>
 
 // Topsort with cycle detection, Kahn's algorithm
+/** Returns Kahn topological order, or empty if a cycle exists. Time: O(n + m). */
 template<class Cost>
 std::optional<vi> toposort_kahn(const Graph<Cost, true>& G) {
     const int N = G.N;
@@ -30,6 +31,7 @@ std::optional<vi> toposort_kahn(const Graph<Cost, true>& G) {
 }
 
 // DFS version with cycle detection
+/** Returns DFS topological order, or empty if a cycle exists. Time: O(n + m). */
 template<class Cost>
 std::optional<vi> toposort_dfs(const Graph<Cost, true>& G) {
     const int N = G.N;

@@ -3,7 +3,7 @@
 #include <stdexcept>
 
 
-// O(n^3)
+/** Solves an n x n linear system from an augmented matrix. Time: O(n^3). Space: O(n). */
 bool gaussian_elimination(vector<vector<double>>& a, vector<double>& x) {
     int n = (int)a.size();    // # rows
     const double EPS = 1e-9;
@@ -52,7 +52,7 @@ bool gaussian_elimination(vector<vector<double>>& a, vector<double>& x) {
     return true;
 }
 
-// Gauss with partial pivoting
+/** Solves Ax = b using Gaussian elimination with partial pivoting. Time: O(n^3). Space: O(n^2). */
 vector<double> gaussianElimination(vector<vector<double>> A, vector<double> b) {
     int n = A.size();
     const double EPS = 1e-12;
@@ -112,6 +112,7 @@ vector<double> gaussianElimination(vector<vector<double>> A, vector<double> b) {
 
 // Gauss elimination for rectangular matrix
 // Returns: 0 -> no solutions, 1 -> single solution, 2 -> inf solutions
+/** Solves a rectangular augmented system and classifies solution count. Time: O(n m^2). Space: O(m). */
 int gauss_rect(vector<vector<double>> a, vector<double>& x) {
     int n = (int)a.size();
     int m = (int)a[0].size() - 1;
@@ -181,4 +182,3 @@ int gauss_rect(vector<vector<double>> a, vector<double>& x) {
 
     return 1; // единственное решение
 }
-

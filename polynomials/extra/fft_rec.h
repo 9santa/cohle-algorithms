@@ -3,6 +3,7 @@
 using cmpl = complex<double>;
 const double PI = atan2(0, -1);
 
+/** Recursive FFT returning frequency values. Time: O(n log n). */
 inline vector<cmpl> fft(vector<cmpl> P) {
     size_t n = P.size();
     if (n == 1) return P;
@@ -22,6 +23,7 @@ inline vector<cmpl> fft(vector<cmpl> P) {
     return val_P;
 }
 
+/** In-place recursive FFT. Time: O(n log n). */
 inline void fft_r(vector<cmpl>& a) {
     int n = sz(a);
     if (n == 1) return;
@@ -38,6 +40,7 @@ inline void fft_r(vector<cmpl>& a) {
     }
 }
 
+/** Inverse recursive FFT. Time: O(n log n). */
 inline vector<cmpl> ifft(vector<cmpl> val_P) {
     size_t n = val_P.size();
     if (n == 1) return val_P;

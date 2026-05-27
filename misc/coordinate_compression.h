@@ -1,5 +1,6 @@
 
 // Coordinate Compression
+/** Returns compressed ranks for arr values. Time: O(n log n). */
 vector<int> coordinate_compression(vector<int>const& arr) {
     int n = (int)arr.size();
 

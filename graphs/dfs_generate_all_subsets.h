@@ -1,5 +1,6 @@
 
 // Generate The Power Set
+/** Prints all subsets of nums using iterative DFS. Time: O(n 2^n). Space: O(n 2^n) transient. */
 void generate_subsets(const vector<int>& nums) {
     struct State {
         int index;
@@ -39,5 +40,4 @@ int main(void) {
 
     return 0;
 }
-
 

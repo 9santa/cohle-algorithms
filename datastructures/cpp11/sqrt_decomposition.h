@@ -1,5 +1,6 @@
 #include "header.h"
 
+/** Square-root decomposition for point updates and range sums. Space: O(n). */
 struct SqrtDecomp {
     int n, len, blocks;
     vi a;     // copy of the input array
@@ -9,6 +10,7 @@ struct SqrtDecomp {
     vi zeros; // count of zeros in block
 
     // preprocessing O(n)
+    /** Builds block sums/min/max/zero counts. Time: O(n). */
     void build(const vi& arr) {
         a = arr;
         n = sz(a);
@@ -29,6 +31,7 @@ struct SqrtDecomp {
     }
 
     // answering queries (bad) O(sqrt(n))
+    /** Returns the sum over [l, r] by block walking. Time: O(sqrt n). */
     int bad_sum(int l, int r) {
         int res = 0;
         for (int i = l; i <= r;) {
@@ -44,6 +47,7 @@ struct SqrtDecomp {
     }
 
     // answering queries (good) O(sqrt(n))
+    /** Returns the sum over [l, r]. Time: O(sqrt n). */
     int sum(int l, int r) {
         int res = 0;
         int cl = l / len, cr = r / len;
@@ -60,6 +64,7 @@ struct SqrtDecomp {
     }
 
     // point update
+    /** Sets a[i] to val and rebuilds its block metadata. Time: O(sqrt n). */
     void update(int i, int val) {
         int blk = i / len;
         b[blk] += val - a[i];
@@ -77,11 +82,13 @@ struct SqrtDecomp {
     }
 };
 
+/** Square-root decomposition with lazy range add and point queries. Space: O(n). */
 struct LazySqrt {
     int n, len, blocks;
     vl a;   // copy of the input array
     vl add; // lazy add per block
 
+    /** Builds from a 0-indexed array. Time: O(n). */
     void build(const vector<ll>& arr) {
         a = arr;
         n = sz(a);
@@ -90,6 +97,7 @@ struct LazySqrt {
         add.assign(blocks, 0);
     }
 
+    /** Adds delta to every element in [l, r]. Time: O(sqrt n). */
     void range_add(int l, int r, ll delta) {
         int bl = l / len;
         int br = r / len;
@@ -115,6 +123,7 @@ struct LazySqrt {
         }
     }
 
+    /** Returns a[i]. Time: O(1). */
     ll point_query(int i) const {
         int b = i / len;
         return a[i] + add[b];

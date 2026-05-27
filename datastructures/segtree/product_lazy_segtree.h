@@ -2,7 +2,7 @@
 
 constexpr int MOD = 1e9 + 7;
 
-// Multiplicative (product) lazy segment tree
+/** Lazy segment tree for range multiplication and range product modulo MOD. Space: O(n). */
 struct ProductLazySeg {
 private:
     int n;
@@ -60,6 +60,7 @@ private:
     }
 
 public:
+    /** Builds from a 0-indexed array. Time: O(n). */
     ProductLazySeg(const vector<ll>& arr) {
         int _n = sz(arr);
         n = 1;
@@ -70,7 +71,7 @@ public:
         build(arr);
     }
 
-    // Range multiplication update [l, r]
+    /** Multiplies every value in [l, r] by val. Time: O(log n log MOD). */
     void range_mul(int l, int r, ll val) {
         val %= MOD;
         if (val == 1) return; // no change
@@ -97,7 +98,7 @@ public:
         }
     }
 
-    // Range product query [l, r]
+    /** Returns the product over [l, r]. Time: O(log n). */
     ll range_query(int l, int r) {
         l += n, r += n;
         push_path(l), push_path(r);
@@ -109,7 +110,7 @@ public:
         return res;
     }
 
-    // Point mul update
+    /** Multiplies a[idx] by val. Time: O(log n). */
     void point_mul(int idx, ll val) {
         idx += n;
         push_path(idx);
@@ -119,7 +120,7 @@ public:
         }
     }
 
-    // Point query
+    /** Returns a[idx]. Time: O(log n). */
     ll point_query(int idx) {
         idx += n;
         push_path(idx);
@@ -129,7 +130,7 @@ public:
 
 
 
-// Recursive
+/** Recursive lazy segment tree for range multiplication and range product. Space: O(n). */
 struct mulsegtree {
 private:
     int n;
@@ -190,6 +191,7 @@ private:
     }
 
 public:
+    /** Builds from a 0-indexed array. Time: O(n). */
     mulsegtree(const V<ll>& a) {
         n = sz(a);
         data.resize(4*n);
@@ -197,10 +199,12 @@ public:
         if (n > 0) build(a, 1, 0, n-1);
     }
 
+    /** Multiplies every value in [l, r] by val. Time: O(log n). */
     void range_mul(int l, int r, ll val) {
         range_mul(1, 0, n-1, l, r, val);
     }
 
+    /** Returns the product over [l, r]. Time: O(log n). */
     ll range_query(int l, int r) {
         return range_query(1, 0, n-1, l, r);
     }

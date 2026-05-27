@@ -15,12 +15,14 @@ Directed graph:
 Time: O(E)
 */
 
+/** Eulerian trail/cycle result. Space: O(E). */
 struct Euler {
     bool ok = false;
     bool is_cycle = false;
     vector<int> vertices; // vertex sequence of the trail/circuit (length = E+1 of ok)
 };
 
+/** Checks connectivity among non-isolated vertices in an undirected graph. Time: O(n + m). */
 static bool connected_undirected(int n, const vector<vector<int>>& g, const vector<int>& deg) {
     int start = -1;
     for (int i = 0; i < n; i++) if (deg[i] > 0) { start = i; break; }
@@ -45,6 +47,7 @@ static bool connected_undirected(int n, const vector<vector<int>>& g, const vect
     return true;
 }
 
+/** Checks directed reachability from start among nonzero-degree vertices. Time: O(n + m). */
 static bool directed_reachable_from_start(int n, const vector<vector<int>>& g, const vector<int>& indeg, const vector<int>& outdeg, int start) {
     // check all nonzero-degree vertices are reachable from start in directed graph
     vector<char> vis(n, 0);
@@ -67,6 +70,7 @@ static bool directed_reachable_from_start(int n, const vector<vector<int>>& g, c
 }
 
 // UNDIRECTED Euler trail/circuit
+/** Returns an undirected Eulerian trail/cycle. Time: O(n + m). Space: O(n + m). */
 Euler euler_undirected(int n, const vector<pair<int, int>>& edges) {
     Euler res;
     int m = (int)edges.size();
@@ -146,6 +150,7 @@ Euler euler_undirected(int n, const vector<pair<int, int>>& edges) {
 }
 
 // DIRECTED Euler trail/circuit
+/** Returns a directed Eulerian trail/cycle. Time: O(n + m). Space: O(n + m). */
 Euler euler_directed(int n, const vector<pair<int, int>>& edges) {
     Euler res;
     int m = (int)edges.size();

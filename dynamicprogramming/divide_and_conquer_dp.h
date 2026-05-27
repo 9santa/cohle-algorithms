@@ -14,8 +14,10 @@ vector<ll> curdp;
 
 // Define for your problem
 // j is split point, computing segment (j+1 ... i)
+/** Problem-specific segment cost. Time: depends on implementation. */
 ll cost(int j, int i);
 
+/** Computes one divide-and-conquer DP layer on [l, r]. Time: O((r-l+1) * opt range). */
 void compute(int l, int r, int optL, int optR) {
     if (l > r) return;
     int mid = (l+1) >> 1;
@@ -48,11 +50,13 @@ ll pref[MAXN];
 V<vl> dp;
 V<vi> opt;
 
+/** Returns squared segment-sum cost for [l, r]. Time: O(1). */
 ll cost(int l, int r) {
     ll s = pref[r] - pref[l-1];
     return s * s;
 }
 
+/** Computes DP layer k on [l, r]. Time: O((r-l+1) * opt range). */
 void compute(int k, int l, int r, int optL, int optR) {
     if (l > r) return;
 
@@ -74,6 +78,7 @@ void compute(int k, int l, int r, int optL, int optR) {
     compute(k, mid+1, r, best, optR);
 }
 
+/** Solves the full-table divide-and-conquer DP example. Time: O(KN log N). */
 ll solve() {
     dp.assign(K+1, vector<ll>(N+1, infty<ll>));
     opt.assign(K+1, vector<int>(N+1, -1));
@@ -109,11 +114,13 @@ int N, K;
 ll pref[MAXN];
 vector<ll> dp_prev, dp_curr;
 
+/** Returns squared segment-sum cost for (l, r]. Time: O(1). */
 ll cost(int l, int r) { // [l+1, r]
     ll s = pref[r] - pref[l];
     return s * s;
 }
 
+/** Computes one optimized-memory DP layer. Time: O((r-l+1) * opt range). */
 void compute(int l, int r, int optL, int optR) {
     if (l > r) return;
     int mid = l + (r-l)/2;
@@ -130,6 +137,7 @@ void compute(int l, int r, int optL, int optR) {
     compute(mid+1, r, opt, optR);
 }
 
+/** Solves the optimized-memory divide-and-conquer DP example. Time: O(KN log N). */
 ll solve() {
     cin >> N >> K;
     pref[0] = 0;

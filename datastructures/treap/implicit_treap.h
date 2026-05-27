@@ -1,9 +1,7 @@
 #include "../core.h"
 #include "../node_pool.h"
 
-// Sequence treap (indices 0..n-1), Monoid
-// point set/get, insert/erase, range prod, max_right, min_left
-// Uses Node Pool, O(n) Memory
+/** Implicit sequence treap over a monoid. Space: O(n). */
 template<class Monoid>
 struct Implicit_Treap {
     using X = typename Monoid::value_type;
@@ -34,14 +32,16 @@ struct Implicit_Treap {
     template<typename F>
     Implicit_Treap(int n, F f) { build(n, f); }
 
+    /** Clears the treap while keeping pooled memory. Time: O(1). */
     void reset() {
         root = nullptr;
         pool.reset_keep_memory();
     }
 
-    // O(n)
+    /** Builds n identity values. Time: O(n). */
     void build(int n) { build(n, [](int){ return Monoid::id(); }); }
 
+    /** Builds n values from f(i). Time: O(n). */
     template<typename F>
     void build(int n, F f) {
         vector<X> a(n);
@@ -49,14 +49,16 @@ struct Implicit_Treap {
         build(a);
     }
 
+    /** Builds from a 0-indexed array. Time: O(n). */
     void build(const vector<X>& a) {
         reset();
         root = build_cartesian(a);
     }
 
+    /** Returns the sequence size. Time: O(1). */
     int size() const { return size(root); }
 
-    // O(log n)
+    /** Returns a[pos]. Expected time: O(log n). */
     X get(int pos) {
         assert(0 <= pos && pos < size());
         auto [a, b] = split(root, pos);
@@ -66,7 +68,7 @@ struct Implicit_Treap {
         return res;
     }
 
-    // O(log n)
+    /** Sets a[pos] to val. Expected time: O(log n). */
     void set(int pos, const X& val) {
         assert(0 <= pos && pos < size());
         auto [a, b] = split(root, pos);
@@ -76,7 +78,7 @@ struct Implicit_Treap {
         root = merge(a, merge(c, d));
     }
 
-    // O(log n)
+    /** Inserts x before position pos. Expected time: O(log n). */
     void insert(int pos, const X& x) {
         assert(0 <= pos && pos <= size());
         auto [a, b] = split(root, pos);
@@ -84,7 +86,7 @@ struct Implicit_Treap {
         root = merge(merge(a, nd), b);
     }
 
-    // O(log n)
+    /** Erases the element at position pos. Expected time: O(log n). */
     void erase(int pos) {
         assert(0 <= pos && pos < size());
         auto [a, b] = split(root, pos);
@@ -94,7 +96,7 @@ struct Implicit_Treap {
         root = merge(a, d);
     }
 
-    // [l, r), O(log n)
+    /** Returns the monoid product over [l, r). Expected time: O(log n). */
     X prod(int l, int r) {
         assert(0 <= l && l <= r && r <= size());
         auto [a, b] = split(root, l);
@@ -104,10 +106,10 @@ struct Implicit_Treap {
         return res;
     }
 
+    /** Returns the monoid product over the whole sequence. Time: O(1). */
     X prod_all() { return prod_all(root); }
 
-    // O(log n)
-    // check(id) = true and monotone under appending
+    /** Returns max r such that check(prod(l, r)) is true. Expected time: O(log n). */
     template<typename F>
     int max_right(const F check, int l) {
         assert(0 <= l && l <= size());
@@ -120,8 +122,7 @@ struct Implicit_Treap {
         return l + len;
     }
 
-    // O(log n)
-    // check(id) = true and monotone under appending
+    /** Returns min l such that check(prod(l, r)) is true. Expected time: O(log n). */
     template<typename F>
     int min_left(const F check, int r) {
         assert(0 <= r && r <= size());
@@ -134,7 +135,7 @@ struct Implicit_Treap {
         return r - len;
     }
 
-    // O(n)
+    /** Returns all values in order. Time: O(n). */
     vector<X> get_all() {
         vector<X> res;
         res.reserve(size());

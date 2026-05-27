@@ -2,6 +2,7 @@
 
 using namespace std;
 
+/** Demonstrates coordinate scanline accumulation. Time: O(n log n). */
 void scanline()
 {
     int n, m; cin >> n >> m;

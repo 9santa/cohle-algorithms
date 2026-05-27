@@ -3,6 +3,7 @@
 namespace CFFT {
 using real = double;
 
+/** Lightweight complex number for FFT. Space: O(1). */
 struct cmpl {
     real x, y;
     cmpl(real _x=0, real _y=0) : x(_x), y(_y) {}
@@ -19,6 +20,7 @@ int base = 1;
 vector<cmpl> rts = {cmpl(0, 0), cmpl(1, 0)};
 vector<int> rev = {0, 1};
 
+/** Ensures roots/rev are prepared up to nbase. Time: O(2^nbase). */
 void ensure_base(int nbase) {
     if (nbase <= base) return;
     rev.resize(1 << nbase);
@@ -37,6 +39,7 @@ void ensure_base(int nbase) {
     }
 }
 
+/** In-place fast FFT. Time: O(n log n). */
 void fft(vector<cmpl>& a) {
     int n = sz(a);
     int lg = __builtin_ctz(n);
@@ -59,6 +62,7 @@ void fft(vector<cmpl>& a) {
     }
 }
 
+/** In-place inverse FFT. Time: O(n log n). */
 void ifft(vector<cmpl>& a) {
     int n = sz(a);
     for (auto& z : a) z = z.conj();

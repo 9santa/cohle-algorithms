@@ -2,14 +2,13 @@
 
 using namespace std;
 
-// efficient & minimized DSU implementation stolen from Neal Wu
-// don't know who came up with this, but super cute
+/** Compact DSU with component size, min, and max tracking. Space: O(n). */
 struct DSU {
     vector<int> data;
     vector<int> min_el;
     vector<int> max_el;
 
-    // usually want to pass n+1 to constructor
+    /** Initializes n singleton sets. Time: O(n). */
     explicit DSU(int n) {
         data.assign(n, -1);
         min_el.resize(n);
@@ -19,10 +18,12 @@ struct DSU {
         }
     }
 
+    /** Returns the representative of x with path compression. Amortized time: O(alpha n). */
     int find(int x) {
         return data[x] < 0 ? x : data[x] = find(data[x]);
     }
 
+    /** Merges the sets containing x and y. Amortized time: O(alpha n). */
     void union_sets(int x, int y) {
         x = find(x);
         y = find(y);
@@ -37,6 +38,7 @@ struct DSU {
         max_el[x] = max(max_el[x], max_el[y]);
     }
 
+    /** Returns the size of the set containing x. Amortized time: O(alpha n). */
     int set_size(int x) {
         return (-data[find(x)]);
     }

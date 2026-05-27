@@ -1,6 +1,7 @@
 #include "core.h"
 
 // Longest Palindromic Subsequence. O(n^2)
+/** Returns longest palindromic subsequence length. Time: O(n^2). Space: O(n^2). */
 int LPS(const string& s) {
     int n = sz(s);
     V<vi> dp(n, vi(n, 0));
@@ -27,6 +28,7 @@ int LPS(const string& s) {
 
 
 // Count All (including duplicates) Palindromic Subsequences. O(n^2)
+/** Counts palindromic subsequences with multiplicity. Time: O(n^2). Space: O(n^2). */
 int count_PS(const string& s) {
     int n = sz(s);
     V<vi> dp(n, vi(n, 0));
@@ -49,6 +51,7 @@ int count_PS(const string& s) {
 }
 
 // Count DISTINCT Palindromic Subsequences. O(n^2) + O(n) preprocessing
+/** Counts distinct palindromic subsequences. Time: O(n^2). Space: O(n^2). */
 int count_distinct_PS(const string& s) {
     int n = s.size();
     static constexpr long long MOD = 1e9 + 7;

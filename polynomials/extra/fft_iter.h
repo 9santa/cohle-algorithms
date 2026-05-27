@@ -8,6 +8,7 @@ const double PI = atan2(0, -1);
     half = n / 2
     inner j is recursive i
 */
+/** In-place iterative FFT. Time: O(n log n). */
 inline void fft_iter(vector<cmpl>& a) {
     int n = sz(a); // assumes n is power of two
     // 1) bit reversal permutation
@@ -34,6 +35,7 @@ inline void fft_iter(vector<cmpl>& a) {
     }
 }
 
+/** Iterative FFT helper with precomputed roots. Space: O(n). */
 struct FFT {
     int n = 0;
     vi rev;

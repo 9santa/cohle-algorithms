@@ -6,6 +6,11 @@
 
 namespace nt {
 
+/**
+ * Returns a primitive root modulo prime p.
+ * @param p Prime modulus.
+ * Time: expected O(number of factors of p-1 * log p). Space: O(number of factors).
+ */
 inline int primitive_root(int p) {
     auto pf = factorize_trial(p-1);
     auto is_root = [&](int g) -> bool {
@@ -21,6 +26,11 @@ inline int primitive_root(int p) {
     return -1;
 }
 
+/**
+ * Returns a primitive root modulo prime p.
+ * @param p Prime modulus.
+ * Time: expected O(number of factors of p-1 * log p). Space: O(number of factors).
+ */
 inline ll primitive_root_ll(ll p) {
     auto pf = factorize_trial(p-1);
     auto is_root = [&](ll g) -> bool {

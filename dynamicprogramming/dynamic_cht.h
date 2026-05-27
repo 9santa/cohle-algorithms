@@ -3,12 +3,14 @@
 /* Static/deque CHT = sorted slopes, arbitrary query order, faster
    Dynamic/multiset CHT = arbitrary slopes, arbitrary query order */
 
+/** Line y = kx + b used in convex hull tricks. */
 struct Line {
     ll k, b;      // y = kx + b
     mutable ll p; // last x where this line is optimal (right boundary)
 
     Line(ll _k = 0, ll _b = 0) : k(_k), b(_b), p(0) {}
 
+    /** Evaluates the line at x. Time: O(1). */
     ll eval(ll x) const {
         return k * x + b;
     }
@@ -22,14 +24,17 @@ struct Line {
     For arbitrary slopes. Can remove lines anywhere.
     Query by binary searching the intersection.
 */
+/** Dynamic max convex hull trick for arbitrary insertion order. Space: O(n). */
 struct DynamicCHT : multiset<Line, std::less<>> {
     static const ll INF = (ll)4e18;
 
     // floor division (to handle negatives)
+    /** Floor division that handles negative values. Time: O(1). */
     static ll div_floor(ll a, ll b) {
         return a / b - ((a ^ b) < 0 && a % b);
     }
 
+    /** Updates intersection point between neighboring lines. Time: O(1). */
     bool intersect(iterator x, iterator y) {
         if (y == end()) {
             x->p = INF;
@@ -43,6 +48,7 @@ struct DynamicCHT : multiset<Line, std::less<>> {
         return x->p >= y->p; // if true y is bad
     }
 
+    /** Adds line y = kx + b. Amortized time: O(log n). */
     void add_line(ll k, ll b) {
         auto z = insert(Line(k, b));
         auto y = z++;
@@ -62,6 +68,7 @@ struct DynamicCHT : multiset<Line, std::less<>> {
         }
     }
 
+    /** Queries maximum y-value at x. Time: O(log n). */
     ll query(ll x) {
         assert(!empty());
         auto l = *lower_bound(x);
@@ -69,6 +76,7 @@ struct DynamicCHT : multiset<Line, std::less<>> {
     }
 };
 
+/** Dynamic CHT wrapper supporting min or max queries. Space: O(n). */
 template<bool isMax>
 struct DynamicCHT1 {
     struct Line {

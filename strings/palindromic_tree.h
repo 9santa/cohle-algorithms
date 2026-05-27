@@ -1,7 +1,9 @@
 #include "core.h"
 
+/** Palindromic tree (eertree) for online distinct palindrome tracking. Space: O(n). */
 template<int SIG = 26>
 struct Eertree {
+    /** Node representing one distinct palindrome. */
     struct Node {
         int len; // len of the palindrome at vertex
         int link; // suf link
@@ -14,29 +16,35 @@ struct Eertree {
     string s;
     int last; // node id of longest pal suffix of current prefix ('vMaxPalSuf')
 
+    /** Initializes an empty tree and reserves optional capacity. Time: O(maxN) reserve. */
     Eertree(int maxN = 0) {
         nodes.reserve(maxN + 3);
         init();
     }
 
     // ===== helpers =====
+    /** Returns suffix link of node v. Time: O(1). */
     int suf(int v) const {
         return nodes[v].link;
     }
 
+    /** Returns palindrome length of node v. Time: O(1). */
     int len(int v) const {
         return nodes[v].len;
     }
 
+    /** Returns whether transition by ch exists from v. Time: O(log degree). */
     bool can_go(int v, char ch) const {
         return nodes[v].nxt.find(ch) != nodes[v].nxt.end();
     }
 
+    /** Returns transition by ch from v, or -1. Time: O(log degree). */
     int go(int v, char ch) const {
         auto it = nodes[v].nxt.find(ch);
         return (it == nodes[v].nxt.end() ? -1 : it->second);
     }
 
+    /** Resets to the two-root empty eertree. Time: O(nodes). */
     void init() {
         nodes.clear();
         // node 0: len = -1 (odd), node 1: len = 0 (even)
@@ -48,15 +56,18 @@ struct Eertree {
         last = 1;
     }
 
+    /** Builds the eertree from str. Amortized time: O(|str| log SIG). */
     void build(const string& str) {
         for (char ch : str) add_char(ch);
     }
 
+    /** Finds the largest suffix palindrome extendable by ch. Amortized time: O(1). */
     int get_suf(int v, int pos, char ch) {
         while (s[pos - len(v) - 1] != ch) v = suf(v);
         return v;
     }
 
+    /** Adds one character to the current string. Amortized time: O(log SIG). */
     void add_char(char ch) {
         s.push_back(ch);
         int pos = sz(s) - 1;
@@ -79,6 +90,7 @@ struct Eertree {
         nodes[last].occ++; // endpos occurrence
     }
 
+    /** Propagates occurrence counts along suffix links. Time: O(nodes log nodes). */
     void propagate_occ() {
         vi order(sz(nodes));
         iota(all(order), 0);
@@ -92,6 +104,7 @@ struct Eertree {
     }
 
     // faster than sorting. since len <= n, we can bucket by length
+    /** Propagates occurrence counts by length buckets. Time: O(n + nodes). */
     void propagate_occ_linear() {
         int n = sz(this->s) - 1;
         V<vi> bucket(n+1);

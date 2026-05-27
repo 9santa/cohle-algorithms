@@ -1,5 +1,6 @@
 
 // O((n+q) log n)
+/** Offline-preprocessed dynamic majority structure for point updates and range majority queries. Space: O(n + updates). */
 struct MajorityDS {
 
 struct Node {

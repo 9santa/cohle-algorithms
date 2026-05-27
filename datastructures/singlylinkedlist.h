@@ -1,12 +1,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/** Singly linked list node. */
 struct Node {
     int data;
     Node* next;
     Node(int val) : data(val), next(nullptr) {}
 };
 
+/** Basic singly linked list with 1-indexed operations. Space: O(n). */
 struct List {
 private:
     Node* head;
@@ -15,6 +17,7 @@ private:
 public:
     List() : head(nullptr), size(0) {}
 
+    /** Inserts y after position x, where x=0 inserts at the head. Time: O(x). */
     void insert_after_x(int x, int y) {
         if (x == 0) {
             Node* new_node = new Node(y);
@@ -33,12 +36,14 @@ public:
         size++;
     }
 
+    /** Returns the value at 1-indexed position x. Time: O(x). */
     int get_at_pos(int x) const {
         Node* cur = head;
         for (int i = 1; i < x; i++) cur = cur->next;
         return cur->data;
     }
 
+    /** Deletes the node at 1-indexed position x. Time: O(x). */
     void delete_at_pos(int x) {
         if (x == 1) {
             Node* temp = head;

@@ -6,6 +6,7 @@ using u128  = __uint128_t;
 
 constexpr int MOD = 998244353;
 
+/** Binary exponentiation by repeated squaring. Time: O(log b). */
 template<typename T>
 constexpr T binpow(T a, u64 b) {
     T res = 1;
@@ -17,6 +18,7 @@ constexpr T binpow(T a, u64 b) {
     return res;
 }
 
+/** Multiplies two 32-bit residues modulo P. Time: O(1). */
 template<u32 P>
 constexpr u32 mulMod(u32 a, u32 b) {
     return u64(a) * b % P;
@@ -24,6 +26,7 @@ constexpr u32 mulMod(u32 a, u32 b) {
 
 /* this is some tricky stuff, intentionally overflows u64
    but recovers the correct value using lond double approx */
+/** Multiplies two 64-bit residues modulo P using long double reduction. Time: O(1). */
 template<u64 P>
 constexpr u64 mulMod(u64 a, u64 b) {
     u64 res = a * b - u64(1.L * a * b / P - 0.5L) * P;
@@ -32,12 +35,14 @@ constexpr u64 mulMod(u64 a, u64 b) {
 }
 
 // signed modulo fix
+/** Returns x modulo mod in [0, mod). Time: O(1). */
 constexpr i64 safeMod(i64 x, i64 mod) {
     x %= mod;
     if (x < 0) x += mod;
     return x;
 }
 
+/** Extended gcd; writes x,y such that ax + by = gcd(a,b). Time: O(log min(a,b)). */
 static i64 egcd(i64 a, i64 b, i64 &x, i64 &y) {
     // returns g=gcd(a,b), and finds x,y such that ax+by=g
     if (b == 0) { x = 1; y = 0; return a; }
@@ -48,6 +53,7 @@ static i64 egcd(i64 a, i64 b, i64 &x, i64 &y) {
     return g;
 }
 
+/** Returns modular inverse of a modulo mod. Time: O(log mod). */
 static i64 modInv(i64 a, i64 mod) {
     // inverse exists if gcd(a, mod)=1
     i64 x, y;
@@ -59,6 +65,7 @@ static i64 modInv(i64 a, i64 mod) {
 }
 
 // returns pair {prime, power}
+/** Returns prime factorization as {prime, exponent}. Time: O(sqrt n). */
 vector<pair<ll, ll>> factorize(ll n) {
     vector<pair<ll, ll>> primes;
     for (ll i = 2; i*i <= n; i++) {
@@ -78,6 +85,7 @@ vector<pair<ll, ll>> factorize(ll n) {
 // CRT for pairwise coprime moduli
 // Combine x ≡ a1 (mod m1), x ≡ a2 (mod m2), gcd(m1,m2)=1
 // ------------------------------
+/** Merges two coprime congruences by CRT. Time: O(log mod). */
 static pair<i64,i64> crt_merge(u64 a1, u64 m1, u64 a2, u64 m2) {
     // returns (a, m) where x ≡ a (mod m), m=m1*m2
     // t = (a2-a1) * inv(m1 mod m2) mod m2
@@ -96,6 +104,7 @@ static pair<i64,i64> crt_merge(u64 a1, u64 m1, u64 a2, u64 m2) {
 // ============================================================
 // Range Product Mod M using prime-power decomposition + prefixes
 // ============================================================
+/** Range product modulo arbitrary M using prime-power decomposition. Space: O(n omega(M)). */
 struct RangeProductMod {
     int n = 0;
     int64 M = 1;
@@ -127,7 +136,8 @@ struct RangeProductMod {
 
     explicit RangeProductMod(const vector<int64>& a, int64 mod) { build(a, mod); }
 
-    void build(const vector<int64>& a, int64 mod) {
+/** Builds prefix tables for range products modulo mod. Time: O(n omega(M) + sqrt M). */
+void build(const vector<int64>& a, int64 mod) {
         n = (int)a.size();
         M = mod;
         if (M == 1) {
@@ -223,7 +233,8 @@ struct RangeProductMod {
     }
 
     // Product of a[l..r) modulo M
-    int64 prod(int l, int r) const {
+/** Returns product of a[l..r) modulo M. Time: O(omega(M) log M). */
+int64 prod(int l, int r) const {
         if (M == 1) return 0;
         if (l < 0) l = 0;
         if (r > n) r = n;

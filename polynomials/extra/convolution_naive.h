@@ -1,4 +1,5 @@
 #include "../core.h"
+/** Naive polynomial convolution. Time: O(nm). */
 inline vector<int> convolution_naive(const vector<int>& P, const vector<int>& Q) {
     size_t n = P.size() + Q.size() - 1;
     vector<int> R(n, 0);

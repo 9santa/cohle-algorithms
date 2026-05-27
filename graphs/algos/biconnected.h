@@ -3,6 +3,7 @@
 // Vertex-biconnected components + acticulation points
 // Returns edge-blocks (components of edges)
 
+/** Biconnected components and articulation points. Space: O(n + m). */
 template<class Cost>
 struct BiconnectedRes {
     vi tin, low;
@@ -10,6 +11,7 @@ struct BiconnectedRes {
     V<vi> edge_components; // each comp is a list of edge-ids
 };
 
+/** Finds vertex-biconnected components in an undirected graph. Time: O(n + m). */
 template<class Cost>
 BiconnectedRes<Cost> biconnected_components(const Graph<Cost, false>& G) {
     const int N = G.N;

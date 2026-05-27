@@ -4,8 +4,11 @@
 
 namespace nt {
 
-// ---------- multiplicative order ord_n(a) ----------
-// returns 0 if order does not exist (i.e. gcd(a,n)!=1 or n==0)
+/**
+ * Returns the multiplicative order ord_n(a).
+ * @return 0 if the order does not exist.
+ * Time: dominated by factorization of lambda(n). Space: O(number of prime factors).
+ */
 inline u64 multiplicative_order(u64 a, u64 n) {
     if (n == 0) return 0;
     if (n == 1) return 1;

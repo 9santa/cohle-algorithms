@@ -1,7 +1,6 @@
 #include "../core.h"
 
-// Templated version for different idempotent operations
-// Monoid::op(x, y) -> bool (true if x is strictly better)!!!
+/** Sparse table for idempotent RMQ-like operations returning best indices. Space: O(n log n). */
 template<class Monoid>
 struct SparseTable {
     using MX = Monoid;
@@ -13,6 +12,7 @@ struct SparseTable {
     SparseTable() = default;
     SparseTable(const vector<X>& arr) { build(arr); }
 
+    /** Builds from a 0-indexed immutable array. Time: O(n log n). */
     void build(const std::vector<X> &arr) {
         a = &arr;
         n = (int)arr.size();
@@ -34,6 +34,7 @@ struct SparseTable {
         }
     }
 
+    /** Returns the best index in [l, r]. Time: O(1). */
     int query_index(int l, int r) const {
         assert(0 <= l && l <= r && r < n);
         int len = r - l + 1;
@@ -43,7 +44,7 @@ struct SparseTable {
         return MX::op((*a)[x], (*a)[y]) ? x : y;
     }
 
-    // Query [l, r] (0-indexed, inclusive)
+    /** Returns the best value in [l, r]. Time: O(1). */
     X query(int l, int r) const {
         if (n == 0 || l > r) return MX::id();
         if (l < 0) l = 0;

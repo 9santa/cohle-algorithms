@@ -2,25 +2,22 @@
 #include "../core.h"
 #include "dsu_rollback.h"
 
-/* Time complexity: O(m log q)*log n + q*log n)
-n = number of vertices
-q = number of operations total
-m = number of edge-active intervals
-Each interval is isnerted into seg in O(log q) nodes.
-So if there are m active intervals total, number of stored edge copies is: O(m log q)
-During the DFS, number of unite() calls is O(m log q) -> O((m log q) * log n)
-Query answering -> two find() calls -> O(log n), for q operations -> O(q*log n)
-Total = Edge preprocessing + Query answering = O((m log q)*log n + q*log n) */
-
+/** Undirected edge event for offline dynamic connectivity. */
 struct Edge {
     int u, v;
 };
 
+/** Query event: add edge, remove edge, or ask connectivity. */
 struct Query {
     char type; // '+', '-', '?'
     int u, v;
 };
 
+/**
+* Offline dynamic connectivity with rollback DSU and a segment tree over time.
+* Time: O((m log q) log n + q log n), where m is active edge intervals.
+* Space: O(n + m log q + q).
+*/
 struct OfflineDynamicConnectivity {
     int n, q;
     vector<Query> queries;
@@ -32,11 +29,13 @@ struct OfflineDynamicConnectivity {
         : n(n_), q((int)queries.size()-1), queries(queries),
           seg(4 * (int)queries.size()), answer(queries.size()), dsu(n+1) {}
 
+    /** Returns an undirected edge key with smaller endpoint first. Time: O(1). */
     static pair<int, int> normalize(int u, int v) {
         if (u > v) swap(u, v);
         return {u, v};
     }
 
+    /** Adds edge e to all segment-tree nodes covering [ql, qr]. Time: O(log q). */
     void add_interval(int v, int l, int r, int ql, int qr, Edge e) {
         if (qr < l || r < ql) return;
         if (ql <= l || r <= qr) {
@@ -48,6 +47,7 @@ struct OfflineDynamicConnectivity {
         add_interval(v*2+1, mid+1, r, ql, qr, e);
     }
 
+    /** Converts add/remove events into active intervals. Time: O(q log q). */
     void build_intervals() {
         map<pair<int, int>, int> start_time;
 
@@ -67,6 +67,7 @@ struct OfflineDynamicConnectivity {
         }
     }
 
+    /** DFS over the time segment tree while rolling DSU state back. Time: O((m log q + q) log n). */
     void dfs(int v, int l, int r) {
         int snap = dsu.snapshot();
 
@@ -87,6 +88,7 @@ struct OfflineDynamicConnectivity {
         dsu.rollback(snap);
     }
 
+    /** Answers all connectivity queries in input order. Time: O((m log q + q) log n). */
     vector<string> solve() {
         build_intervals();
         dfs(1, 1, q);

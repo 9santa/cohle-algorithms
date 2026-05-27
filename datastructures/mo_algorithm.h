@@ -1,10 +1,10 @@
 #include "core.h"
 
-// Answer static range queries in O((N+Q) * sqrt(N))
-// Queries are offline
-// Update operation is O(1) or close to that
+/** Removes index idx from the current Mo window. */
 void remove(idx);
+/** Adds index idx to the current Mo window. */
 void add(idx);
+/** Returns the current answer. */
 int get_ans();
 
 int BLOCK_SIZE;
@@ -27,6 +27,7 @@ struct Query {
     }
 };
 
+/** Answers offline static range queries using Mo's algorithm. Time: O((N + Q) sqrt N) for O(1) add/remove. */
 vector<int> mo_algorithm(vector<Query> qs) {
     vector<int> ans(qs.size());
     sort(qs.begin(), qs.end());

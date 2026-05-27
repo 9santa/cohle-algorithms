@@ -6,10 +6,15 @@
 
 namespace nt {
 
+/** Polynomial step function used by Pollard Rho. Time: O(1). Space: O(1). */
 inline u64 rho_f(u64 x, u64 c, u64 mod) {
     return (mul_mod(x, x, mod) + c) % mod;
 }
 
+/**
+ * Returns a non-trivial factor of composite n using Pollard Rho.
+ * Time: expected sublinear, heuristic. Space: O(1).
+ */
 inline u64 pollard_rho(u64 n) {
     if ((n & 1ULL) == 0) return 2;
     if (n % 3ULL == 0) return 3;
@@ -36,6 +41,7 @@ inline u64 pollard_rho(u64 n) {
     }
 }
 
+/** Recursively appends prime factors of n to fac. Time: heuristic. Space: O(log n) recursion. */
 inline void factor_rec(u64 n, vector<u64>& fac) {
     if (n == 1) return;
     if (is_prime_u64(n)) { fac.pb(n); return; }
@@ -44,6 +50,7 @@ inline void factor_rec(u64 n, vector<u64>& fac) {
     factor_rec(n / d, fac);
 }
 
+/** Returns all prime factors of n with multiplicity. Time: heuristic. Space: O(number of factors). */
 inline vector<u64> factorize_u64(u64 n) {
     vector<u64> fac;
     if (n == 0) return fac;
@@ -52,6 +59,7 @@ inline vector<u64> factorize_u64(u64 n) {
     return fac;
 }
 
+/** Returns factorization of n as {prime, exponent}. Time: heuristic. Space: O(number of distinct factors). */
 inline vector<pair<u64, int>> factorize_u64_powers(u64 n) {
     auto fac = factorize_u64(n);
     vector<pair<u64, int>> res;

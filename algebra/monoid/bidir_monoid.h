@@ -1,11 +1,13 @@
 #pragma once
 #include "../core.h"
 
+/** Detects whether a value type exposes a fail field. */
 template<class T, class = void>
 struct has_fail : std::false_type {};
 template<class T>
 struct has_fail<T, std::void_t<decltype(std::declval<T>().fail)>> : std::true_type {};
 
+/** Stores forward and reverse aggregate values, with optional fail propagation. */
 template<class X, bool HasFail>
 struct BidirValImpl;
 
@@ -18,12 +20,14 @@ struct BidirValImpl<X, true> { X fwd, rev; bool fail = false; };
 template<class X>
 using BidirVal = BidirValImpl<X, has_fail<X>::value>;
 
+/** Bidirectional wrapper for any associative monoid. Space: O(1). */
 template<class Monoid>
 struct Monoid_Bidir {
     using X0 = typename Monoid::value_type;
     using value_type = BidirVal<X0>;
     using X = value_type;
 
+    /** Returns the bidirectional identity. Time: O(Monoid::id). */
     static X id() {
         X res;
         res.fwd = Monoid::id();
@@ -34,6 +38,7 @@ struct Monoid_Bidir {
         return res;
     }
 
+    /** Combines adjacent bidirectional aggregates. Time: O(Monoid::op). */
     static X op(const X& a, const X& b) {
         X res;
         res.fwd = Monoid::op(a.fwd, b.fwd);

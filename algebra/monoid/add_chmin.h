@@ -6,10 +6,12 @@ h(x) = g(f(x)) = min(min(x+a, c) + d, f)
 h.first = a + d
 h.second = min(c + d, f)
 */
+/** Monoid of functions f(x) = min(x + add, upper). Space: O(1). */
 template<typename E>
 struct Monoid_Add_Chmin {
     using value_type = pair<E, E>; // first -> how much to add, second -> lower bound after adding
     using X = value_type;
+    /** Composes two functions. Time: O(1). */
     static X op(X x, X y) {
         auto& [a, c] = x;
         auto& [d, f] = y;
@@ -18,11 +20,15 @@ struct Monoid_Add_Chmin {
         c = min(c, f);
         return {a, c};
     }
+    /** Evaluates function f at a. Time: O(1). */
     static E eval(X f, E a) {
         return min(a + f.first, f.second);
     }
+    /** Creates an add function. Time: O(1). */
     static X add(E a) { return {a, infty<E>}; }
+    /** Creates a chmin function. Time: O(1). */
     static X chmin(E a) { return {0, a}; }
+    /** Returns the identity function. Time: O(1). */
     static constexpr X id() { return {0, infty<E>}; }
     static constexpr bool commute = false;
 };

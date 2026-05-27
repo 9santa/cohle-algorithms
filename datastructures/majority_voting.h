@@ -1,9 +1,6 @@
 #include "core.h"
 
-// O((n+q) log n) after preprocessing all future update values/positions.
-// This is an offline dynamic-majority structure:
-// - build() takes the initial array and the list of future point-updates
-// - update()/query_majority() run online after that preparation step
+/** Offline-preprocessed dynamic majority structure for point updates and range majority queries. Space: O(n + updates). */
 struct MajorityDS {
     struct Node {
         int cand; // possible majority candidate
@@ -133,6 +130,7 @@ struct MajorityDS {
         build(initial, future_updates);
     }
 
+    /** Builds from initial values and all future {position, value} updates. Time: O((n + q) log(n + q)). */
     void build(const vi& initial, const vector<pair<int, int>>& future_updates = {}) {
         vals = initial;
         for (auto [pos, val] : future_updates) {
@@ -168,19 +166,23 @@ struct MajorityDS {
         if (!a.empty()) st.build(a, 1, 0, sz(a) - 1);
     }
 
+    /** Returns the array size. Time: O(1). */
     int size() const { return sz(a); }
 
+    /** Converts an original value to its compressed id. Time: O(1) average. */
     int compress(int x) const {
         auto it = id_of.find(x);
         assert(it != id_of.end());
         return it->second;
     }
 
+    /** Returns the current original value at index i. Time: O(1). */
     int value_at(int i) const {
         assert(0 <= i && i < size());
         return vals[a[i]];
     }
 
+    /** Sets a[i] to x. Time: O(log n). */
     void update(int i, int x) {
         assert(0 <= i && i < size());
         int y = compress(x);
@@ -198,7 +200,7 @@ struct MajorityDS {
         st.update(1, 0, size() - 1, i, y);
     }
 
-    // query [l, r)
+    /** Returns the strict majority value in [l, r), if one exists. Time: O(log n). */
     optional<int> query_majority(int l, int r) const {
         assert(0 <= l && l <= r && r <= size());
         if (l == r) return nullopt;

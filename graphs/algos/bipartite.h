@@ -2,6 +2,7 @@
 
 // Returns {ok, color}, where color[v] is 0/1 if ok empty vector otherwise
 // Intended for undirected graphs
+/** Returns whether graph is bipartite and a 0/1 coloring. Time: O(n + m). */
 template<class Cost>
 pair<bool, vector<int>> bipartite_coloring(const Graph<Cost, false>& G) {
     const int N = G.N;

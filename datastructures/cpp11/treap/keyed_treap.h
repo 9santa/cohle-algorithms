@@ -38,8 +38,11 @@ struct TreapKeyed {
     }
 
     // --- basic ---
+    /** Clears the treap while keeping pooled memory. Time: O(1). */
     void reset() { root = nullptr; pool.reset_keep_memory(); }
+    /** Returns number of nodes. Time: O(1). */
     int size() const { return size(root); }
+    /** Returns aggregate over all keys. Time: O(1). */
     X prod_all() const { return prod(root); }
 
     Node* build_cartesian(const vector<X>& a) {
@@ -70,6 +73,7 @@ struct TreapKeyed {
 
     // O(log n)
     // Range aggregate over keys in [l, r)
+    /** Returns aggregate over keys in [L, R). Expected time: O(log n). */
     X prod_range(const Key&L, const Key& R) {
         Node *a, *b, *c;
         tie(a, b) = split_lt(root, L); // a: < L, b: >= L
@@ -80,6 +84,7 @@ struct TreapKeyed {
     }
 
     // Range aggregate over keys in [l, r]
+    /** Returns aggregate over keys in [L, R]. Expected time: O(log n). */
     X prod_range_inclusive(Node*& root, const Key& L, const Key& R) {
         if (comp(R, L)) return Monoid::id();
         Node* a, *b, *c;
@@ -91,6 +96,7 @@ struct TreapKeyed {
     }
 
     // Prefix prod: nodes with key <= k
+    /** Returns aggregate over keys <= k. Expected time: O(log n). */
     X prod_leq(const Key& k) const {
         Node* t = root;
         X res = Monoid::id();
@@ -153,6 +159,7 @@ struct TreapKeyed {
     }
 
     // Erase one occurrence by key. Returns whether erased
+    /** Erases one occurrence of key k. Expected time: O(log n). */
     bool erase_one(const Key& k) {
         bool erased = false;
         root = era(root, k, erased);
@@ -160,6 +167,7 @@ struct TreapKeyed {
     }
 
     // Count occurrences by key
+    /** Counts occurrences of key k. Expected time: O(log n). */
     int count(const Key& k) {
         Node* a, *bc, *b, *c;
         tie(a, bc) = split_lt(root, k); // < k, >= k
@@ -179,6 +187,7 @@ struct TreapKeyed {
     }
 
     // lower_bound: first key >= k
+    /** Returns first node with key >= k, or nullptr. Expected time: O(log n). */
     Node* lower_bound(const Key& k) const {
         Node* t = root;
         Node* ans = nullptr;
@@ -192,6 +201,7 @@ struct TreapKeyed {
     }
 
     // #keys < k
+    /** Returns number of keys < k. Expected time: O(log n). */
     int order_of_key(const Key& k) const {
         Node* t = root;
         int res = 0;

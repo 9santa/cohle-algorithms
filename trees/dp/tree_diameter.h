@@ -7,6 +7,7 @@ constexpr int MOD = 1e9+7;
 
 constexpr int MAXN = 100005;
 vi g[MAXN];
+/** Returns max depth from u and updates diameter. Time: O(subtree size). */
 int dfs(int u, int p, int& diam) {
     int max1 = 0, max2 = 0; // two max children depths
     for (int v : g[u]) {

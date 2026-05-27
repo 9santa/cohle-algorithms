@@ -2,9 +2,7 @@
 
 #include "../core.h"
 
-// --- RMQ +-1 ---
-// Static RMQ in O(1) per query with Four Russians, O(sz(euler)) preprocessing
-// Static RMQ -> Static LCA -> Static RMQ +-1 -> Four Russians -> O(1)
+/** Static RMQ for arrays whose adjacent differences are +/-1. Space: O(n). */
 struct PlusMinusOneRMQ {
     int n = 0;     // length Euler depth array
     int B = 1;     // block size
@@ -25,23 +23,26 @@ struct PlusMinusOneRMQ {
     PlusMinusOneRMQ() = default;
     explicit PlusMinusOneRMQ(const vector<int>& depths) { build(depths); }
 
+    /** Returns floor(log2(x)). Time: O(log x). */
     static int floor_log2(int x) {
         int res = 0;
         while ((1 << (res + 1)) <= x) ++res;
         return res;
     }
 
+    /** Returns the better position by value, then by smaller index. Time: O(1). */
     inline int better(int pos1, int pos2) const {
         // compare by D value, tie by smaller index (leftmost)
         if (D[pos1] != D[pos2]) return (D[pos1] < D[pos2]) ? pos1 : pos2;
         return min(pos1, pos2);
     }
 
-    // helper for access
+    /** Returns the precomputed in-block argmin offset. Time: O(1). */
     inline u8 microAt(int t, int i, int j) const {
         return micro[(t * B + i) * B + j];
     }
 
+    /** Builds the plus-minus-one RMQ structure. Time: O(n). */
     void build(const vector<int>& depths) {
         D = depths;
         n = sz(D);
@@ -118,6 +119,7 @@ struct PlusMinusOneRMQ {
         }
     }
 
+    /** Returns the best position across full blocks [L, R]. Time: O(1). */
     int queryBlocks(int L, int R) const {
         // inclusive block indices, requires L <= R
         assert(L <= R);
@@ -128,6 +130,7 @@ struct PlusMinusOneRMQ {
         return better(a, b);
     }
 
+    /** Returns the index of the minimum depth in [l, r]. Time: O(1). */
     int query(int l, int r) const {
         // inclusive positions in D
         if (l > r) swap(l, r);

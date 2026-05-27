@@ -6,15 +6,15 @@
 using namespace std;
 
 /**
- * @brief Finds one of the Longest Increasing Subsequences (LIS) in O(n log n).
- * The function calculates dp[i] (length of LIS ending at nums[i])
- * in O(n log n) using 'tails' array and binary search.
- * It then reconstructs the sequence in O(n) time by iterating backwards
- * from the last element of the LIS found.
- *
- * @param nums The input array.
- * @return vector<int> The reconstrucred LIS.
- */
+* @brief Finds one of the Longest Increasing Subsequences (LIS) in O(n log n).
+* The function calculates dp[i] (length of LIS ending at nums[i])
+* in O(n log n) using 'tails' array and binary search.
+* It then reconstructs the sequence in O(n) time by iterating backwards
+* from the last element of the LIS found.
+*
+* @param nums The input array.
+* @return vector<int> The reconstrucred LIS.
+*/
 vector<int> LIS(vector<int>& nums) {
     int n = (int)nums.size();
     vector<int> dp(n, 1);
@@ -46,6 +46,7 @@ vector<int> LIS(vector<int>& nums) {
 }
 
 // O(n^2) DP algorithm
+/** Returns LIS length by O(n^2) DP. Time: O(n^2). Space: O(n). */
 int longestIncreasingSubsequence(vector<int>& nums) {
     if(nums.empty()) return 0;
 
@@ -64,6 +65,7 @@ int longestIncreasingSubsequence(vector<int>& nums) {
 }
 
 // O(n log n) Binary Search algorithm
+/** Returns LIS length by patience sorting. Time: O(n log n). Space: O(n). */
 int longestIncreasingSubsequence1(vector<int>& nums) {
     vector<int> tail;
 
@@ -84,6 +86,7 @@ int longestIncreasingSubsequence1(vector<int>& nums) {
 }
 
 // More intuitive O(n log n) Binary Search algorithm
+/** Returns LIS length by lower_bound tails. Time: O(n log n). Space: O(n). */
 int lengthOfLIS(vector<int>& nums) {
     int n = (int)nums.size();
 

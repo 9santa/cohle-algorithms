@@ -1,11 +1,13 @@
 #include "../core.h"
 #include <execution>
 
+/** BFS distances and parent tree. Space: O(n). */
 struct BFSRes {
     vi dist;    // -1 = unreachable
     vi parent;  // parent[v] = prev vertex on shortest path, -1 if none
 };
 
+/** Runs BFS from one source on an unweighted graph. Time: O(n + m). */
 template<class Cost, bool directed>
 BFSRes bfs(const Graph<Cost, directed>& G, int src) {
     const int N = G.N;
@@ -32,6 +34,7 @@ BFSRes bfs(const Graph<Cost, directed>& G, int src) {
 
 // BFS but stops expanding nodes once depth == max_depth
 // Nodes deeper than max_depth will remain dist = -1
+/** Runs BFS without expanding nodes past max_depth. Time: O(n + m). */
 template<class Cost, bool directed>
 BFSRes bfs_limited_depth(const Graph<Cost, directed>& G, int src, int max_depth) {
     const int N = G.N;
@@ -60,6 +63,7 @@ BFSRes bfs_limited_depth(const Graph<Cost, directed>& G, int src, int max_depth)
 
 // Reconstruct path from src (implicit in parent) to target
 // Returns empty if target unreachable
+/** Restores path to target from BFS parent data, or empty if unreachable. Time: O(path length). */
 inline vi restore_path(int target, const vi& parent, const vi& dist) {
     if (target < 0 || target >= sz(parent) || dist[target] == -1) return {};
     vi path;

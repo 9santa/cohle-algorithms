@@ -6,6 +6,7 @@ vector<int> g[MAXN];
 int dp[MAXN][2];    // 0 - don't take u, 1 - take u
 int weight[MAXN];
 
+/** Fills maximum-weight independent-set DP for subtree u. Time: O(subtree size). */
 void dfs_mwis(int u, int p) {
     dp[u][1] = weight[u]; // take u
     dp[u][0] = 0;         // do not take u

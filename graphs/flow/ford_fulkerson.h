@@ -3,6 +3,7 @@
 // Brute force algorithm, we just keep trying to push flow while we can, finds max flow but pretty slow
 // Find any augmenting (improving) path using iterative stack DFS, optionally only edges with cap >= delta
 // Returns pushed flow (0 if none)
+/** Finds one DFS augmenting path with residual capacity at least delta. Time: O(E). */
 template<class Cap>
 static Cap ff_augment(FlowGraph<Cap>& F, int s, int t, Cap delta) {
     int N = F.N;
@@ -51,6 +52,7 @@ static Cap ff_augment(FlowGraph<Cap>& F, int s, int t, Cap delta) {
 }
 
 // O(F*M), F - max flow, M - #edges
+/** Computes max flow by Ford-Fulkerson. Time: O(FE). */
 template<class Cap = long long>
 Cap max_flow_ford_fulkerson(FlowGraph<Cap>& F, int s, int t) {
     Cap flow = 0;
@@ -66,6 +68,7 @@ Cap max_flow_ford_fulkerson(FlowGraph<Cap>& F, int s, int t) {
 // Capacity scaling Ford-Fulkerson:
 // delta = highest power of two <= max_cap, and only use edges with residual >= delta in that phase
 // O(E^2 log C), C - max capacity in graph
+/** Computes max flow by capacity-scaling Ford-Fulkerson. Time: O(E^2 log C). */
 template<class Cap = long long>
 Cap max_flow_ford_fulkerson_scaling(FlowGraph<Cap>& F, int s, int t) {
     Cap flow = 0;

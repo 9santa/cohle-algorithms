@@ -1,5 +1,6 @@
 #include "../graphs/core.h"
 
+/** Returns a centroid of a tree. Time: O(n). Space: O(n). */
 template<class Cost>
 int tree_centroid(const Graph<Cost, false>& G) {
     const int N = G.N;

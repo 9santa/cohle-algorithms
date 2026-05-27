@@ -1,6 +1,7 @@
 #pragma once
 #include "../core.h"
 
+/** Generic pointer-based link-cut tree over a node monoid abstraction. Space: O(n). */
 template<class Node>
 struct LCT_Monoid {
     using np = Node*;
@@ -12,6 +13,7 @@ struct LCT_Monoid {
 
     LCT_Monoid(int n_ = 0) { init(n_); }
 
+    /** Initializes n nodes. Time: O(n). */
     void init(int n_) {
         n = n_;
         t.reserve(n);
@@ -110,17 +112,21 @@ struct LCT_Monoid {
         return last;
     }
 
+    /** Accesses x and makes the represented root-to-x path preferred. Amortized time: O(log n). */
     np access(np x) { return expose(x); }
 
+    /** Makes x the represented-tree root. Amortized time: O(log n). */
     void evert(np x) {
         expose(x);
         x->reverse();
     }
 
+    /** Makes x the represented-tree root. Amortized time: O(log n). */
     void makeroot(np x) {
         evert(x);
     }
 
+    /** Returns the represented-tree root containing x. Amortized time: O(log n). */
     np findroot(np x) {
         expose(x);
         while (x->l) {
@@ -131,12 +137,13 @@ struct LCT_Monoid {
         return x;
     }
 
+    /** Returns whether a and b are connected. Amortized time: O(log n). */
     bool connected(np a, np b) {
         if (a == b) return true;
         return findroot(a) == findroot(b);
     }
 
-    // after split(a, b), the whole path a->b is exactly the aux tree rooted at b
+    /** Exposes path a-b as the auxiliary tree rooted at b. Amortized time: O(log n). */
     bool split(np a, np b) {
         if (!connected(a, b)) return false;
         makeroot(a);
@@ -144,6 +151,7 @@ struct LCT_Monoid {
         return true;
     }
 
+    /** Adds edge a-b if it connects two different trees. Amortized time: O(log n). */
     bool link(np a, np b) {
         makeroot(a);
         if (findroot(b) == a) return false; // already connected
@@ -156,6 +164,7 @@ struct LCT_Monoid {
         return true;
     }
 
+    /** Removes edge a-b if it exists. Amortized time: O(log n). */
     bool cut(np a, np b) {
         makeroot(a);
         expose(b);
@@ -170,30 +179,33 @@ struct LCT_Monoid {
         return true;
     }
 
+    /** Returns LCA of a and b in the current rooted represented tree, or nullptr. Amortized time: O(log n). */
     np lca(np a, np b) {
         if (!connected(a, b)) return nullptr;
         expose(a);
         return expose(b);
     }
 
+    /** Sets vertex value at x. Amortized time: O(log n). */
     void set(np x, const VX& v) {
         expose(x);
         x->set(v);
         pull(x);
     }
 
+    /** Returns vertex value at x. Amortized time: O(log n). */
     VX get_vertex(np x) {
         expose(x);
         return x->vx;
     }
 
-    // aggregate on path a ... b
+    /** Returns aggregate on path a-b. Amortized time: O(log n). */
     X prod_path(np a, np b) {
         split(a, b);
         return b->x;
     }
 
-    // aggregate on path b .. a
+    /** Returns aggregate on path b-a in reverse order. Amortized time: O(log n). */
     X prod_path_rev(np a, np b) {
         split(a, b);
         return b->rx;

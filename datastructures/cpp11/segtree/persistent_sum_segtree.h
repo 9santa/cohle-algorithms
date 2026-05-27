@@ -1,4 +1,5 @@
 
+/** Persistent segment tree over an arbitrary monoid. Space: O(n + q log n). */
 template<class Monoid>
 struct PST {
     using X = typename Monoid::value_type;
@@ -13,6 +14,7 @@ struct PST {
     PST() : n(0) {}
     PST(int n_, int reserve_nodes = 0) { init(n_, reserve_nodes); }
 
+    /** Initializes an empty persistent tree over n positions. Time: O(1). */
     void init(int n_, int reserve_nodes = 0) {
         n = n_;
         st.clear();
@@ -25,7 +27,7 @@ struct PST {
         return (int)st.size() - 1;
     }
 
-    // Build from function f(i) for in [0..n)
+    /** Builds one version from values f(i) over [0, n). Time: O(n). */
     template<class F>
     int build(F f) { return build(0, n, f); }
 
@@ -43,7 +45,7 @@ struct PST {
         return clone(cur);
     }
 
-    // Point set: a[pos] = x
+    /** Returns a new root after setting a[pos] to x. Time: O(log n). */
     int set(int root, int pos, const X& x) { return set(root, 0, n, pos, x); }
 
     int set(int v, int tl, int tr, int pos, const X& x) {
@@ -59,7 +61,7 @@ struct PST {
         return clone(cur);
     }
 
-    // Point apply: a[pos] = op(a[pos], delta)
+    /** Returns a new root after applying op(a[pos], delta). Time: O(log n). */
     int apply(int root, int pos, const X& delta) { return apply(root, 0, n, pos, delta); }
 
     int apply(int v, int tl, int tr, int pos, const X& delta) {
@@ -75,7 +77,7 @@ struct PST {
         return clone(cur);
     }
 
-    // Range query [l, r)
+    /** Returns the monoid product over [l, r) in this version. Time: O(log n). */
     X prod(int root, int l, int r) const { return prod(root, 0, n, l, r); }
 
     X prod(int v, int tl, int tr, int l, int r) const {
@@ -86,11 +88,10 @@ struct PST {
                           prod(st[v].r, tm, tr, l, r));
     }
 
+    /** Returns the monoid product over the whole version. Time: O(1). */
     X all_prod(int root) const { return st[root].val; }
 
-    // Find max r in [l..n] such that f(prod(root, l, r)) == true
-    // Requires: f(Monoid::id()) == true
-    // 0-indexed, returns r (half-open end)
+    /** Returns max r such that f(prod(root, l, r)) is true. Time: O(log n). */
     template<class F>
     int max_right(int root, int l, F f) const {
         assert(0 <= l && l <= n);
@@ -123,6 +124,7 @@ struct PST {
         return max_right_dfs(st[v].r, tm, tr, l, f, acc);  // try to extend via right child, if took the whole left child
     }
 
+    /** Returns min l such that f(prod(root, l, r)) is true. Time: O(log n). */
     template<class F>
     int min_left(int root, int r, F f) const {
         assert(0 <= r && r <= n);
@@ -156,7 +158,7 @@ struct PST {
 };
 
 
-// Memory is O(#updates * log2 n)
+/** Persistent frequency/sum segment tree over positions [1, n]. Space: O(q log n). */
 struct PST1 {
     struct Node {
         int l = 0, r = 0; // children indices in pool
@@ -176,7 +178,7 @@ struct PST1 {
         return (int)st.size() - 1;
     }
 
-    // Point add: return new root after adding delta at position pos
+    /** Returns a new root after adding delta at position pos. Time: O(log n). */
     int add(int v, int tl, int tr, int pos, int delta) {
         Node cur = st[v];
         if (tl == tr) {
@@ -190,11 +192,12 @@ struct PST1 {
         return clone(cur);
     }
 
+    /** Returns a new root after adding delta at position pos. Time: O(log n). */
     int add(int root, int pos, int delta) {
         return add(root, 1, n, pos, delta);
     }
 
-    // Range sum query on [l, r]
+    /** Returns the range sum over [l, r]. Time: O(log n). */
     int query(int v, int tl, int tr, int l, int r) const {
         if (!v || r < tl || l > tr) return 0;
         if (l <= tl && tr <= r) return st[v].sum;
@@ -202,16 +205,16 @@ struct PST1 {
         return query(st[v].l, tl, tm, l, r) + query(st[v].r, tm+1, tr, l, r);
     }
 
+    /** Returns the range sum over [l, r]. Time: O(log n). */
     int query(int root, int l, int r) const {
         if (l > r) return 0;
         return query(root, 1, n, l, r);
     }
 
-    // Total sum in this version
+    /** Returns the total sum in this version. Time: O(1). */
     int total(int root) const { return st[root].sum; }
 
-    // k-th order statistic: smallest poisiotn p where prefix sum >= k (1-indexed k)
-    // Requires: 1 <= k <= total(root) and all values non-negative
+    /** Returns the smallest position p with prefix sum >= k. Time: O(log n). */
     int kth(int v, int tl, int tr, int k) const {
         if (tl == tr) return tl;
         int left = st[v].l;
@@ -221,6 +224,7 @@ struct PST1 {
         return kth(st[v].r, tm+1, tr, k - left_sum);
     }
 
+    /** Returns the smallest position p with prefix sum >= k. Time: O(log n). */
     int kth(int root, int k) const {
         // caller should check 1 <= k <= total(root)
         return kth(root, 1, n, k);

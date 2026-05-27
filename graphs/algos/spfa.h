@@ -1,5 +1,6 @@
 #include "../core.h"
 
+/** SPFA result with negative-cycle flag. Space: O(n). */
 template<class Cost>
 struct SPFARes {
     V<Cost> dist;
@@ -7,6 +8,7 @@ struct SPFARes {
 };
 
 // Directed graph expected
+/** Runs SPFA from src. Worst-case time: O(nm). Space: O(n). */
 template<class Cost>
 SPFARes<Cost> spfa(const Graph<Cost, true>& G, int src) {
     const int N = G.N;

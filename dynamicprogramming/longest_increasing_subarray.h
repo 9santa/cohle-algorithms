@@ -3,6 +3,7 @@
 
 using namespace std;
 
+/** Returns length of longest strictly increasing contiguous subarray. Time: O(n). */
 int longestStrictlyIncreasingSubarray(vector<int>& nums) {
     if(nums.empty()) return 0;
 
@@ -20,6 +21,7 @@ int longestStrictlyIncreasingSubarray(vector<int>& nums) {
     return max_len;
 }
 
+/** Returns length of longest nondecreasing contiguous subarray. Time: O(n). */
 int longestNonDecreasingSubarray(vector<int>& nums) {
     if(nums.empty()) return 0;
 

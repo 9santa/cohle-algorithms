@@ -1,6 +1,7 @@
 #pragma once
 #include "../graphs/core.h"
 
+/** Rooted-tree metadata from DFS/BFS rooting. Space: O(n). */
 struct RootedTree {
     vi parent;      // parent[v] (root has parent[root] = -1)
     vi parent_eid;  // edge-id connecting v to parent
@@ -8,7 +9,8 @@ struct RootedTree {
     vi order;       // traversal order
 };
 
-// DFS-rooting (iterative). Good when you ant a traversal order for subtree DP
+// DFS-rooting (iterative). Good when you want a traversal order for subtree DP
+/** Roots a tree by iterative DFS. Time: O(n). Space: O(n). */
 template<class Cost>
 RootedTree tree_dfs_root(const Graph<Cost, false>& G, int root = 0) {
     int N = G.N;
@@ -39,6 +41,7 @@ RootedTree tree_dfs_root(const Graph<Cost, false>& G, int root = 0) {
 }
 
 // BFS-rooting. Depth is shortest-path distance in number of edges from root
+/** Roots a tree by BFS. Time: O(n). Space: O(n). */
 template<class Cost>
 RootedTree tree_bfs_root(const Graph<Cost, false>& G, int root = 0) {
     int N = G.N;
@@ -71,6 +74,7 @@ RootedTree tree_bfs_root(const Graph<Cost, false>& G, int root = 0) {
 
 
 // Make a directed tree from graph. Returns Graph<T, directed=true>
+/** Converts a rooted undirected tree into directed parent-to-child edges. Time: O(n). */
 template<class T, class UnirectedGraph>
 auto make_directed_tree(const UnirectedGraph& g, const RootedTree& t) {
     Graph<T, true> tr(g.N);

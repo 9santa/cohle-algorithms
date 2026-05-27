@@ -1,10 +1,12 @@
 #pragma once
 #include "../../linalg/xor_basis.h"
 
+/** Segment tree storing xor bases for range linear-basis queries. Space: O(60n). */
 struct SegTree {
     int n;
     vector<XorBasis<60>> t;
 
+    /** Builds from a 0-indexed array. Time: O(60n). */
     SegTree(const vector<ll>& a) {
         n = sz(a);
         t.resize(2 * n);
@@ -15,7 +17,7 @@ struct SegTree {
         }
     }
 
-    // [l, r)
+    /** Returns the xor basis of values in [l, r). Time: O(60 log n). */
     XorBasis<60> query(int l, int r) {
         XorBasis<60> res;
         for (l+=n, r+=n; l<r; l>>=1, r>>=1) {

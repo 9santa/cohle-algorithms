@@ -1,11 +1,13 @@
 #include "../graphs/core.h"
 
+/** Builds the centroid tree of an undirected tree. Space: O(n). */
 struct CentroidDecomposition {
     int N = 0;
     vi parent;      // parent in centroid tree (-1 for root)
     V<char> used;
     vi sub;
 
+    /** Builds parent links in the centroid decomposition. Time: O(n log n). */
     template<class Cost>
     void build(const Graph<Cost, false>& G) {
         N = G.N;

@@ -2,6 +2,7 @@
 
 // Edmonds-Karp = BFS shortest augmenting paths (basically Ford-Fulkerson but BFS instead of DFS)
 // O(V * E^2)
+/** Finds one BFS augmenting path with residual capacity at least delta. Time: O(E). */
 template<class Cap>
 static Cap ek_augment(FlowGraph<Cap>& F, int s, int t, Cap delta) {
     int N = F.N;
@@ -42,6 +43,7 @@ static Cap ek_augment(FlowGraph<Cap>& F, int s, int t, Cap delta) {
     return add;
 }
 
+/** Computes max flow by Edmonds-Karp. Time: O(VE^2). */
 template<class Cap = long long>
 Cap max_flow_edmonds_karp(FlowGraph<Cap>& F, int s, int t) {
     Cap flow = 0;
@@ -53,6 +55,7 @@ Cap max_flow_edmonds_karp(FlowGraph<Cap>& F, int s, int t) {
     return flow;
 }
 
+/** Computes max flow with capacity-scaling Edmonds-Karp. Time: O(E^2 log C) typical bound. */
 template<class Cap = long long>
 Cap max_flow_edmonds_karp_scaling(FlowGraph<Cap> &F, int s, int t) {
     Cap flow = 0;

@@ -84,6 +84,7 @@ int subtree_size[MAXN];
 // result for each edge
 vector<pair<pair<int, int>, long long>> edge_paths;
 
+/** Computes subtree sizes and path counts through each tree edge. Time: O(n). */
 void dfs(int u, int p) {
     subtree_size[u] = 1;
 

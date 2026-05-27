@@ -1,4 +1,5 @@
 #include "core.h"
+/** Returns whether S is a subsequence of T. Time: O(|S| + |T|). */
 template<typename STRING>
 bool is_subseq(const STRING& S, const STRING& T) {
     int p = 0;

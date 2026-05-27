@@ -1,6 +1,7 @@
 #include "../../datastructures/dsu/dsu.h"
 #include "../core.h"
 
+/** Returns the first edge closing a cycle in an undirected edge list. Time: O(m alpha n). */
 inline vi find_redundant_edge(const V<vi>& edges) {
     int mx = 0;
     for (auto& e : edges) mx = max(mx, max(e[0], e[1]));

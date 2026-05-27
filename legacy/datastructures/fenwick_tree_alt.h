@@ -54,19 +54,3 @@ public:
     }
 };
 
-
-// testing example
-int main(void) {
-    vector<int> nums = {1, 3, 5, 7, 9, 11};
-    FenwickTree ft(nums);
-
-    cout << "Prefix sum [0, 3]: " << ft.sum_query(3) << "\n";        // 1+3+5+7 = 16
-    cout << "Range sum [2, 4]: " << ft.range_sum_query(2, 4) << "\n"; // 5+7+9 = 21
-
-    ft.update(3, 2);  // add 2 to element at index 3 (7+2 = 9)
-    cout << "After update, prefix sum [0, 3]: " << ft.sum_query(3) << "\n";  // 1+3+5+9 = 18
-
-
-
-    return 0;
-}

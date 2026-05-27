@@ -3,6 +3,7 @@
 
 using Matrix = vector<vector<Z>>;
 
+/** Multiplies compatible matrices. Time: O(nmp). Space: O(nm). */
 Matrix multiply(const Matrix& a, const Matrix& b) {
     int n = sz(a);
     int m = sz(b[0]);
@@ -18,6 +19,7 @@ Matrix multiply(const Matrix& a, const Matrix& b) {
     return c;
 }
 
+/** Multiplies square matrices, skipping zero entries in the left matrix. Time: O(n^3). Space: O(n^2). */
 Matrix fastmul(const Matrix& a, const Matrix& b) {
     int n = sz(a);
     Matrix c(n, vector<Z>(n, 0));
@@ -34,6 +36,7 @@ Matrix fastmul(const Matrix& a, const Matrix& b) {
 }
 
 // Matrix Binary Exponentiation
+/** Returns mat^power for a square matrix. Time: O(n^3 log power). Space: O(n^2). */
 Matrix mpow(Matrix mat, ll power) {
     int n = (int)mat.size();
     Matrix res(n, vector<Z>(n, 0));

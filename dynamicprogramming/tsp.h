@@ -1,6 +1,7 @@
 #include "core.h"
 
 
+/** Prints the shortest Hamiltonian cycle using subset DP. Time: O(n^2 2^n). */
 static void tsp(int n, const vector<vector<int>>& dist) {
     int num_masks = 1 << n;
     vector<vector<int>> dp(num_masks, vector<int>(n, INT_MAX));

@@ -1,8 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// Efficient & minimized DSU implementation stolen from Neal Wu
-// Don't know who came up with this, but super cute
+/** Compact disjoint-set union with component size/min/max tracking. Space: O(n). */
 struct DSU {
 private:
     // data[x] < 0 => x is the root of this set, set size = -data[x]
@@ -12,7 +11,7 @@ private:
     vector<int> max_el;
 
 public:
-    // usually want to pass n+1 for construction
+    /** Initializes size singleton sets. Time: O(n). */
     void build(int size) {
         data.assign(size, -1);
         min_el.resize(size);
@@ -22,10 +21,12 @@ public:
         }
     }
 
+    /** Returns the representative of x with path compression. Amortized time: O(alpha n). */
     int find(int x) {
         return data[x] < 0 ? x : data[x] = find(data[x]);
     }
 
+    /** Merges the sets containing x and y. Amortized time: O(alpha n). */
     void unionSets(int x, int y) {
         x = find(x);
         y = find(y);
@@ -39,6 +40,7 @@ public:
         max_el[x] = max(max_el[x], max_el[y]);
     }
 
+    /** Returns the size of the set containing x. Amortized time: O(alpha n). */
     int setSize(int x) {
         return (-data[find(x)]);
     }

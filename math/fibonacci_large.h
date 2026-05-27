@@ -1,6 +1,7 @@
 #pragma once
 #include "large_number.h"
 
+/** Returns F(n) using arbitrary-size decimal arithmetic. Time: O(n digits). Space: O(digits). */
 inline large_number fib(uint64_t n) {
     large_number f0(1);
     large_number f1(1);
@@ -14,5 +15,4 @@ inline large_number fib(uint64_t n) {
 
     return f1;
 }
-
 

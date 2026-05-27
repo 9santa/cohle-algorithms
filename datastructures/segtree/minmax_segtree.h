@@ -3,13 +3,14 @@
 constexpr int MAXN = 100005;
 pair<int, int> t[4*MAXN];
 
-// pair {max, occurences}
+/** Combines {maximum, occurrences} values from two segments. Time: O(1). */
 pair<int, int> cmb(const pair<int, int>& a, const pair<int, int>& b) {
     if (a.first > b.first) return a;
     if (b.first > a.first) return b;
     return make_pair(a.first, a.second + b.second);
 }
 
+/** Builds a max-with-count segment tree. Time: O(n). Space: O(MAXN). */
 void build(const vi& a, int v, int tl, int tr) {
     if (tl == tr) t[v] = make_pair(a[tl], 1);
     else {
@@ -20,6 +21,7 @@ void build(const vi& a, int v, int tl, int tr) {
     }
 }
 
+/** Returns {maximum, occurrences} over [l, r]. Time: O(log n). */
 pair<int, int> get_max(int v, int tl, int tr, int l, int r) {
     if (l > r) return make_pair(-infty<int>, 0);
     if (l == tl && r == tr) return t[v];
@@ -28,6 +30,7 @@ pair<int, int> get_max(int v, int tl, int tr, int l, int r) {
             get_max(v*2+1, tm+1, tr, max(l, tm+1), r));
 }
 
+/** Sets a[pos] to val. Time: O(log n). */
 void update(int v, int tl, int tr, int pos, int val) {
     if (tl == tr) t[v] = make_pair(val, 1);
     else {

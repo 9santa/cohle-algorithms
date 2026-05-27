@@ -1,10 +1,9 @@
 /**
- * @file
- * @brief Library to perform arithmatic operations on arbitrarily large
- * numbers.
- * \author [Krishna Vedala](https://github.com/kvedala)
- */
-
+* @file
+* @brief Library to perform arithmatic operations on arbitrarily large
+* numbers.
+* \author [Krishna Vedala](https://github.com/kvedala)
+*/
 #ifndef MATH_LARGE_NUMBER_H_
 #define MATH_LARGE_NUMBER_H_
 #include <algorithm>
@@ -16,11 +15,11 @@
 #include <vector>
 
 /**
- * Store large unsigned numbers as a C++ vector
- * The class provides convenience functions to add a
- * digit to the number, perform multiplication of
- * large number with long unsigned integers.
- **/
+* Store large unsigned numbers as a C++ vector
+* The class provides convenience functions to add a
+* digit to the number, perform multiplication of
+* large number with long unsigned integers.
+**/
 class large_number {
  public:
     /**< initializer with value = 1 */
@@ -60,8 +59,8 @@ class large_number {
     }
 
     /**
-     * Function to check implementation
-     **/
+    * Function to check implementation
+    **/
     static bool test() {
         std::cout << "------ Checking `large_number` class implementations\t"
                   << std::endl;
@@ -113,8 +112,8 @@ class large_number {
     }
 
     /**
-     * add a digit at MSB to the large number
-     **/
+    * add a digit at MSB to the large number
+    **/
     void add_digit(unsigned int value) {
         if (value > 9) {
             std::cerr << "digit > 9!!\n";
@@ -125,15 +124,15 @@ class large_number {
     }
 
     /**
-     * Get number of digits in the number
-     **/
+    * Get number of digits in the number
+    **/
     size_t num_digits() const { return _digits.size(); }
 
     /**
-     * operator over load to access the
-     * i^th digit conveniently and also
-     * assign value to it
-     **/
+    * operator over load to access the
+    * i^th digit conveniently and also
+    * assign value to it
+    **/
     inline unsigned char &operator[](size_t n) { return this->_digits[n]; }
 
     inline const unsigned char &operator[](size_t n) const {
@@ -141,8 +140,8 @@ class large_number {
     }
 
     /**
-     * operator overload to compare two numbers
-     **/
+    * operator overload to compare two numbers
+    **/
     friend std::ostream &operator<<(std::ostream &out, const large_number &a) {
         for (size_t i = a.num_digits(); i > 0; i--)
             out << static_cast<int>(a[i - 1]);
@@ -150,8 +149,8 @@ class large_number {
     }
 
     /**
-     * operator overload to compare two numbers
-     **/
+    * operator overload to compare two numbers
+    **/
     friend bool operator==(large_number const &a, large_number const &b) {
         size_t N = a.num_digits();
         if (N != b.num_digits())
@@ -163,23 +162,23 @@ class large_number {
     }
 
     /**
-     * operator overload to compare two numbers
-     **/
+    * operator overload to compare two numbers
+    **/
     friend bool operator!=(large_number const &a, large_number const &b) {
         return !(a == b);
     }
 
     /**
-     * operator overload to increment (prefix)
-     **/
+    * operator overload to increment (prefix)
+    **/
     large_number &operator++() {
         (*this) += 1;
         return *this;
     }
 
     /**
-     * operator overload to increment (postfix)
-     **/
+    * operator overload to increment (postfix)
+    **/
     large_number &operator++(int) {
         static large_number tmp(_digits);
         ++(*this);
@@ -187,8 +186,8 @@ class large_number {
     }
 
     /**
-     * operator overload to add
-     **/
+    * operator overload to add
+    **/
     large_number &operator+=(large_number n) {
         // if adding with another large_number
         large_number *b = reinterpret_cast<large_number *>(&n);
@@ -214,8 +213,8 @@ class large_number {
     // }
 
     /**
-     * operator overload to perform addition
-     **/
+    * operator overload to perform addition
+    **/
     template <class T>
     friend large_number &operator+(const large_number &a, const T &b) {
         static large_number c = a;
@@ -224,16 +223,16 @@ class large_number {
     }
 
     /**
-     * assignment operator
-     **/
+    * assignment operator
+    **/
     large_number &operator=(const large_number &b) {
         this->_digits = b._digits;
         return *this;
     }
 
     /**
-     * operator overload to increment
-     **/
+    * operator overload to increment
+    **/
     template <class T>
     large_number &operator*=(const T n) {
         static_assert(std::is_integral<T>::value,
@@ -243,17 +242,17 @@ class large_number {
     }
 
     /**
-     * returns i^th digit as an ASCII character
-     **/
+    * returns i^th digit as an ASCII character
+    **/
     char digit_char(size_t i) const {
         return _digits[num_digits() - i - 1] + '0';
     }
 
  private:
     /**
-     * multiply large number with another integer and
-     * store the result in the same large number
-     **/
+    * multiply large number with another integer and
+    * store the result in the same large number
+    **/
     template <class T>
     void multiply(const T n) {
         static_assert(std::is_integral<T>::value,

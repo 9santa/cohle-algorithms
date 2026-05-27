@@ -3,10 +3,12 @@
 // 2D optimization
 // Minimize sum of k farthest distances to point (X, Y)
 
+/** 2D point for distance minimization. */
 struct Point {
     long double x, y;
 };
 
+/** Solves the k-farthest distance minimization example. Time: O(n log n). */
 void solve(void) {
     int n, k; cin >> n >> k;
 

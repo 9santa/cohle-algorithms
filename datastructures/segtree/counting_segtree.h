@@ -2,10 +2,11 @@
 
 #include "../core.h"
 
-// Counting SegTree for frequency of some value 'x'
+/** Counting segment tree for frequencies of one chosen value. Space: O(MAXN). */
 constexpr int MAXN = 100005;
 vi t(4*MAXN);
 
+/** Builds counts of value x over a[tl..tr]. Time: O(n). */
 void build(const vi& a, int v, int tl, int tr, int x) {
     if (tl == tr) t[v] = (a[tl] == x ? 1 : 0);
     else {
@@ -16,6 +17,7 @@ void build(const vi& a, int v, int tl, int tr, int x) {
     }
 }
 
+/** Returns the count in [l, r]. Time: O(log n). */
 int sum(int v, int tl, int tr, int l, int r) {
     if (l > r) return 0;
     if (l == tl && r == tr) return t[v];
@@ -24,6 +26,7 @@ int sum(int v, int tl, int tr, int l, int r) {
         + sum(v*2+1, tm+1, tr, max(l, tm+1), r);
 }
 
+/** Sets the stored count at pos to val. Time: O(log n). */
 void update(int v, int tl, int tr, int pos, int val) {
     if (tl == tr) t[v] = val;
     else {
@@ -37,7 +40,7 @@ void update(int v, int tl, int tr, int pos, int val) {
     }
 }
 
-// returns the index of k-th 'x', or -1 if it doesn't exist
+/** Returns the index of the k-th occurrence, or -1 if it does not exist. Time: O(log n). */
 int find_kth(int v, int tl, int tr, int k) {
     if (k > t[v]) return -1;
     if (tl == tr) return tl;

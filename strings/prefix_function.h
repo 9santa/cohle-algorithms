@@ -4,6 +4,7 @@
 // pi[i] = the length of the longest proper prefix of s[0..i]
 //         which is also a suffix of s[0..i].
 // O(|s|)
+/** Computes the KMP prefix function. Time: O(|s|). Space: O(|s|). */
 vector<int> prefix_function(const string& s) {
     int n = sz(s);
     vi pi(n);

@@ -23,6 +23,7 @@ int base = 1; // how many levels or roots / rev are prepared
 vector<Z> roots = {0, 1}; // roots[k + j] stores the j-th twiddle for stage block-size 2*k
 vector<int> rev = {0, 1}; // rev stores bit-reversed indices
 
+/** Ensures NTT roots/rev are prepared up to nbase. Time: O(2^nbase). */
 void ensure_base(int nbase) {
     if (nbase <= base) return;
     rev.resize(1 << nbase);
@@ -40,6 +41,7 @@ void ensure_base(int nbase) {
     }
 }
 
+/** In-place NTT. Time: O(n log n). */
 void ntt(vector<Z>& a) {
     int n = sz(a);
     assert(n > 0 && (n & (n - 1)) == 0); // power of two
@@ -63,6 +65,7 @@ void ntt(vector<Z>& a) {
     }
 }
 
+/** In-place inverse NTT. Time: O(n log n). */
 void intt(vector<Z>& a) {
     int n = sz(a);
     assert(n > 0 && (n & (n - 1)) == 0);

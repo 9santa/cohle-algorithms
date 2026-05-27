@@ -1,4 +1,5 @@
 
+/** Stores minimum, maximum, and their counts. Space: O(1). */
 struct MinMaxCount {
     ll minval, maxval;
     ll mincnt, maxcnt;

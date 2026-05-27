@@ -9,6 +9,7 @@
 
 // https://atcoder.jp/contests/dp/tasks/dp_o
 
+/** Counts perfect matchings in a bipartite graph by subset DP. Time: O(n 2^n). */
 ll countMatchings(vector<vector<int>>& ok) {
     int n = sz(ok);
     vector<ll> dp(1 << n, 0);

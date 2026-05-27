@@ -1,11 +1,13 @@
 #include "core.h"
 
+/** Trie for lowercase words with counts and kth-word lookup. Space: O(total characters * alphabet). */
 struct Trie {
+    /** Trie node with fixed 26-way transitions. */
     struct Node {
         bool end;
         int link[26];
         int cnt;
-        int end_cnt;    // count of words ending in the subtree of this node
+        int end_cnt;    // count of words ending at this node
 
         Node() {
             end = false;
@@ -18,6 +20,7 @@ struct Trie {
     vector<Node> trie = {Node()};
 
     // O(|s|)
+    /** Inserts s. Time: O(|s|). */
     void addString(const string& s) {
         int v = 0;
         trie[v].cnt++;
@@ -34,6 +37,7 @@ struct Trie {
     }
 
     // O(|s|)
+    /** Returns whether s exists as a full word. Time: O(|s|). */
     bool findString(const string& s) const {
         int v = 0;
         for (auto c : s) {
@@ -45,6 +49,7 @@ struct Trie {
     }
 
     // O(|s|)
+    /** Removes one occurrence of s if present. Time: O(|s|). */
     bool removeString(const string& s) {
         int v = 0;
         trie[v].cnt--;
@@ -62,6 +67,7 @@ struct Trie {
     }
 
     // O(26 * |res|)
+    /** Returns the k-th lexicographic stored string, or empty on invalid k. Time: O(26 * |answer|). */
     string kthString(int k) {
         string res;
         int v = 0;

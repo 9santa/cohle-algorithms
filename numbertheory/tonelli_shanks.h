@@ -3,8 +3,12 @@
 
 namespace nt {
 
-// Tonelli-Shanks: solve x^2 = a (mod p), p odd prime
-// returns one root x, or -1 if no solution
+/**
+ * Solves x^2 = a (mod p) with Tonelli-Shanks.
+ * @param p Prime modulus.
+ * @return One square root, or -1 if no root exists.
+ * Time: O(log^2 p). Space: O(1).
+ */
 inline ll tonelli_shanks(ll a, ll p) {
     a %= p;
     if (a < 0) a += p;

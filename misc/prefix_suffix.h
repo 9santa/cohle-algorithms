@@ -3,6 +3,7 @@
 using std::vector;
 
 // Prefix Sums and Suffix Sums
+/** Prefix/suffix sum helper. Space: O(n). */
 class PrefixSuffixSums {
 public:
     // Build Prefix Sum array
@@ -67,6 +68,7 @@ public:
 };
 
 // Prefix and Suffix Min & Max
+/** Prefix/suffix min-max helper. Space: O(n). */
 class PrefixSuffixMinMax {
 public:
     vector<int> suf_max;

@@ -13,6 +13,7 @@ struct SparseTable_Monoid_Decomp {
     explicit SparseTable_Monoid_Decomp(const vector<X>& a) { build(a); }
 
     // Build from array
+    /** Builds from a 0-indexed immutable array. Time: O(n log n). */
     void build(const vector<X>& a) {
         n = (int)a.size();
         if (n == 0) {
@@ -37,6 +38,7 @@ struct SparseTable_Monoid_Decomp {
     }
 
     // Query [l, r). O(log n)
+    /** Returns the monoid product over [l, r). Time: O(log n). */
     X prod(int l, int r) const {
         if (l < 0) l = 0;
         if (r > n) r = n;

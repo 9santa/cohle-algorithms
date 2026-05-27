@@ -13,6 +13,7 @@ ll memo[20][2][2][11];
 bool vis[20][2][2][11];
 string s;
 
+/** Digit-DP state for counting numbers with no equal adjacent digits. Time: O(remaining digits * 10). */
 ll dfs(int pos, int tight, int started, int last) {
     if (pos == sz(s)) return 1;
 
@@ -49,6 +50,7 @@ ll dfs(int pos, int tight, int started, int last) {
 // Count numbers <= N with predicate: digits are non decreasing
 // For segment [L, R] ans = solve(R) - solve(L-1)
 // O(len(N) * 10 * 2 * 10)
+/** Counts numbers <= N with non-decreasing digits. Time: O(log N * 10^2). */
 ll non_decreasing_digits(ll N) {
     vector<int> digits;
     if (N == 0) digits.push_back(0);
@@ -92,6 +94,7 @@ ll non_decreasing_digits(ll N) {
 
 // Count numbers with digit sum = S
 // Iterative bottom-up
+/** Counts numbers <= N whose digit sum is S using iterative DP. Time: O(log N * S * 10). */
 ll count_numbers_with_digit_sum_iterative(ll N, ll S) {
     vector<int> digits;
     if (N == 0) digits.push_back(0);
@@ -128,6 +131,7 @@ ll count_numbers_with_digit_sum_iterative(ll N, ll S) {
 
 // Recursive DFS
 ll dp[20][2][200];
+/** DFS digit-DP state for digit-sum counting. Time: O(remaining digits * S * 10). */
 ll count_numbers_with_digit_sum_dfs(int pos, bool tight, int sum, vector<int>& digits, ll S) {
     // base case
     if (pos == digits.size())

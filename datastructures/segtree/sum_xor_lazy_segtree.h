@@ -1,6 +1,7 @@
 // Verification: https://codeforces.com/contest/242/problem/E
 #include "../core.h"
 
+/** Sum monoid used by the xor-lazy segment tree. */
 template<typename E>
 struct Monoid_Sum {
     using value_type = E;
@@ -29,6 +30,7 @@ struct Monoid_Sum {
     }
 };
 
+/** Xor monoid used for lazy masks. */
 template<typename E>
 struct Monoid_Xor {
     using value_type = E;
@@ -42,6 +44,7 @@ struct Monoid_Xor {
     static constexpr bool commute = true;
 };
 
+/** Acted monoid for range xor updates and range sum queries. */
 template<int B = 20>
 struct ActedMonoid_Sum_Xor {
     // Data is an array of bit counts
@@ -89,8 +92,7 @@ struct ActedMonoid_Sum_Xor {
     static constexpr X id() { return X{}; }
 };
 
-// Lazy segment tree over an acted monoid
-// Range updates via ActedMonoid::act(), range query via Monoid_X::op()
+/** Lazy segment tree over an acted monoid. Space: O(n). */
 template<typename ActedMonoid>
 struct LazySegtree {
     using AM = ActedMonoid;
@@ -108,16 +110,18 @@ struct LazySegtree {
     LazySegtree(int n, F f) { build(n, f); }
     LazySegtree(const V<X>& v) { build(v); }
 
-    // build with identity element since we don't have the array yet
+    /** Builds a tree of size m filled with the data identity. Time: O(n). */
     void build(int m) {
         build(m, [](int i) -> X {return MX::id(); });
     }
-    // build from array
+
+    /** Builds the tree from a 0-indexed array. Time: O(n). */
     void build(const V<X>& v) {
         build(sz(v), [&v](int i) -> X { return v[i]; });
     }
+
+    /** Builds the tree from values f(i). Time: O(n). */
     template<typename F>
-    // build with a custom function F
     void build(int m, F f) {
         n = m, log = 1;
         while ((1<<log) < n) log++;
@@ -130,7 +134,7 @@ struct LazySegtree {
 
     void update(int p) { data[p] = MX::op(data[p<<1], data[p<<1|1]); }
 
-    // set leaf p = x, push stored lazy before assignment, update parents after assignment
+    /** Sets a[p] to x. Time: O(log n). */
     void set(int p, X x) {
         assert(0 <= p && p < n);
         p += size;
@@ -138,7 +142,8 @@ struct LazySegtree {
         data[p] = x;
         for (int i = 1; i <= log; i++) update(p>>i);
     }
-    // if MX = multiplicative Monoid
+
+    /** Replaces a[p] by Monoid_X::op(a[p], x). Time: O(log n). */
     void multiply(int p, X x) {
         assert(0 <= p && p < n);
         p += size;
@@ -147,7 +152,7 @@ struct LazySegtree {
         for (int i = 1; i <= log; i++) update(p>>i);
     }
 
-    // get value at index p, push stored lazy if it exists before returning the value
+    /** Returns a[p]. Time: O(log n). */
     X get(int p) {
         assert(0 <= p && p < n);
         p += size;
@@ -155,12 +160,13 @@ struct LazySegtree {
         return data[p];
     }
 
+    /** Pushes all lazy tags and returns the current array. Time: O(n). */
     V<X> get_all() {
         FOR(i, 1, size) { push(i); }
         return {data.begin() + size, data.begin() + size + n};
     }
 
-    // [L, R) range query (Monoid::op operation)
+    /** Returns the monoid product over [l, r). Time: O(log n). */
     X prod(int l, int r) {
         assert(0 <= l && l <= r && r <= n);
         if (l == r) return MX::id();
@@ -178,9 +184,10 @@ struct LazySegtree {
         return MX::op(xl, xr);
     }
 
-    // whole tree
+    /** Returns the monoid product over the whole array. Time: O(1). */
     X prod_all() { return data[1]; }
 
+    /** Applies action a to every element in [l, r). Time: O(log n). */
     void apply(int l, int r, A a) {
         assert(0 <= l && l <= r && r <= n);
         if (l == r) return;
@@ -205,6 +212,7 @@ struct LazySegtree {
         }
     }
 
+    /** Returns the maximum r such that check(prod(l, r)) is true. Time: O(log n). */
     template<typename F>
     int max_right(const F check, int l) {
         assert(0 <= l && l <= n);
@@ -228,6 +236,7 @@ struct LazySegtree {
         return n;
     }
 
+    /** Returns the minimum l such that check(prod(l, r)) is true. Time: O(log n). */
     template<typename F>
     int min_left(const F check, int r) {
         assert(0 <= r && r <= n);

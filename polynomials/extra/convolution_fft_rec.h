@@ -1,6 +1,7 @@
 #include "../core.h"
 #include "fft_rec.h"
 
+/** Recursive FFT integer convolution. Time: O(n log n). */
 inline vector<ll> convolution(const vector<int>& P, const vector<int>& Q) {
     int n = 1;
     while (n <= sz(P) + sz(Q) - 1) n *= 2;

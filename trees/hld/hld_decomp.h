@@ -1,6 +1,7 @@
 #pragma once
 #include "../../graphs/core.h"
 
+/** Heavy-light decomposition metadata and path interval iterator. Space: O(n). */
 struct HLDDecomp {
     int n = 0;
     vector<vector<int>> g;
@@ -11,6 +12,7 @@ struct HLDDecomp {
     HLDDecomp() {}
     explicit HLDDecomp(int n_) { init(n_); }
 
+    /** Initializes empty decomposition storage for n vertices. Time: O(n). */
     void init(int n_) {
         n = n_;
         g.assign(n, {});
@@ -24,6 +26,7 @@ struct HLDDecomp {
         curPos = 0;
     }
 
+    /** Builds HLD from an adjacency list. Time: O(n). */
     void build(const vector<vector<int>>& G, int root = 0) {
         g = G;
         n = sz(g);
@@ -41,11 +44,13 @@ struct HLDDecomp {
         dfs2(root, root);
     }
 
+    /** Adds an undirected edge before build. Time: O(1). */
     void add_edge(int u, int v) {
         g[u].push_back(v);
         g[v].push_back(u);
     }
 
+    /** Computes subtree sizes and heavy children. Time: O(subtree size). */
     int dfs1(int u, int p) {
         parent[u] = p;
         siz[u] = 1;
@@ -61,6 +66,7 @@ struct HLDDecomp {
         return siz[u];
     }
 
+    /** Assigns chain heads and positions. Time: O(subtree size). */
     void dfs2(int u, int h) {
         head[u] = h;
         pos[u] = curPos;
@@ -73,10 +79,12 @@ struct HLDDecomp {
         }
     }
 
+    /** Returns the half-open vertex-subtree interval of u. Time: O(1). */
     pair<int, int> subtree_interval(int u) const {
         return {pos[u], pos[u] + siz[u]}; // [l, r)
     }
 
+    /** Returns lowest common ancestor of u and v. Time: O(log n). */
     int lca(int u, int v) const {
         while (head[u] != head[v]) {
             if (depth[head[u]] < depth[head[v]]) swap(u, v);
@@ -86,6 +94,7 @@ struct HLDDecomp {
     }
 
     // unordered path segments (commut queries + updates)
+    /** Calls f(l, r) for vertex intervals covering path u-v. Time: O(log n) calls. */
     template<class F>
     void for_each_path_unordered(int u, int v, F f) const {
         while (head[u] != head[v]) {
@@ -98,6 +107,7 @@ struct HLDDecomp {
         f(pos[u], pos[v] + 1);
     }
 
+    /** Calls f(l, r) for edge intervals covering path u-v. Time: O(log n) calls. */
     template<class F>
     void for_each_path_edge_unordered(int u, int v, F f) const {
         while (head[u] != head[v]) {

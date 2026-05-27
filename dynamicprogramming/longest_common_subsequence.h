@@ -1,5 +1,6 @@
 #include "core.h"
 
+/** Returns LCS length between integer sequences a and b. Time: O(nm). Space: O(nm). */
 int LCS(const vector<int>& a, const vector<int>& b) {
     int n = sz(a), m = sz(b);
     V<vi> dp(n+1, vi(m+1, 0));
@@ -13,6 +14,7 @@ int LCS(const vector<int>& a, const vector<int>& b) {
 }
 
 // Longest Common String Subsequnce + reconstruction
+/** Returns one LCS string for s and t. Time: O(nm). Space: O(nm). */
 string solve(const string& s, const string& t) {
     int n = sz(s), m = sz(t);
     V<vi> dp(n+1, vi(m+1));

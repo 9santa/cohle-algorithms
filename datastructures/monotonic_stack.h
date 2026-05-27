@@ -3,7 +3,7 @@
 
 namespace monotonic_stack {
 
-// For each element, find the first greater element to its right.
+/** Returns index of the first greater element to the right, or n. Time: O(n). */
 template<typename T>
 vector<int> next_greater_index(const vector<T>& a) {
     int n = (int)a.size();
@@ -20,7 +20,7 @@ vector<int> next_greater_index(const vector<T>& a) {
     return nge;
 }
 
-// For each element, find the first smaller element to its right.
+/** Returns index of the first smaller element to the right, or n. Time: O(n). */
 template<typename T>
 vector<int> next_smaller_array(const vector<T>& a) {
     int n = (int)a.size();
@@ -37,7 +37,7 @@ vector<int> next_smaller_array(const vector<T>& a) {
     return nse;
 }
 
-// For each element, find the first smaller element to its left.
+/** Returns index of the first smaller element to the left, or -1. Time: O(n). */
 template<typename T>
 vector<int> prev_smaller_array(const vector<T>& a) {
     int n = (int)a.size();
@@ -55,7 +55,7 @@ vector<int> prev_smaller_array(const vector<T>& a) {
     return pse;
 }
 
-// For each element, find the first greater element to its left.
+/** Returns index of the first greater element to the left, or -1. Time: O(n). */
 template<typename T>
 vector<int> prev_greater_array(const vector<T>& a) {
     int n = (int)a.size();

@@ -1,4 +1,5 @@
 #include "core.h"
+/** Trie node for lowercase English letters. */
 struct Node {
     bool end;
     int link[26];
@@ -15,7 +16,7 @@ struct Node {
 
 vector<Node> trie(1);
 
-// O(|s|)
+/** Inserts s into the trie. Time: O(|s|). Space: O(new nodes). */
 void addString(const string& s) {
     int v = 0;
     trie[v].cnt++;
@@ -31,7 +32,7 @@ void addString(const string& s) {
     trie[v].end_cnt++;
 }
 
-// O(|s|)
+/** Returns whether s exists as a word. Time: O(|s|). */
 bool findString(const string& s) {
     int v = 0;
     for (auto c : s) {
@@ -42,7 +43,7 @@ bool findString(const string& s) {
     return trie[v].end;
 }
 
-// O(|s|)
+/** Removes one stored word s if present. Time: O(|s|). */
 bool removeString(const string& s) {
     int v = 0;
     trie[v].cnt--;
@@ -59,7 +60,7 @@ bool removeString(const string& s) {
     return true;
 }
 
-// O(26 * |res|)
+/** Returns the k-th lexicographic string among stored words, or empty if invalid. Time: O(26 * |answer|). */
 string kthString(int k) {
     string res;
     int v = 0;

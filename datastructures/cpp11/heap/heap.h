@@ -2,18 +2,17 @@
 
 constexpr int MAXN = 100;
 
-// decent human-like heap implementation (binary min/max heap)
-// each node is min/max in its subtree
+/** Fixed-capacity binary min-heap. Space: O(MAXN). */
 struct heap {
     int h[MAXN];
     int n = 0;
 
-    // O(1)
+    /** Returns the minimum element. Time: O(1). */
     int get_min() const {
         return h[0];
     }
 
-    // O(log n)
+    /** Inserts x. Time: O(log n). */
     void insert(int x) {
         h[n++] = x;
         // sift-up
@@ -24,7 +23,7 @@ struct heap {
         }
     }
 
-    // O(log n)
+    /** Removes the minimum element. Time: O(log n). */
     void remove_min() {
         // sift-down
         std::swap(h[0], h[--n]);

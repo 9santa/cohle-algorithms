@@ -1,9 +1,6 @@
 #include "../core.h"
 
-/* Sparse Table for associative Monoid (doesn't require idempotency)
-   Query: O(log n) with binary decomp
-   Preserves order: res = op(res, block), so non-commutative is fine
-   Memory: O(n log n), without padding to power-of-two */
+/** Sparse table for associative monoids, including non-idempotent operations. Space: O(n log n). */
 template<class Monoid>
 struct SparseTable_Monoid_Decomp {
     using X = typename Monoid::value_type;
@@ -12,7 +9,7 @@ struct SparseTable_Monoid_Decomp {
     vector<vector<X>> st; // st[k][i] = prod of length 2^k starting at i
     explicit SparseTable_Monoid_Decomp(const vector<X>& a) { build(a); }
 
-    // Build from array
+    /** Builds from a 0-indexed immutable array. Time: O(n log n). */
     void build(const vector<X>& a) {
         n = (int)a.size();
         if (n == 0) {
@@ -36,7 +33,7 @@ struct SparseTable_Monoid_Decomp {
         }
     }
 
-    // Query [l, r). O(log n)
+    /** Returns the monoid product over [l, r). Time: O(log n). */
     X prod(int l, int r) const {
         if (l < 0) l = 0;
         if (r > n) r = n;

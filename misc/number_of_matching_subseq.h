@@ -1,5 +1,6 @@
 
 // Binary search, O(|s| + sum(|w|) * log |S|)
+/** Counts words that are subsequences of s. Time: O(|s| + total word length). */
 int numMatchingSubseq(string s, vector<string>& words) {
     vector<vector<int>> pos(26);
     for (int i = 0; i < (int)s.size(); i++) {

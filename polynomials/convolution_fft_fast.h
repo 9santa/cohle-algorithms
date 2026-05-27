@@ -3,6 +3,8 @@
 
 using poly = vector<int>;
 
+/** Naive integer convolution. Time: O(nm). */
+/** Chooses naive or FFT convolution by input size. Time: O(nm) or O(n log n). */
 inline vl convolution_ll_naive(const poly& A, const poly& B) {
     int n = sz(A), m = sz(B);
     vl C(n + m - 1, 0);
@@ -14,6 +16,8 @@ inline vl convolution_ll_naive(const poly& A, const poly& B) {
     return C;
 }
 
+/** Optimized FFT-backed integer convolution. Time: O(n log n). */
+/** FFT-backed integer convolution. Time: O(n log n). */
 inline vl convolution_ll_fft_opt(const poly& A, const poly& B) {
     int need = sz(A) + sz(B) - 1;
     int n = 1;

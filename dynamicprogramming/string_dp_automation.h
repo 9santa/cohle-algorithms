@@ -7,6 +7,7 @@
    then dp is: dp[pos+1][go[st][c]][found || (go[st][c] == m)] += dp[pos][st][found]
    combines well with digit DP */
 
+/** Builds KMP automaton transitions for pattern p. Time: O(|p| * alphabet). */
 vector<vector<int>> buildAtomation(const string& p) {
     int m = sz(p);
     auto pi = prefix_function(p);

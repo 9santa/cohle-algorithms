@@ -2,8 +2,7 @@
 
 using namespace std;
 
-// Operations: O(log n)
-// Space: O(n)
+/** Zero-indexed Fenwick tree for point assignments and range sum queries. Space: O(n). */
 class FenwickTree {
 private:
     vector<int> tree;
@@ -12,7 +11,7 @@ private:
 public:
     // FenwickTree(int size) : tree(size, 0) {}
 
-    // Construct Fenwick Tree
+    /** Builds the tree from a 0-indexed array. Time: O(n log n). */
     FenwickTree(const vector<int>& arr) {
         nums = arr;
         tree.assign(arr.size(), 0);
@@ -22,6 +21,7 @@ public:
         }
     }
 
+    /** Adds delta to nums[index]. Time: O(log n). */
     void add(int index, int delta) {
         int j = index;
         while(j < (int)tree.size()) {
@@ -30,13 +30,14 @@ public:
         }
     }
 
-    // Update value at index
+    /** Sets nums[index] to value. Time: O(log n). */
     void update(int index, int value) {
         int diff = value - nums[index];
         nums[index] = value;
         add(index, diff);
     }
-    // Get prefix sum [0, index]
+
+    /** Returns the prefix sum over [0, index]. Time: O(log n). */
     int sum_query(int index) {
         int j = index;
         int sum = 0;
@@ -47,26 +48,9 @@ public:
         return sum;
     }
 
-    // Get range sum [l, r] (same as prefix sum formula)
+    /** Returns the range sum over [l, r]. Time: O(log n). */
     int range_sum_query(int l, int r) {
         if(l == 0) return sum_query(r);
         return sum_query(r) - sum_query(l-1);
     }
 };
-
-
-// testing example
-int main(void) {
-    vector<int> nums = {1, 3, 5, 7, 9, 11};
-    FenwickTree ft(nums);
-
-    cout << "Prefix sum [0, 3]: " << ft.sum_query(3) << "\n";        // 1+3+5+7 = 16
-    cout << "Range sum [2, 4]: " << ft.range_sum_query(2, 4) << "\n"; // 5+7+9 = 21
-
-    ft.update(3, 2);  // add 2 to element at index 3 (7+2 = 9)
-    cout << "After update, prefix sum [0, 3]: " << ft.sum_query(3) << "\n";  // 1+3+5+9 = 18
-
-
-
-    return 0;
-}

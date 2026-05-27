@@ -5,6 +5,7 @@ constexpr int MOD = 1e9+7;
 
 // O(n * m * 2^m) time and memory
 // N, M should be small. M is the smaller one (number of rows)
+/** Counts domino tilings of an n by m board. Time: O(n m 2^m). Space: O(n m 2^m). */
 inline int domino_tiling(int n, int m) {
     if (m > n) swap(m, n);
     // dp[i][j][p] -> number of ways to fill i first columns, j cells from above at i+1 column, with a broken profile p
@@ -35,6 +36,7 @@ inline int domino_tiling(int n, int m) {
 }
 
 // With blocked cells
+/** Counts domino tilings with blocked cells marked in g. Time: O(R C 2^min(R,C)). */
 inline int domino_tiling_with_blocks(vector<string> g) {
     int R = sz(g);
     int C = sz(g[0]);

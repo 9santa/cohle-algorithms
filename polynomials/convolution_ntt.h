@@ -4,6 +4,7 @@
 
 namespace NTT {
 
+/** Computes convolution modulo the NTT modulus. Time: O(n log n). */
 vector<Z> convolution(const vector<Z>& A, const vector<Z>& B) {
     if (A.empty() || B.empty()) return {};
 

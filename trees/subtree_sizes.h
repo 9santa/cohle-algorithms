@@ -1,5 +1,6 @@
 #include "rooted_tree.h"
 
+/** Returns subtree sizes for a rooted tree. Time: O(n). Space: O(n). */
 template<class G>
 vi subtree_sizes(const G& g, const RootedTree& t) {
     int N = g.N;

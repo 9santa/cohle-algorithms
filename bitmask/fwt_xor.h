@@ -1,5 +1,6 @@
 #include "core.h"
 // 'a' should be an 2^n all subsets array
+/** Applies the XOR Walsh-Hadamard transform, or its inverse, in place. Time: O(n 2^n). */
 template<class T>
 void fwt_xor(vector<T>& a, bool inv=false) {
     int n = (int)a.size();

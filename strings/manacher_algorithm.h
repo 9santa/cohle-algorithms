@@ -5,6 +5,7 @@
 //          palindrome length = 2 * odd[i] - 1
 // even[i] = # of chars in radius for even palindrome centered at i-1 and i
 //          palindrome length = 2 * even[i]
+/** Returns odd and even palindrome radii for every center. Time: O(n). Space: O(n). */
 pair<vector<int>, vector<int>> manacher(const string& s) {
     int n = sz(s);
     vi even(n), odd(n);

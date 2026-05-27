@@ -1,6 +1,7 @@
 #include "../core.h"
 #include "fft_iter.h"
 
+/** Iterative FFT integer convolution. Time: O(n log n). */
 inline vl convolution(const vi& A, const vi& B) {
     int n = 1;
     while (n < sz(A) + sz(B) - 1) n *= 2;

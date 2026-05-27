@@ -17,6 +17,7 @@ namespace linalg {
     Default scalar type is double.
 */
 
+/** Fixed-dimension vector with scalar arithmetic. Space: O(N). */
 template<int N, class T = double>
 struct Vec {
     std::array<T, N> a{};
@@ -36,6 +37,7 @@ struct Vec {
     Dot product:
       dot(x,y) = Σ x_i * y_i
 */
+/** Returns dot(x, y). Time: O(N). */
 template<int N, class T>
 inline T dot(const Vec<N,T>& x, const Vec<N,T>& y) {
     T res{};
@@ -47,6 +49,7 @@ inline T dot(const Vec<N,T>& x, const Vec<N,T>& y) {
     Squared Euclidean norm:
       ||x||^2 = dot(x,x)
 */
+/** Returns squared Euclidean norm. Time: O(N). */
 template<int N, class T>
 inline T norm2(const Vec<N,T>& x) { return dot(x, x); }
 
@@ -54,6 +57,7 @@ inline T norm2(const Vec<N,T>& x) { return dot(x, x); }
     Euclidean norm:
       ||x|| = sqrt(dot(x,x))
 */
+/** Returns Euclidean norm. Time: O(N). */
 template<int N, class T>
 inline T norm(const Vec<N,T>& x) {
     return (T)std::sqrt((long double)norm2(x));
@@ -69,6 +73,7 @@ inline T norm(const Vec<N,T>& x) {
 
     If 'onto' is (near) zero, returns the zero vector.
 */
+/** Projects x onto onto, or zero if onto is near zero. Time: O(N). */
 template<int N, class T>
 inline Vec<N,T> proj(const Vec<N,T>& x, const Vec<N,T>& onto) {
     T denom = dot(onto, onto);
@@ -85,6 +90,7 @@ inline Vec<N,T> proj(const Vec<N,T>& x, const Vec<N,T>& onto) {
           |Xa Xb Xz|
           |Ya Yb Yz|
 */
+/** Returns the 3D cross product a x b. Time: O(1). */
 template<class T>
 inline Vec<3, T> cross(const Vec<3, T>& a, const Vec<3, T>& b) {
     return Vec<3, T>{{ a[1]*b[2] - a[2]*b[1],
@@ -99,6 +105,7 @@ inline Vec<3, T> cross(const Vec<3, T>& a, const Vec<3, T>& b) {
     Geometric meaning:
       |triple| = volume of the parallelepiped spanned by (a,b,c)
 */
+/** Returns the scalar triple product a dot (b x c). Time: O(1). */
 template<class T>
 inline T triple(const Vec<3,T>& a, const Vec<3,T>& b, const Vec<3,T>& c) {
     return dot(a, cross(b, c));
@@ -108,6 +115,7 @@ inline T triple(const Vec<3,T>& a, const Vec<3,T>& b, const Vec<3,T>& c) {
     Triangle area in 3D:
       area(ABC) = 0.5 * || (B-A) × (C-A) ||
 */
+/** Returns the area of triangle ABC in 3D. Time: O(1). */
 template<class T>
 inline T triangle_area(const Vec<3,T>& A, const Vec<3,T>& B, const Vec<3,T>& C){
     return (T)0.5 * norm(cross(B - A, C - A));
@@ -117,6 +125,7 @@ inline T triangle_area(const Vec<3,T>& A, const Vec<3,T>& B, const Vec<3,T>& C){
     Tetrahedron volume in 3D:
       vol(ABCD) = | (B-A) · ((C-A) × (D-A)) | / 6
 */
+/** Returns the volume of tetrahedron ABCD in 3D. Time: O(1). */
 template<class T>
 inline T tetra_volume(const Vec<3,T>& A, const Vec<3,T>& B,
                       const Vec<3,T>& C, const Vec<3,T>& D){
@@ -137,8 +146,9 @@ inline T tetra_volume(const Vec<3,T>& A, const Vec<3,T>& B,
       ...
     'eps' is used to drop nearly-zero vectors (linear dependence / numeric issues).
 */
+/** Returns an orthonormal basis from Gram-Schmidt. Time: O(k^2 N). Space: O(kN). */
 template<int N, class T = double>
-    inline vector<Vec<N,T>> gram_schmidt(const vector<Vec<N,T>>& v, T eps = (T)1e-12) {
+inline vector<Vec<N,T>> gram_schmidt(const vector<Vec<N,T>>& v, T eps = (T)1e-12) {
     vector<Vec<N,T>> basis;
     for (auto x : v) {
         for (auto& u : basis) x -= proj(x, u);

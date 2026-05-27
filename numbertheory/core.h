@@ -33,14 +33,6 @@ using ld   = long double;
 
 using pii = pair<int, int>;
 
-template<typename T>
-using V = vector<T>;
-template<typename T, size_t SZ>
-using AR = array<T, SZ>;
-using vi = V<int>;
-using vl = V<ll>;
-using vb = V<bool>;
-
 #define all(x) (x).begin(), (x).end()
 #define sz(x) int((x).size())
 #define pb push_back

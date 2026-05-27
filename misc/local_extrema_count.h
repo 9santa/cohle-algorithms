@@ -1,5 +1,6 @@
 
 // pair.first = local mins, pair.second = local maxs
+/** Counts local minima and maxima after ignoring equal adjacent values. Time: O(n). */
 template<class T>
 pair<ll, ll> countLocalExtrema(const vector<T>& a) {
     pair<ll, ll> res;

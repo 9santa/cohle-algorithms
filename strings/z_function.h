@@ -1,5 +1,6 @@
 #include "core.h"
 
+/** Computes the Z-function. Time: O(|s|). Space: O(|s|). */
 vector<int> z_function(const string& s) {
     int n = sz(s);
     vi z(n);
@@ -19,6 +20,7 @@ vector<int> z_function(const string& s) {
 
 // Search the substring (find occurences of some pattern in text)
 // O(|s| + |p|)
+/** Demonstrates pattern search with Z-function. Time: O(|s| + |p|). */
 void search_substring(string s, const string& p) {
     int t = sz(s);
     s = p + '#' + s;
@@ -35,6 +37,7 @@ void search_substring(string s, const string& p) {
 }
 
 // Same thing just different indexing
+/** Demonstrates alternate indexing for Z-function pattern search. Time: O(|s| + |p|). */
 void search_substring_alt(string s, const string& p) {
     s = p + '#' + s;
     vi z = z_function(s);

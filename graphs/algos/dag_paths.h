@@ -1,5 +1,6 @@
 #include "../core.h"
 
+/** Counts paths ending at each vertex in a DAG modulo MOD. Time: O(n + m). */
 template<class Cost>
 vi dag_paths_ending_at_mod(const Graph<Cost, true>& G, int MOD) {
     auto topo_opt = toposort_kahn(G);
@@ -20,6 +21,7 @@ vi dag_paths_ending_at_mod(const Graph<Cost, true>& G, int MOD) {
 }
 
 // XOR Parity (mod 2) variant
+/** Counts paths ending at each vertex in a DAG with xor aggregation. Time: O(n + m). */
 template<class Cost>
 vi dag_paths_ending_at_xor(const Graph<Cost, true>& G, int MOD) {
     auto topo_opt = toposort_kahn(G);

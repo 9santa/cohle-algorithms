@@ -1,5 +1,6 @@
 
 // Finds the min/max value in every window of size k
+/** Demonstrates interval scanline accumulation. Time: O(n log n). */
 void scanline() {
     int n, k; cin >> n >> k;
     vector<int> a(n);

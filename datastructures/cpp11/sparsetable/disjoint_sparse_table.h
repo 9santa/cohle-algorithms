@@ -1,5 +1,6 @@
 #include "../header.h"
 
+/** Disjoint sparse table for associative monoid range products. Space: O(n log n). */
 template<class Monoid>
 struct DisjointSparseTable {
     using MX = Monoid;
@@ -15,11 +16,13 @@ struct DisjointSparseTable {
     DisjointSparseTable(int n_, F f) { build(n_, f); }
 
     // Build from vector
+    /** Builds from a 0-indexed array. Time: O(n log n). */
     void build(const vector<X>& a) {
         build((int)a.size(), [&](int i) -> X { return a[i]; });
     }
 
     // Build from function f(i). O(n log n)
+    /** Builds from values f(i). Time: O(n log n). */
     template<class F>
     void build(int n_, F f) {
         n = n_;
@@ -54,6 +57,7 @@ struct DisjointSparseTable {
     }
 
     // Query [l, r). O(1)
+    /** Returns the monoid product over [l, r). Time: O(1). */
     X prod(int l, int r) const {
         if (l >= r) return MX::id();
         if (r - l == 1) return data[0][l];

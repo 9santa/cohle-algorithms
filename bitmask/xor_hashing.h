@@ -1,5 +1,6 @@
 #include "core.h"
 
+/** SplitMix64 mixer used for deterministic-looking 64-bit random values. Time: O(1). */
 static u64 splitmix64(u64 x) {
     x += 0x9e3779b97f4a7c15ULL;
     x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9ULL;
@@ -8,6 +9,7 @@ static u64 splitmix64(u64 x) {
 }
 
 // Collision probability: 2^(-64)
+/** Assigns random xor hashes to values in a. Time: O(n + max(a)). Space: O(max(a)). */
 template<class T>
 static vector<u64> xor_hash(vector<T>& a) {
     int n = sz(a);
@@ -27,6 +29,7 @@ static vector<u64> xor_hash(vector<T>& a) {
 }
 
 // Queries: is a[l..r] a permutation of if its own value range [L..R]?
+/** Answers permutation-range queries with xor hashing. Time: O((n + q) log n). Space: O(n log n). */
 static void solve() {
     int n, q; re(n, q);
     vector<int> a(n+1);

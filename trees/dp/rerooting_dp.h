@@ -17,17 +17,20 @@ vector<ll> down; // down[u] = contribution of the subtree of u to its parent
 vector<ll> up;   // up[u] = contribution coming into u from the parent side
 vector<ll> ans;  // ans[u] = final ans for node u using all directions
 
+/** Problem-specific merge of neighbor contributions. Time: O(1). */
 ll combine(ll a, ll b) {
     // replace with problem-specific merge
     return a * b;
 }
 
+/** Problem-specific transform after attaching node u. Time: O(1). */
 ll addRoot(ll x, int u) {
     // replace with problem-specific "attach node u"
     return x + 1;
 }
 
 // contributions coming from children
+/** Computes child-to-parent DP values. Time: O(n). */
 void dfs1(int u, int p) {
     ll cur = 1;
     for (auto v : g[u]) {
@@ -38,6 +41,7 @@ void dfs1(int u, int p) {
     down[u] = addRoot(cur, u);
 }
 
+/** Computes rerooted answers using prefix/suffix products. Time: O(n). */
 void dfs2(int u, int p) {
     int m = sz(g[u]);
     vl pref(m+1, 1), suf(m+1, 1);
@@ -72,6 +76,7 @@ void dfs2(int u, int p) {
 
 
 // More generic version
+/** Generic rerooting DP helper for trees. Space: O(n). */
 template <class T>
 struct Rerooting {
     int n;
@@ -88,11 +93,13 @@ struct Rerooting {
         : n(n), g(n), down(n), up(n), ans(n),
           ID(id), combine(combine), addRoot(addRoot) {}
 
+    /** Adds an undirected edge. Time: O(1). */
     void addEdge(int u, int v) {
         g[u].push_back(v);
         g[v].push_back(u);
     }
 
+    /** Computes down values. Time: O(subtree size). */
     void dfs1(int u, int p) {
         T cur = ID;
         for (int v : g[u]) {
@@ -103,6 +110,7 @@ struct Rerooting {
         down[u] = addRoot(cur, u);
     }
 
+    /** Computes up values and answers. Time: O(subtree size). */
     void dfs2(int u, int p) {
         int m = g[u].size();
         vector<T> pref(m + 1, ID), suff(m + 1, ID);
@@ -129,6 +137,7 @@ struct Rerooting {
         }
     }
 
+    /** Returns rerooted answer for every node. Time: O(n). */
     vector<T> solve(int root = 0) {
         dfs1(root, -1);
         up[root] = ID;

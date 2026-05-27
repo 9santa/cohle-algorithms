@@ -10,6 +10,7 @@ Time: O(2^n * n^2). For n ~<= 25
 Memoery: O(2^n * n)
 */
 
+/** Returns one Hamiltonian cycle, or empty if none is found. Time: O(2^n n^2). */
 static vector<int> hamilton_cycle(const vector<vector<int>>& matrix, bool isDirected) {
     int n = (int)matrix.size();
     if (n == 0) return {};

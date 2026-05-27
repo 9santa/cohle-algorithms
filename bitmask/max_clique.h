@@ -15,6 +15,7 @@ Time: O(2 ^ (n/2) * poly(n))
 Memory: O(2 ^ (n/2))
 */
 
+/** Solves maximum clique with meet-in-the-middle. Time: O(2^(n/2) * poly(n)). Space: O(2^(n/2)). */
 static void solve() {
     int n, m; cin >> n >> m;
     vector<u64> adj(n, 0); // adj[i] stores mask of all outgoing edges

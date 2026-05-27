@@ -8,6 +8,7 @@ Common use-cases: Subset sum over bitmasks, Inclusion–exclusion optimization, 
 Graph problems (cliques, independent sets), Frequency convolution over subsets
 */
 
+/** Demonstrates SOS DP over submasks. Time: O(B 2^B). Space: O(2^B). */
 static void solve() {
     int n; cin >> n;
     vector<int> a(n); cin >> a;

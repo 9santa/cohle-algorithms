@@ -6,6 +6,7 @@ vi topo;
 vb used;
 V<vi> graph;
 
+/** DFS used to build a reverse finishing order. Time: O(n + m). */
 void dfs(int v) {
     used[v] = true;
     for (auto u : graph[v]) {
@@ -16,6 +17,7 @@ void dfs(int v) {
     topo.push_back(v);
 }
 
+/** Reads a DAG and prints the longest path length. Time: O(n + m). */
 void solve(void) {
     int n, m; cin >> n >> m;
     graph.resize(n);
@@ -52,6 +54,7 @@ vi g[MAXN];
 int dp[MAXN];
 int parent[MAXN];
 
+/** Returns longest path length starting at u in a DAG. Time: O(reachable edges) memoized. */
 int dfs(int u) {
     if (dp[u] != -1) return dp[u];
 

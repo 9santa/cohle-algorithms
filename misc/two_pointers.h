@@ -3,6 +3,7 @@
 
 /* 1. Opposite-direction pointers.
 Used on sorted arrays, palindrome checks, pair sum, etc. */
+/** Demonstrates opposite-direction two pointers for pair sum. Time: O(n). */
 void opposite_direction_pointers(const vector<int>& a, int target) {
     int l = 0, r = (int)a.size() - 1;
     while (l < r) {
@@ -20,6 +21,7 @@ Used for subarrays. Typically:
  - longest/shortest valid subarray
  - count subarrays
  - sum/freqeuncy constrains */
+/** Demonstrates same-direction sliding window. Time: O(n). */
 void same_direction(const vector<int>& a) {
     int n = (int)a.size();
     int l = 0;
@@ -36,6 +38,7 @@ void same_direction(const vector<int>& a) {
 
 /* 3. Longest subarray with sum <= or >= k.
 Works the array is non-negative */
+/** Prints longest subarray with sum at most k for nonnegative arrays. Time: O(n). */
 void longest_subbaray_with_sum(const vector<int>& a, int k) {
     int l = 0;
     long long sum = 0;
@@ -53,6 +56,7 @@ void longest_subbaray_with_sum(const vector<int>& a, int k) {
 }
 
 /* 4. Count subarrays with at most k distinct values. */
+/** Counts subarrays with at most k distinct values. Time: O(n). */
 long long at_most_k_distinct(const vector<int>& a, int k) {
     unordered_map<int, int> freq;
     int l = 0;
@@ -73,6 +77,7 @@ long long at_most_k_distinct(const vector<int>& a, int k) {
 }
 
 /* 5. Longest substring / subarray with all unique elements */
+/** Returns longest substring length with all unique chars. Time: O(n). */
 int longest_substring_all_unique(const string& s) {
     vector<int> freq(256, 0);
     int l = 0, best = 0;

@@ -1,6 +1,7 @@
 
 // Node abstraction from LCT
 // Node will work with templated monoid
+/** Node abstraction for monoid-based link-cut trees. */
 template<class Monoid>
 struct LCT_Node_Monoid {
     using np = LCT_Node_Monoid*;
@@ -18,6 +19,7 @@ struct LCT_Node_Monoid {
     LCT_Node_Monoid() = default;
 
     // update node from left and right children
+    /** Recomputes aggregate values from children and vertex value. Time: O(1). */
     void update() {
         siz = 1;
         x = vx, rx = vx;
@@ -33,12 +35,14 @@ struct LCT_Node_Monoid {
         }
     }
 
+    /** Toggles path orientation for this auxiliary subtree. Time: O(1). */
     void reverse() {
         rev ^= 1;
         swap(l, r);
         swap(x, rx);
     }
 
+    /** Pushes pending reversal to children. Time: O(1). */
     void push() {
         if (!rev) return;
         if (l) l->reverse();
@@ -46,6 +50,7 @@ struct LCT_Node_Monoid {
         rev = false;
     }
 
+    /** Sets this vertex value. Time: O(1). */
     void set(const X& v) { vx = v; }
 
     void add_light(np) {}

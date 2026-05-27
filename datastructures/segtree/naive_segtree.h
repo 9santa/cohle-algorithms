@@ -1,7 +1,7 @@
 #include "../core.h"
 
 
-// Recursive top-to-bottom
+/** Recursive segment tree for point set and range sum queries. Space: O(n). */
 class SegmentTreeRecursive {
 private:
     int n;  // Size of the input array
@@ -37,6 +37,7 @@ private:
         return suml + sumr;
     }
 public:
+    /** Builds from a 0-indexed array. Time: O(n). */
     SegmentTreeRecursive(const vector<int>& arr) {
         n = (int)arr.size();
         if(n == 0) {
@@ -66,19 +67,19 @@ public:
         }
     }
 
-    // Set public wrapper
+    /** Sets a[i] to val. Time: O(log n). */
     void set(int i, long long val) {
         if(i < 0 || i >= n) return; // out of bounds
         set(i, val, 0, 0, size);
     }
 
-    // Sum query public wrapper
+    /** Returns the sum over [l, r). Time: O(log n). */
     long long sum(int l, int r) {
         if(l < 0 || r > n || l > r) return 0; // correct half-interval check
         return sum_query(l, r, 0, 0, size);
     }
 
-    // Searching for the first element greater than a given 'x' and a given range [l, r]
+    /** Returns the first index in [l, r] with value greater than x, or -1. Time: O(log n). */
     int get_first(int v, int tl, int tr, int l, int r, int x) {
         if(tl > r || tr < l) return -1;
         if(tree[v] <= x) return -1;
@@ -92,7 +93,7 @@ public:
     }
 };
 
-// Iterative bottom-to-top
+/** Iterative segment tree for point set and range sum queries. Space: O(n). */
 class SegmentTreeIterative {
 private:
     int n;
@@ -100,6 +101,7 @@ private:
     vector<long long> tree;
 
 public:
+    /** Builds from a 0-indexed array. Time: O(n). */
     SegmentTreeIterative(const vector<int>& arr) {
         n = (int)arr.size();
         size = 1;
@@ -125,6 +127,7 @@ public:
         }
     }
 
+    /** Sets a[i] to val. Time: O(log n). */
     void set(int i, long long val) {
         int x = i + size;
         tree[x] = val;  // update value at the correct index
@@ -137,7 +140,7 @@ public:
         }
     }
 
-    // [l, r)
+    /** Returns the sum over [l, r). Time: O(log n). */
     long long sum(int l, int r) {
         l = l + size;  // included
         r = r + size;  // not included
@@ -153,7 +156,7 @@ public:
     }
 };
 
-// Segment Tree With A Proper Tree Structure
+/** Node for the pointer-based segment tree. */
 class Node {
 public:
     long long val;
@@ -164,6 +167,7 @@ public:
     Node(int _l, int _r) : val(0), left(nullptr), right(nullptr), l(_l), r(_r) {}
 };
 
+/** Pointer-based segment tree for point set and range sum queries. Space: O(n). */
 class SegmentTreeProper {
 public:
     Node* root;
@@ -199,10 +203,12 @@ private:
         return sum(node->left, xl, xr) + sum(node->right, xl, xr);
     }
 public:
+    /** Builds from a 0-indexed array. Time: O(n). */
     SegmentTreeProper(const vector<int>& arr) {
         root = build(arr, 0, arr.size());
     }
 
+    /** Writes the pointer tree into heap-array order. Time: O(n). */
     static void convert_to_array(Node* node, vector<long long>& tree, int i) {
         if(!node) return;
         if(i >= (int)tree.size()) tree.resize(i+1, 0);
@@ -213,10 +219,12 @@ public:
     }
 
 
+    /** Sets a[i] to val. Time: O(log n). */
     void set(int i, long long val) {
         set(root, i, val);
     }
 
+    /** Returns the sum over [l, r). Time: O(log n). */
     long long sum(int l, int r) {
         return sum(root, l, r);
     }

@@ -3,6 +3,7 @@
 #include "convolution_fft_fast.h"
 
 
+/** Boolean convolution capped to sums <= S. Time: O(S log S). */
 inline vi mul_bool(const vi& A, const vi& B, int S) {
     auto C = convolution_ll(A, B);
     if (sz(C) > S+1) C.resize(S+1);
@@ -11,6 +12,7 @@ inline vi mul_bool(const vi& A, const vi& B, int S) {
     return res;
 }
 
+/** Repeated boolean convolution by exponentiation. Time: O(S log S log b). */
 inline vi self_conv(vi base, ll b, ll S) {
     vi res(1, 1);
     while (b) {

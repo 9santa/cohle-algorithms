@@ -1,6 +1,7 @@
 #include "../../datastructures/splay/acted_lazy_implicit_splay.h"
 #include "../../alg/acted_monoid/sum_add.h"
 
+/** HLD storing each heavy path in a lazy implicit splay tree. Space: O(n). */
 struct HLD_Splay {
     int n;
     V<vi> g;
@@ -21,6 +22,7 @@ struct HLD_Splay {
     HLD_Splay(int n_) : n(n_), g(n), parent(n, -1), depth(n, 0), heavy(n, -1), head(n, 0),
                         siz(n, 0), value(n, 0), pathId(n, -1), idxInPath(n, -1) {}
 
+    /** Computes subtree sizes and heavy children. Time: O(subtree size). */
     int dfs1(int u, int p) {
         parent[u] = p;
         heavy[u] = -1;
@@ -36,6 +38,7 @@ struct HLD_Splay {
         return siz[u];
     }
 
+    /** Assigns path ids and indices inside each heavy path. Time: O(subtree size). */
     void dfs2(int u, int h, int pid) {
         head[u] = h;
         pathId[u] = pid;
@@ -51,6 +54,7 @@ struct HLD_Splay {
         }
     }
 
+    /** Builds per-path splay trees. Time: O(n). */
     void build(const V<vi>& G, int root = 0) {
         g = G;
         depth[root] = 0;
@@ -70,6 +74,7 @@ struct HLD_Splay {
     }
 
     // amort O(log n)
+    /** Adds delta to all vertices on path u-v. Amortized time: O(log^2 n). */
     void path_update(int u, int v, ll delta) {
         while (head[u] != head[v]) {
             if (depth[head[u]] < depth[head[v]]) swap(u, v);
@@ -85,6 +90,7 @@ struct HLD_Splay {
     }
 
     // amort O(log n)
+    /** Returns sum over vertices on path u-v. Amortized time: O(log^2 n). */
     ll path_prod(int u, int v) {
         ll res = 0;
         while (head[u] != head[v]) {

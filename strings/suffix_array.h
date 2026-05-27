@@ -1,6 +1,7 @@
 #pragma once
 #include "core.h"
 
+/** Suffix array built by cyclic-shift doubling. Space: O(n). */
 struct SuffixArray {
     int n;
     const int SIGMA;
@@ -8,11 +9,13 @@ struct SuffixArray {
     vector<int> c;
     int classes = 1;
 
+    /** Builds suffix array for s. Time: O(n log n). */
     SuffixArray(const string& s, int _SIGMA=256) : n(sz(s)), SIGMA(_SIGMA) {
         build(s);
     }
 
     // O(n log n)
+    /** Rebuilds suffix array for s. Time: O(n log n). */
     void build(string s) {
         s += '$';
         classes = 1;

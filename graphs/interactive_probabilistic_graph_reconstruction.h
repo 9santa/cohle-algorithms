@@ -1,22 +1,26 @@
 #include "core.h"
 
+/** Edge endpoints used by the interactive oracle. */
 struct OracleEdge {
     int u, v;
 };
 
 mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 
+/** Returns one random bit. Time: O(1). */
 int randBit() {
     return (int)(rng() & 1);
 }
 
 // Block edge e
+/** Sends an interactive command to block edge id. Time: O(1). */
 void block_edge(int id) {
     cout << "1 " << id << "\n";
     cout.flush();
 }
 
 // Unblock edge e
+/** Sends an interactive command to unblock edge id. Time: O(1). */
 void unblock_edge(int id) {
     cout << "2 " << id << "\n";
     cout.flush();
@@ -24,6 +28,7 @@ void unblock_edge(int id) {
 
 // Type 3 Query: oracle chooses random vertex s,
 // we send vertex v, get YES/NO
+/** Queries the interactive oracle at vertex v. Time: O(1) plus judge latency. */
 bool query_vertex(int v) {
     cout << "3 " << v << "\n";
     cout.flush();
@@ -34,6 +39,7 @@ bool query_vertex(int v) {
 }
 
 // Test (probabilistic: ~100%) if edge e is in Spanning Tree
+/** Probabilistically tests whether edge id behaves like a bridge. Time: O(T) oracle queries. */
 bool is_bridge_probabilistic(const OracleEdge& e, int id, int T = 48) {
     int seenNo = false;
     for (int t = 0; t < T; t++) {

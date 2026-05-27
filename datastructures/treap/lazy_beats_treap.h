@@ -1,5 +1,6 @@
 #include "../core.h"
 
+/** Lazy tag for implicit treap beats range operations. */
 struct Lazy {
     bool rev;  // toggles order (swap children)
     ll val;    // val is the increment amount
@@ -9,7 +10,7 @@ struct Lazy {
     ll mn, mx; // pending lower/upper bounds: after applying the tag, values should be <= mn (chmin), >= mx (chmax)
     ll add;    // pending addition to segment
 
-    // composes two lazy tags: apply 'oth' after this
+    /** Composes another tag after this one. Time: O(1). */
     void operator+=(const Lazy& oth) {
         rev ^= oth.rev;
 
@@ -35,32 +36,38 @@ struct Lazy {
 // Lazy identity
 const Lazy lid = {false, 0, true, 0, true, (ll)4e18, (ll)-4e18, 0};
 
+/** Creates a range chmin tag. Time: O(1). */
 Lazy chmin_tag(ll x) { Lazy t = lid; t.mn = x; return t; }
+/** Creates a range chmax tag. Time: O(1). */
 Lazy chmax_tag(ll x) { Lazy t = lid; t.mx = x; return t; }
+/** Creates a range add tag. Time: O(1). */
 Lazy add_tag(ll x) { Lazy t = lid; t.add = x; return t; }
+/** Creates a range reverse tag. Time: O(1). */
 Lazy rev_tag() { Lazy t = lid; t.rev = true; return t; }
 
+/** Segment aggregate for treap beats: sum/min/max and second extrema. */
 struct Value {
     int ksum;
     ll sum;
     ll mx, mxcnt, mx2;
     ll mn, mncnt, mn2;
 
+    /** Creates an aggregate for len copies of x. Time: O(1). */
     static Value make(ll x, ll len = 1) {
         return {0, x*len, x, len, (ll)-4e18, x, len, (ll)4e18};
     }
 
-    // Tag does nothing on this segment => stop recursion
+    /** True if tag cannot change this aggregate. Time: O(1). */
     bool can_break(const Lazy& lazy) const {
         return lazy.mn >= mx && lazy.mx <= mn && lazy.add == 0;
     }
 
-    // Safe to apply tag without descending
+    /** True if tag can be applied without descending. Time: O(1). */
     bool can_tag(const Lazy& lazy) const {
         return mx2 < lazy.mn && mn2 > lazy.mx;
     }
 
-    // Apply lazy to this segment, O(1)
+    /** Applies a lazy tag to this aggregate. Time: O(1). */
     void apply(Lazy lazy, int sz) {
         if (!lazy.kinc) ksum = 0;
         ksum += lazy.val * sz;
@@ -85,6 +92,7 @@ struct Value {
         mn += lazy.add, mn2 += lazy.add;
     }
 
+    /** Merges adjacent aggregates. Time: O(1). */
     Value operator+(const Value& oth) const {
         Value res{};
         res.ksum = ksum + oth.ksum;
@@ -127,9 +135,7 @@ struct Value {
 // Value identity
 const Value vid = {0, 0, (ll)-4e18, 0, (ll)-4e18, (ll)4e18, 0, (ll)4e18};
 
-// -------------------------------------------------
-// Implicit Treap Beats: range ops by index [l, r)
-// -------------------------------------------------
+/** Implicit treap beats with range operations by index. Space: O(n). */
 template<class Value, class Lazy>
 struct Implicit_Treap_Beats {
     using X = Value;
@@ -159,15 +165,20 @@ struct Implicit_Treap_Beats {
         return x ^ (x >> 31);
     }
 
+    /** Returns subtree size. Time: O(1). */
     static int siz(np t) { return t ? t->siz : 0; }
+    /** Returns sequence size. Time: O(1). */
     int siz() const { return siz(root); }
+    /** Returns subtree aggregate. Time: O(1). */
     static X agg(np t) { return t ? t->agg : vid; }
 
+    /** Tests whether a lazy tag is the identity. Time: O(1). */
     static bool is_lid(const A& z) {
         return !z.rev && z.add == 0 && z.mn == lid.mn && z.mx == lid.mx &&
                z.val == 0 && z.kval == 0 && z.inc && z.kinc;
     }
 
+    /** Builds from scalar values. Expected time: O(n). */
     void build(const V<ll>& a) {
         clear();
         if (a.empty()) return;
@@ -275,10 +286,10 @@ struct Implicit_Treap_Beats {
 
     static np merge3(np a, np b, np c) { return merge(merge(a, b), c); }
 
-    // O(1) reset that leaks resources (like NodePool reset_keep_memory)
+    /** Drops the root without deleting nodes. Time: O(1). */
     void reset_fast() { root = nullptr; }
 
-    // real delete-all (safe for multitests)
+    /** Deletes all nodes. Time: O(n). */
     void clear() { clear_rec(root); root = nullptr; }
     static void clear_rec(np t) {
         if (!t) return;
@@ -288,7 +299,7 @@ struct Implicit_Treap_Beats {
         delete t;
     }
 
-    // find i-th node (0-index). pushes lazies along path for correctness
+    /** Finds the i-th node, pushing lazies on the path. Expected time: O(log n). */
     np findi(int i) {
         assert(0 <= i && i < siz());
         np t = root;
@@ -301,16 +312,17 @@ struct Implicit_Treap_Beats {
         }
     }
 
-    // point get (as Value)
+    /** Returns the aggregate value at index i. Expected time: O(log n). */
     X get_val(int i) { return findi(i)->val; }
 
+    /** Sets index i to scalar v. Expected time: O(log n). */
     void set_ll(int i, ll v) {
         modifyi(i, [&](np n) {
             n->val = X::make(v);
         });
     }
 
-    // modify i-th node with a callback op(np)
+    /** Applies a callback to the i-th node. Expected time: O(log n). */
     template<class Op>
     void modifyi(int i, Op op) {
         assert(0 <= i && i < siz());
@@ -373,6 +385,7 @@ struct Implicit_Treap_Beats {
         return res;
     }
 
+    /** Inserts scalar x before index i. Expected time: O(log n). */
     void insert(int i, ll x) {
         // Node made from scalar x
         np nd = new Node(X::make(x), rnd());
@@ -380,7 +393,7 @@ struct Implicit_Treap_Beats {
         root = merge(merge(a, nd), b);
     }
 
-    // erase index i, returns erased Value
+    /** Erases index i and returns its value. Expected time: O(log n). */
     X erase(int i) {
         assert(0 <= i && i < siz());
         auto [a, bc] = split(root, i);
@@ -392,14 +405,14 @@ struct Implicit_Treap_Beats {
         return ret;
     }
 
-    // rotate sequence so index i becomes start: [0..i) moves to end (i, i+1, i+2, ..., 0, 1, ..., i-1)
+    /** Rotates so index i becomes the first element. Expected time: O(log n). */
     void rotate(int i) {
         assert(0 <= i && i <= siz());
         auto [a, b] = split(root, i);
         root = merge(b, a);
     }
 
-    // reverse range [l, r)
+    /** Reverses [l, r). Expected time: O(log n). */
     void reverse(int l, int r) {
         auto [a, bc] = split(root, l);
         auto [b, c] = split(bc, r - l);
@@ -409,7 +422,7 @@ struct Implicit_Treap_Beats {
         root = merge(a, merge(b, c));
     }
 
-    // apply beats tag on range [l, r)
+    /** Applies a beats tag to [l, r). Expected amortized time: O(log n). */
     void apply(int l, int r, A tag) {
         auto [a, bc] = split(root, l);
         auto [b, c] = split(bc, r - l);
@@ -417,7 +430,7 @@ struct Implicit_Treap_Beats {
         root = merge(a, merge(b, c));
     }
 
-    // query aggregate on range [l, r) (split-based)
+    /** Returns the aggregate on [l, r) using splits. Expected time: O(log n). */
     X query(int l, int r) {
         assert(0 <= l && l <= r && r <= siz());
         auto [a, bc] = split(root, l);
@@ -427,7 +440,7 @@ struct Implicit_Treap_Beats {
         return res;
     }
 
-    // query aggregate on range [l, r) (in-place, no splits)
+    /** Returns the aggregate on [l, r) without splitting. Expected time: O(log n). */
     X query_fast(int l, int r) {
         assert(0 <= l && l <= r && r <= siz());
         return queryi(root, l, r);

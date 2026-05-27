@@ -3,6 +3,7 @@
 
 namespace geom {
 
+/** Segment between two points. Space: O(1). */
 template<typename T>
 struct Segment {
     Point<T> a, b;
@@ -31,6 +32,7 @@ struct Segment {
 };
 
 
+/** Returns whether vectors a and b are parallel. Time: O(1). */
 template<typename T>
 bool parallel(const Point<T>& a, const Point<T>& b) {
     if constexpr (std::is_floating_point_v<T>) return std::abs(a.cross(b)) <= geoutils::EPS<T>;
@@ -38,6 +40,7 @@ bool parallel(const Point<T>& a, const Point<T>& b) {
 }
 
 // Distance
+/** Returns Euclidean distance between a and b. Time: O(1). */
 template<typename T>
 double distance(const Point<T>& a, const Point<T>& b) { return (a-b).euclid(); }
 
@@ -45,12 +48,14 @@ template<typename T>
 T squared_distance(const Point<T>& a, const Point<T>& b) { return (a-b).norm(); }
 
 // Linear interpolation (line between 2 points)
+/** Linearly interpolates between a and b by t. Time: O(1). */
 template<typename T, typename U>
 Point<double> lerp(const Point<T>& a, const Point<U>& b, double t) {
     return Point<double>(a) * (1-t) + Point<double>(b) * t;
 }
 
 // Chords on a circle with points labeled 1..2n, endpoints are distinct.
+/** Returns whether chords (a,b) and (c,d) intersect on a circle. Time: O(1). */
 bool chord_intersect(int a, int b, int c, int d) {
     return (a < c && c < b) ^ (a < d && d < b);
 }

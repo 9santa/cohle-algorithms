@@ -12,7 +12,7 @@ using ull = unsigned long long;
 using ld = long double;
 using pii = pair<int, int>;
 
-// Disjoin-Set-Union
+/** Disjoint-set union with component size, min, and max tracking. Space: O(n). */
 class DSU {
 private:
     vector<uint64_t> parent;
@@ -23,7 +23,7 @@ private:
     uint64_t count; // number of disjoint sets
 
 public:
-    // Constructor 
+    /** Initializes size singleton sets. Time: O(size). */
     explicit DSU(uint64_t size) {
         parent.resize(size);
         rank.assign(size, 0);
@@ -42,7 +42,7 @@ public:
         }
     }
 
-    // Find operation: Go up the tree to the root of a component (set)
+    /** Returns the representative of x with path compression. Amortized time: O(alpha n). */
     int find(uint64_t x) {
         // using path compression
         if(parent[x] == x) {
@@ -52,7 +52,7 @@ public:
         return (parent[x] = find(parent[x]));
     }
 
-    // Union smaller set to larger
+    /** Merges the sets containing x and y. Amortized time: O(alpha n). */
     void unionSets(int x, int y) {
         int rootX = find(x);
         int rootY = find(y);
@@ -75,11 +75,12 @@ public:
         count--;
     }
 
+    /** Returns whether x and y are in the same set. Amortized time: O(alpha n). */
     bool isConnected(int x, int y) {
         return find(x) == find(y);
     }
 
-    // function returns a vector of all the elements from i to root of this union
+    /** Returns the parent chain from i to its representative. Time: O(tree height). */
     vector<uint64_t> getParents(uint64_t i) {
         vector<uint64_t> ans;
         while(parent[i] != i) {
@@ -90,10 +91,13 @@ public:
         return ans;
     }
 
+    /** Returns the size of the set containing i. Amortized time: O(alpha n). */
     uint64_t size(uint64_t i) { return setSize[find(i)]; }
 
+    /** Returns the maximum index in the set containing i. Amortized time: O(alpha n). */
     uint64_t get_max(uint64_t i) { return maxElement[find(i)]; }
 
+    /** Returns the minimum index in the set containing i. Amortized time: O(alpha n). */
     uint64_t get_min(uint64_t i) { return minElement[find(i)]; }
 };
 
@@ -115,4 +119,3 @@ static void test1() {
     }
     cout << "***1st test passed!***\n";
 }
-

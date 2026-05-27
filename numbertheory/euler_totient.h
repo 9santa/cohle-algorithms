@@ -3,7 +3,7 @@
 
 namespace nt {
 
-// O(sqrt(n))
+/** Returns Euler's totient phi(n). Time: O(sqrt n). Space: O(1). */
 inline ll phi_ll(ll n) {
     if (n == 0) return 0;
     ll res = n;
@@ -17,7 +17,7 @@ inline ll phi_ll(ll n) {
     return res;
 }
 
-// O(n log log n)
+/** Returns phi(i) for every i in [0, n]. Time: O(n log log n). Space: O(n). */
 inline vi phi_1_to_n(int n) {
     vi phi(n+1);
     iota(all(phi), 0);

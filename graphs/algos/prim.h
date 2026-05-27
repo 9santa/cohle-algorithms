@@ -1,5 +1,6 @@
 #include "../core.h"
 
+/** Prim MST result. Space: O(n). */
 template<class Cost>
 struct PrimRes {
     Cost total_weight = 0;
@@ -8,6 +9,7 @@ struct PrimRes {
     bool is_connected = true;
 };
 
+/** Computes a minimum spanning tree with Prim's algorithm. Time: O((n + m) log n). */
 template<class Cost>
 PrimRes<Cost> prim_mst(const Graph<Cost, false>& G, int root = 0) {
     const int N = G.N;

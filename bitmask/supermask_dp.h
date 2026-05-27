@@ -4,6 +4,7 @@ dp[mask] = sum over supersets f[sup] that include mask
 mnemonic: if (mask lacks bit) dp[mask] += dp[mask | bit]
 */
 
+/** Demonstrates superset-sum DP. Time: O(B 2^B). Space: O(2^B). */
 inline void solve() {
     int B;
     vector<ll> dp(1<<B, 0);

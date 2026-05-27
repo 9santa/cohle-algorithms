@@ -2,6 +2,7 @@
 #include "prefix_function.h"
 
 // Knuth-Morris-Prath
+/** Returns all starting positions of pattern p in s. Time: O(|s| + |p|). */
 vector<int> KMP(string s, const string& p){
     s = p + '#' + s;
     vi pi = prefix_function(s);
@@ -16,6 +17,7 @@ vector<int> KMP(string s, const string& p){
     return matches;
 }
 
+/** KMP search without concatenating pattern and text. Time: O(|text| + |p|). */
 vector<int> kmp_mem_optimized(const string& text, const string& p) {
     vector<int> res;
     if (p.empty()) return res;

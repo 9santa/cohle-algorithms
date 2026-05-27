@@ -11,23 +11,28 @@ Problems like:
 - merge basis on trees / DSU on tree / divide and conquer
 */
 
+/** Linear xor basis over fixed-width unsigned values. Space: O(BITS). */
 template<int BITS = 64, typename T = u64>
 struct XorBasis {
     T basis[BITS] = {0};   // basis[i] stores a number whose highest set bit is 'i'
     u32 inserted = 0;      // total elements inserted
     int rk = 0;            // rank
 
+    /** Clears all inserted vectors and rank state. Time: O(BITS). */
     void clear() {
         basis = {0};
         inserted = 0;
         rk = 0;
     }
 
+    /** Returns whether the span has rank zero. Time: O(1). */
     bool empty() const { return rk == 0; }
+    /** Returns current basis rank. Time: O(1). */
     int rank() const { return rk; }
 
     // insert into the span only; does NOT change 'inserted'
     // O(BITS)
+    /** Inserts a vector into the span without changing inserted count. Time: O(BITS). */
     bool insert_vector(T x) {
         for (int i = BITS-1; i >= 0; i--) {
             if (((x >> i) & 1) == 0) continue;
@@ -43,12 +48,14 @@ struct XorBasis {
 
     // insert one original vector into the multiset
     // O(BITS)
+    /** Inserts one original vector and updates inserted count. Time: O(BITS). */
     inline bool insert(T x) {
         inserted++;
         return insert_vector(x);
 
     }
  
+    /** Merges another basis into this basis. Time: O(BITS^2). */
     inline void merge_from(const XorBasis& other) {
         for (int i = 0; i < BITS; i++) {
             if (other.basis[i]) add_vec(other.basis[i]);
@@ -57,6 +64,7 @@ struct XorBasis {
  
  
     // maximize seed xor y, where y is in span
+    /** Maximizes seed xor y over y in the span. Time: O(BITS). */
     T max_xor(T seed = 0) const {
         T res = seed;
         for (int i = BITS-1; i >= 0; i--) {
@@ -67,6 +75,7 @@ struct XorBasis {
     }
  
     // minimize seed xor y, where y is in span
+    /** Minimizes seed xor y over y in the span. Time: O(BITS). */
     T min_xor(T seed = 0) const {
         T res = seed;
         for (int i = BITS-1; i >= 0; i--) {
@@ -78,6 +87,7 @@ struct XorBasis {
 
     // Reduces basis in increasing pivot order.
     // Good for kth_smallest()
+    /** Returns a reduced basis ordered by increasing pivot. Time: O(BITS^2). */
     vector<T> reduces_basis() const {
         auto tmp = *this;
 
@@ -99,6 +109,7 @@ struct XorBasis {
         return v;
     }
 
+    /** Returns the minimum nonzero value in the span, or 0 if empty. Time: O(BITS^2). */
     T min_nonzero() const {
         if (rk == 0) return 0;
         auto v = reduces_basis();
@@ -109,6 +120,7 @@ struct XorBasis {
 
     // kth smallest value in the span, 0-indexed, INCLUDING 0
     // valid when k < 2^rank
+    /** Returns the k-th smallest span value, including zero. Time: O(BITS^2). */
     T kth_smallest(u64 k) const {
         auto v = reduces_basis();
         T res = 0;
@@ -120,6 +132,7 @@ struct XorBasis {
     }
 
     // returns true if 'x' can be formed as the XOR of some subset of the basis
+    /** Returns whether x is representable by the basis. Time: O(BITS). */
     bool can(T x) const {
         for (int i = BITS-1; i >= 0; i--) {
             if (x & (1LL << i)) {
@@ -131,12 +144,14 @@ struct XorBasis {
     }
  
     // span{} size
+    /** Returns span size, or -1 if it does not fit in signed 64-bit. Time: O(1). */
     ll span_size() const {
         if (rk >= 63) return -1;
         return (1LL << rk);
     }
  
     // applies bitwise AND with 'x' to every value in the basis, then rebuilds the basis
+    /** Applies bitwise AND to basis vectors and rebuilds. Time: O(BITS^2). */
     void updateAnd(ll x) {
         vector<ll> v;
         for (int i = 0; i < BITS; i++) {
@@ -149,12 +164,14 @@ struct XorBasis {
     }
  
     // O(BITS^2)
+    /** Merges only the span of another basis. Time: O(BITS^2). */
     void merge_span(const XorBasis& other) {
         for (int i = 0; i < BITS; i++) {
             if (other.basis[i]) insert_vector(other.basis[i]);
         }
     }
  
+    /** Counts original subsets with xor x, or -1 on overflow. Time: O(BITS). */
     ll count_subsets(T x) const {
         if (!can(x)) return 0;
         ll free_vars = inserted - rk;
@@ -162,6 +179,7 @@ struct XorBasis {
         return (1LL << free_vars);
     }
 
+    /** Returns nonzero basis vectors in descending pivot order. Time: O(BITS). */
     vector<T> raw_basis_desc() const {
         vector<T> v;
         for (int i = BITS - 1; i >= 0; i--) {

@@ -2,6 +2,7 @@
 // Floyd-Warshall algorithm for shortest paths between any 2 vertices
 const int INF = numeric_limits<int>::max();
 
+/** Floyd-Warshall all-pairs shortest paths with path reconstruction. Space: O(n^2). */
 class FloydWarshall {
 private:
     vector<vector<int>> dist;    // Distance matrix
@@ -9,6 +10,7 @@ private:
     int n;                       // Number of vertices
 
 public:
+    /** Initializes n vertices using 1-based vertex ids. Time: O(n^2). */
     FloydWarshall(int vertices) : n(vertices) {
         // Initialize distance matrix with INF
         dist.resize(n+1, vector<int>(n+1, INF));
@@ -22,18 +24,21 @@ public:
     }
 
     // Add a directed edge from u to v with weight w
+    /** Adds directed edge u -> v. Time: O(1). */
     void addEdge(int u, int v, int w) {
         dist[u][v] = w;
         next[u][v] = v;
     }
 
     // Add an undirected edge between u and v with weight w
+    /** Adds undirected edge u-v. Time: O(1). */
     void addUndirectedEdge(int u, int v, int w) {
         addEdge(u, v, w);
         addEdge(v, u, w);
     }
 
     // Run Floyd-Warshall algorithm
+    /** Computes all-pairs shortest paths. Time: O(n^3). */
     void compute() {
         for (int k = 1; k <= n; k++) {
             for (int i = 1; i <= n; i++) {
@@ -75,11 +80,13 @@ public:
     }
 
     // Get shortest path distance from u to v
+    /** Returns shortest-path distance from u to v. Time: O(1). */
     int getDistance(int u, int v) {
         return dist[u][v];
     }
 
     // Reconstruct shortest path from u to v
+    /** Reconstructs a shortest path from u to v. Time: O(path length). */
     vector<int> getPath(int u, int v) {
         vector<int> path;
 
@@ -104,4 +111,3 @@ public:
         return path;
     }
 };
-

@@ -1,9 +1,11 @@
 #include "core.h"
 
+/** Aho-Corasick automaton for multiple-pattern matching. Space: O(total pattern length * SIG). */
 template<int SIG = 26>
 struct AhoCorasick {
     static constexpr char OFF = 'a';
 
+    /** Trie node plus failure/output links. Space: O(SIG + outputs). */
     struct Node {
         int nxt[SIG];   // during build becomes 'go' transitions
         int fail;       // failure link
@@ -23,6 +25,7 @@ struct AhoCorasick {
 
     AhoCorasick() : t(1) {} // node 0 = root
 
+    /** Adds pattern s with id and returns its terminal node. Time: O(|s|). */
     int add_pattern(const string& s, int id) {
         if (sz(pat_end_node) <= id) pat_end_node.resize(id+1, -1);
         int v = 0;
@@ -41,6 +44,7 @@ struct AhoCorasick {
 
     // Build failure links + complete automation transitions (go function)
     // After build: t[v].nxt[c] is always defined (0..nodes-1)
+    /** Builds failure links and completed transitions. Time: O(nodes * SIG). */
     void build() {
         queue<int> q;
         bfs_order.clear();
@@ -83,6 +87,7 @@ struct AhoCorasick {
     }
 
     // Report matches: calls callback(pos_end, pattern_id)
+    /** Calls on_match(end_position, pattern_id) for every match in text. Time: O(|text| + matches). */
     template<class F>
     void match(const string& text, F on_match) const {
         int v = 0;
@@ -103,6 +108,7 @@ struct AhoCorasick {
     }
 
     // Count occurrences of each pattern id (patterns are added with ids 0..P-1)
+    /** Counts occurrences of every pattern id in text. Time: O(|text| + nodes + P). */
     vl count_occurrences(const string& text, int P) const {
         vl occ_node(t.size(), 0);
 
@@ -130,6 +136,7 @@ struct AhoCorasick {
     }
 };
 
+/** Small usage example for Aho-Corasick. */
 void example() {
     AhoCorasick<26> ac;
     ac.add_pattern("he", 0);

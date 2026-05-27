@@ -2,6 +2,7 @@
 #include "../monoid/sum.h"
 #include "../monoid/xor.h"
 
+/** Acted monoid for range xor updates and range bit-sum queries. Space: O(B). */
 template<int B = 20>
 struct ActedMonoid_Sum_Xor {
     // Data is an array of bit counts
@@ -11,7 +12,7 @@ struct ActedMonoid_Sum_Xor {
     using X = typename Monoid_X::value_type; // std::array<ll, B>
     using A = typename Monoid_A::value_type; // int
 
-    // Apply the XOR mask 'a' to the bit counts 'x'
+    /** Applies xor mask a to bit counts x for size elements. Time: O(B). */
     static X act(const X& x, const A& a, const ll &size) {
         if (a == 0) return x;
         X res = x;
@@ -24,11 +25,12 @@ struct ActedMonoid_Sum_Xor {
         return res;
     }
 
+    /** Composes xor tags. Time: O(1). */
     static A compose(const A& f, const A& g) {
         return f ^ g;
     }
 
-    // Convert input number to bit-count array
+    /** Converts a scalar to a bit-count array. Time: O(B). */
     static X lift(ll val) {
         X res{};
         for (int i = 0; i < B; i++) {
@@ -37,7 +39,7 @@ struct ActedMonoid_Sum_Xor {
         return res;
     }
 
-    // Convert bit-count array back to num
+    /** Converts bit counts to their numeric sum. Time: O(B). */
     static ll sum(const X& x) {
         ll s = 0;
         for (int i = 0; i < B; i++) {
@@ -46,5 +48,6 @@ struct ActedMonoid_Sum_Xor {
         return s;
     }
 
+    /** Returns the zero bit-count aggregate. Time: O(B). */
     static constexpr X id() { return X{}; }
 };

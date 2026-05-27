@@ -6,6 +6,7 @@ using namespace std;
 // Works for string, vector<>, or any container with size() and operator[]
 // Time: O(n * m)
 // Memory: O(min(n, m))
+/** Returns Levenshtein distance between two sequences. Time: O(nm). */
 template<class Seq>
 int levenshtein_distance(const Seq& a, const Seq& b) {
     int n = (int)a.size();
@@ -40,6 +41,7 @@ int levenshtein_distance(const Seq& a, const Seq& b) {
 }
 
 // Version for Iterators instead of indexable containers
+/** Returns Levenshtein distance between two iterator ranges. Time: O(nm). */
 template<class It1, class It2>
 int levenshtein_distance(It1 first1, It1 last1, It2 first2, It2 last2) {
     using T1 = typename iterator_traits<It1>::value_type;

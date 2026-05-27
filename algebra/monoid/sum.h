@@ -1,9 +1,11 @@
 #include "../core.h"
+/** Sum monoid for arithmetic values or fixed-size containers. Space: O(size of E). */
 template<typename E>
 struct Monoid_Sum {
     using value_type = E;
     using X = value_type;
 
+    /** Returns x + y, component-wise for containers. Time: O(size of E). */
     static constexpr X op(const X& x, const X& y) {
         if constexpr (std::is_arithmetic_v<E>) {
             return x + y;
@@ -16,6 +18,7 @@ struct Monoid_Sum {
         }
     }
 
+    /** Returns the additive identity. Time: O(size of E). */
     static constexpr X id() {
         if constexpr (std::is_arithmetic_v<E>) {
             return E(0);

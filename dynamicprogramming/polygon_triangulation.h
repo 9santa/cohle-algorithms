@@ -1,9 +1,11 @@
 #include "core.h"
 
+/** 2D point used by polygon triangulation DP. */
 struct Point {
     double x, y;
 };
 
+/** Returns Euclidean distance between two points. Time: O(1). */
 double dist(const Point& a, const Point& b) {
     double dx = a.x - b.x;
     double dy = a.y - b.y;
@@ -12,6 +14,7 @@ double dist(const Point& a, const Point& b) {
 
 // Finds minimal sum of perimeters of triangles. O(n^3)
 // dp[i][j] - min cost of triangulation for vertices i..j
+/** Reads a polygon and returns minimum-perimeter triangulation cost. Time: O(n^3). */
 double polygon_triangulation() {
     int n; cin >> n;    // number of vertices in polygon
     vector<Point> p(n);

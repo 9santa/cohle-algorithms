@@ -1,5 +1,6 @@
 #include <concepts>
 
+/** Concept for additive abelian group-like types. */
 template<typename G>
 concept AbelianGroup = requires (G a, G b) {
     { a + b } -> std::same_as<G>; // closure

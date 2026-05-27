@@ -1,7 +1,7 @@
 #include "../core.h"
 #include "../node_pool.h"
 
-// Lazy implicit treap with Acted Monoid
+/** Implicit treap with lazy acted-monoid range updates. Space: O(n). */
 template<typename ActedMonoid>
 struct LazyTreap {
     using AM = ActedMonoid;
@@ -38,13 +38,16 @@ struct LazyTreap {
     LazyTreap(int n, F f) { build(n, f); }
     LazyTreap(const vector<X>& a) { build(a); }
 
+    /** Clears the treap while keeping pooled memory. Time: O(1). */
     void reset() {
         root = nullptr;
         pool.reset_keep_memory();
     }
 
+    /** Builds n identity values. Time: O(n). */
     void build(int n) { build(n, [](int){ return MX::id(); }); }
 
+    /** Builds n values from f(i). Time: O(n). */
     template<typename F>
     void build(int n, F f) {
         vector<X> a(n);
@@ -52,13 +55,16 @@ struct LazyTreap {
         build(a);
     }
 
+    /** Builds from a 0-indexed array. Time: O(n). */
     void build(const vector<X>& a) {
         reset();
         root = build_cartesian(a);
     }
 
+    /** Returns the sequence size. Time: O(1). */
     int size() const { return size(root); }
 
+    /** Returns a[pos]. Expected time: O(log n). */
     X get(int pos) {
         assert(0 <= pos < size());
         auto [a, b] = split(root, pos);
@@ -68,6 +74,7 @@ struct LazyTreap {
         return res;
     }
 
+    /** Sets a[pos] to val. Expected time: O(log n). */
     void set(int pos, const X& val) {
         assert(0 <= pos && pos < size());
         auto [a, b] = split(root, pos);
@@ -77,6 +84,7 @@ struct LazyTreap {
         root = merge(a, merge(c, d));
     }
 
+    /** Erases the element at position pos. Expected time: O(log n). */
     void erase(int pos) {
         assert(0 <= pos && pos < size());
         auto [a, b] = split(root, pos);
@@ -86,7 +94,7 @@ struct LazyTreap {
         root = merge(a, d);
     }
 
-    // [l, r)
+    /** Returns the monoid product over [l, r). Expected time: O(log n). */
     X prod(int l, int r) {
         assert(0 <= l && l <= r && r <= size());
         auto [a, b] = split(root, l);
@@ -96,9 +104,10 @@ struct LazyTreap {
         return res;
     }
 
+    /** Returns the monoid product over the whole sequence. Time: O(1). */
     X prod_all() { return prod_all(root); }
 
-    // apply action 'a' on [l, r)
+    /** Applies action a to every element in [l, r). Expected time: O(log n). */
     void apply(int l, int r, const A& a) {
         assert(0 <= l && l <= r && r <= size());
         auto [p, q] = split(root, l);
@@ -107,6 +116,7 @@ struct LazyTreap {
         root = merge(p, merge(m, s));
     }
 
+    /** Returns max r such that check(prod(l, r)) is true. Expected time: O(log n). */
     template<typename F>
     int max_right(const F check, int l) {
         assert(0 <= l && l <= size());
@@ -119,6 +129,7 @@ struct LazyTreap {
         return l + len;
     }
 
+    /** Returns min l such that check(prod(l, r)) is true. Expected time: O(log n). */
     template<typename F>
     int min_left(const F check, int r) {
         assert(0 <= r && r <= size());
@@ -131,6 +142,7 @@ struct LazyTreap {
         return r - len;
     }
 
+    /** Returns all values in order. Time: O(n). */
     vector<X> get_all() {
         vector<X> res;
         res.reserve(size());

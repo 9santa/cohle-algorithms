@@ -3,6 +3,7 @@
 #include <stdexcept>
 
 
+/** Solves an augmented linear system using Gauss-Jordan elimination. Time: O(n m^2). Space: O(m). */
 bool gauss_jordan_elimination(vector<vector<double>>& a, vector<double>& x) {
     int n = (int)a.size();      // # rows
     int m = (int)a[0].size();   // # cols
@@ -57,7 +58,7 @@ bool gauss_jordan_elimination(vector<vector<double>>& a, vector<double>& x) {
     return true;
 }
 
-// Gauss-Jordan with partial pivoting
+/** Solves Ax = b using Gauss-Jordan elimination with partial pivoting. Time: O(n^3). Space: O(n^2). */
 vector<double> gaussJordanElimination(vector<vector<double>> A, vector<double> b) {
     int n = A.size();
     const double EPS = 1e-12;

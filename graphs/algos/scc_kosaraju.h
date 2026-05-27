@@ -1,5 +1,6 @@
 #include "../core.h"
 
+/** SCC decomposition result. Space: O(n). */
 struct SCCRes {
     int n_comp = 0;
     vi comp;      // comp[v] in [0..n_comp) => which component vertex v belongs to
@@ -7,6 +8,7 @@ struct SCCRes {
 };
 
 // Kosaraju: O(N+M). Requires directed graph
+/** Computes strongly connected components by Kosaraju. Time: O(n + m). */
 template<class Cost>
 SCCRes scc_kosaraju(const Graph<Cost, true>& G) {
     const int N = G.N;

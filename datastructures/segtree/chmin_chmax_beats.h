@@ -1,7 +1,6 @@
 #include "../core.h"
 
-// Value-based version (Ji Driver style) - invariant: max1 and min1 always reflect real values
-// Invariant chain: min1 < min2 <= max2 < max1
+/** Node data for segment tree beats chmin/chmax/add/sum queries. */
 struct Beat {
     ll sum;
     ll max1, max2, min1, min2; // max1 > max2, min1 < min2
@@ -9,6 +8,7 @@ struct Beat {
     ll lazy_add;
 };
 
+/** Segment tree beats for range chmin, chmax, add, and sum queries. Space: O(n). */
 struct BeatsSeg {
 private:
     int n;
@@ -107,6 +107,7 @@ private:
     }
 
 public:
+    /** Builds from a 0-indexed array. Time: O(n). */
     BeatsSeg(const vector<ll>& arr) {
         n = (int)arr.size();
         data.resize(4*n);
@@ -182,8 +183,15 @@ private:
     }
 
 public:
+    /** Applies a[i] = min(a[i], val) for i in [l, r]. Time: O(log n) amortized. */
     void update_chmin(int l, int r, ll val) { update_chmin(1, 0, n-1, l, r, val); }
+
+    /** Applies a[i] = max(a[i], val) for i in [l, r]. Time: O(log n) amortized. */
     void update_chmax(int l, int r, ll val) { update_chmax(1, 0, n-1, l, r, val); }
+
+    /** Adds val to every element in [l, r]. Time: O(log n) amortized. */
     void update_add(int l, int r, ll val) { update_add(1, 0, n-1, l, r, val); }
+
+    /** Returns the sum over [l, r]. Time: O(log n) amortized. */
     ll query_sum(int l, int r) { return query_sum(1, 0, n-1, l, r); }
 };

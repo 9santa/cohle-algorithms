@@ -64,6 +64,7 @@ constexpr double infty<double> = numeric_limits<double>::infinity();
 template<>
 constexpr long double infty<long double> = numeric_limits<long double>::infinity();
 
+/** Weighted edge in a graph. */
 template<class T>
 struct Edge {
     int frm, to;
@@ -71,6 +72,7 @@ struct Edge {
     int id;
 };
 
+/** CSR-backed graph; undirected graphs store both adjacency directions after build. Space: O(n + m). */
 template<class T = int, bool directed = false>
 struct Graph {
     int N = 0;
@@ -85,6 +87,7 @@ struct Graph {
     Graph() {}
     Graph(int n) { build_empty(n); }
 
+    /** Resets graph to n vertices and no edges. Time: O(n + m). */
     void build_empty(int n) {
         N = n, M = 0; built = false;
         edges.clear();
@@ -93,6 +96,7 @@ struct Graph {
     }
 
     // call before build
+    /** Adds an edge before build. Time: O(1). */
     void add_edge(int frm, int to, T cost = 1, int id = -1) {
         assert(!built);
         assert(0 <= frm && frm < N);
@@ -102,6 +106,7 @@ struct Graph {
         M++;
     }
 
+    /** Builds CSR adjacency from the edge list. Time: O(n + m). */
     void build() {
         built = true;
         indptr.assign(N+1, 0);
@@ -120,11 +125,13 @@ struct Graph {
         }
     }
 
+    /** Returns out-degree of v. Time: O(1). */
     int out_deg(int v) const {
         assert(0 <= v && v < N);
         return indptr[v+1] - indptr[v];
     }
 
+    /** Lightweight adjacency range for one vertex. */
     struct Range {
         const Edge<T> *l;
         const Edge<T> *r;
@@ -132,11 +139,13 @@ struct Graph {
         const Edge<T> *end() const { return r; }
     };
 
+    /** Returns adjacency range of v. Time: O(1). */
     Range operator[](int v) const {
         // call after build
         return Range{ &csr[indptr[v]], &csr[indptr[v+1]]};
     }
 
+    /** Returns the reversed directed graph. Time: O(n + m). Space: O(n + m). */
     Graph<T, true> reverse_graph() const {
         static_assert(directed, "reverse_graph is for directed graphs only");
         Graph<T, true> R(N);

@@ -5,6 +5,7 @@
    trans: dp[l][r] = min/max/... over k in [l, r-1] of dp[l][k] + dp[k+1][r] + func(l, r) */
 
 // https://atcoder.jp/contests/dp/tasks/dp_n
+/** Solves interval merge DP for slimes/stones. Time: O(n^3). Space: O(n^2). */
 ll solve(vl& a) {
     int n = sz(a);
     V<vl> dp(n, vl(n, infty<ll>));

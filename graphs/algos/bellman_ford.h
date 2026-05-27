@@ -1,5 +1,6 @@
 #include "../core.h"
 
+/** Bellman-Ford result with negative-cycle flag. Space: O(n). */
 template<class Cost>
 struct BellmanFordRes {
     V<Cost> dist;
@@ -8,6 +9,7 @@ struct BellmanFordRes {
 };
 
 // Requires a directed graph (if you want undirected, add both directions when building)
+/** Runs Bellman-Ford from src. Time: O(nm). Space: O(n). */
 template<class Cost>
 BellmanFordRes<Cost> bellman_ford(const Graph<Cost, true>& G, int src) {
     const int N = G.N;
@@ -48,6 +50,7 @@ BellmanFordRes<Cost> bellman_ford(const Graph<Cost, true>& G, int src) {
     return res;
 }
 
+/** Restores path to target from parent links. Time: O(path length). */
 inline vi restore_path(int target, const vi& parent) {
     vi path;
     if (target < 0 || target >= sz(parent)) return {};

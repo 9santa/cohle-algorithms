@@ -2,7 +2,11 @@
 
 namespace nt {
 
-// Legendre symbol (a | p), p odd prime
+/**
+ * Returns the Legendre symbol (a | p).
+ * @param p Odd prime modulus.
+ * Time: O(log p). Space: O(1).
+ */
 inline int legendre_symbol(ll a, ll p) {
     a %= p;
     if (a < 0) a += p;
@@ -13,7 +17,11 @@ inline int legendre_symbol(ll a, ll p) {
     return 0; // should not happen for prime p
 }
 
-// Jacobi symbol (a | n), n odd positive
+/**
+ * Returns the Jacobi symbol (a | n).
+ * @param n Positive odd integer.
+ * Time: O(log n). Space: O(1).
+ */
 inline int jacobi_symbol(ll a, ll n) {
     if (n <= 0 || (n % 2 == 0)) return 0;
     a %= n;

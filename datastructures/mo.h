@@ -1,8 +1,12 @@
 #include "core.h"
+/** Offline Mo's algorithm query scheduler for half-open ranges. Space: O(Q). */
 struct Mo {
     vector<pair<int, int>> LR;  // queries [L, R)
+
+    /** Adds a query over [L, R). Time: O(1). */
     void add(int L, int R) { LR.emplace_back(L, R); }
 
+    /** Returns query indices in Mo order. Time: O(Q log Q). */
     static vector<int> get_mo_order(vector<pair<int, int>> LR) {
         int N = 1;
         for (auto &[l, r] : LR) setmax(N, l), setmax(N, r);
@@ -36,6 +40,7 @@ struct Mo {
         return I;
     }
 
+    /** Runs add/remove callbacks in Mo order and calls query(idx) for each answer. Time: O(Q log Q + pointer movement cost). */
     template<typename F1, typename F2, typename F3, typename F4, typename FQ>
     void calc(F1 add_l, F2 add_r, F3 rm_l, F4 rm_r, FQ query) {
         auto I = get_mo_order(LR);

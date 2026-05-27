@@ -6,6 +6,7 @@
 // BST key: L (segment start)
 // Each node stores interval [L, R) and augmented mxR = max R in subtree
 // Ops Time complexity: O(log n)
+/** Treap-backed interval tree keyed by interval starts. Space: O(n). */
 template<class Coord, class Comp = std::less<Coord>>
 struct Interval_Treap {
     struct Node {
@@ -32,14 +33,17 @@ struct Interval_Treap {
         return x ^ (x >> 31);
     }
 
+    /** Clears the tree while keeping pooled memory. Time: O(1). */
     void reset() { root = nullptr; pool.reset_keep_memory(); }
 
     // Insert assumes unique L
+    /** Inserts interval [L, R), assuming unique L. Expected time: O(log n). */
     void insert(Coord L, Coord R) {
         assert(!comp(R, L) && "require L <= R");
         root = ins(root, pool.create(L, R, splitmix64()));
     }
 
+    /** Erases the interval with start L, if present. Expected time: O(log n). */
     bool erase_by_L(const Coord& L) {
         bool erased = false;
         root = era(root, L, erased);
@@ -47,6 +51,7 @@ struct Interval_Treap {
     }
 
     // Returns pointer to an interval containing x, or nullptr
+    /** Returns an interval containing x, or nullptr. Expected time: O(log n). */
     Node* find_containing(const Coord& x) const {
         Node* t = root;
         while (t) {
@@ -60,9 +65,11 @@ struct Interval_Treap {
     }
 
     // Check if tree contains coordinate
+    /** Returns whether any interval contains x. Expected time: O(log n). */
     bool contains_point(const Coord& x) const { return find_containing(x) != nullptr; }
 
     // Any overlap with query [L, R): overlap if node.L < R && L < node.R
+    /** Returns whether any interval overlaps [L, R). Expected time: O(log n). */
     bool any_overlap(const Coord& L, const Coord& R) const {
         return any_overlap_rec(root, L, R);
     }

@@ -15,6 +15,7 @@ const ll MOD = 1e9 + 7;
 vector<vector<int>> g;
 vector<array<ll, 2>> dp;
 
+/** Computes independent-set style tree DP values for subtree u. Time: O(subtree size). */
 void dfs(int u, int p) {
     dp[u][0] = 1; // u not chosen
     dp[u][1] = 1; // u chosen

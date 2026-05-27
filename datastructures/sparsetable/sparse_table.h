@@ -1,7 +1,5 @@
 #include "../core.h"
-// Sparse Table for Range Minimum Queries
-// For Maximum Queries: just change INT_MAX to INT_MIN, and std::min to std::max
-// Prep: O(n log n), Queries: O(1)
+/** Static sparse table for range minimum queries. Space: O(n log n). */
 class SparseTableRMQ {
 private:
     std::vector<std::vector<int>> table;
@@ -21,6 +19,7 @@ private:
     }
 
 public:
+    /** Builds from a 0-indexed immutable array. Time: O(n log n). */
     SparseTableRMQ(std::vector<int> const& arr) : n((int)arr.size()) {
         if (n == 0) return;
 
@@ -49,7 +48,7 @@ public:
         }
     }
 
-    // Query for minimum in range [l, r] (0-idexed, inclusive)
+    /** Returns the minimum value in [l, r]. Time: O(1). */
     int query(int l, int r) {
         if (l < 0) l = 0;
         if (r >= n) r = n - 1;

@@ -1,6 +1,7 @@
 #include "core.h"
 #include "extra/convolution_fft_iter.h"
 
+/** Converts decimal string to base B chunks of width k. Time: O(|s|). */
 vi to_base(const string& s, int B, int k) {
     vi a;
     for (int i = sz(s); i > 0; i -= k) {

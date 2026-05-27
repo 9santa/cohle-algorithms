@@ -1,10 +1,12 @@
 #include "header.h"
 
+/** Linear trajectory f(t) = a*t + b. */
 struct Line {
     double a = 0.0, b = 0.0; // f(t) = a*t + b
     double eval(double t) const { return a * t + b;}
 };
 
+/** Certificate failure event for kinetic tournament nodes. */
 struct Event {
     double time;
     int node;
@@ -15,6 +17,7 @@ struct Event {
     }
 };
 
+/** Kinetic tournament maintaining the maximum line as time increases. Space: O(n). */
 struct KineticTournamentMax {
 private:
     int n;
@@ -127,17 +130,20 @@ private:
     }
 
 public:
+    /** Builds the tournament from line trajectories. Time: O(n log n). */
     explicit KineticTournamentMax(vector<Line> lines) : n((int)lines.size()), f(std::move(lines)) {
         build();
     }
 
     // Return index of maximum at time t (0-indexed)
+    /** Returns the index of the maximum line at time t. Amortized time: O(log n) per event crossed. */
     int argmax(double t) {
         advance_to(t);
         return winner[1];
     }
 
     // Retutn maximum value at time t
+    /** Returns the maximum value at time t. Amortized time: O(log n) per event crossed. */
     double max_value(double t) {
         int idx = argmax(t);
         if (idx < 0) return -INF;
@@ -145,6 +151,7 @@ public:
     }
 
     // Update one trajectory at current processed time
+    /** Replaces one trajectory at the current processed time. Time: O(log n). */
     void set_line(int idx, Line L) {
         if (idx < 0 || idx >= n) return;
         f[idx] = L;

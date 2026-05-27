@@ -3,7 +3,7 @@
 
 namespace nt {
 
-// returns prime factors with multiplicities
+/** Returns prime factors of n with multiplicity. Time: O(sqrt n). Space: O(number of factors). */
 inline vl prime_factors_trial(ll n) {
     vl f;
     if (n < 0) n = -n;
@@ -17,7 +17,7 @@ inline vl prime_factors_trial(ll n) {
     return f;
 }
 
-// returns {prime, exponent}
+/** Returns factorization of n as {prime, exponent}. Time: O(sqrt n). Space: O(number of distinct factors). */
 inline vector<pair<ll, int>> factorize_trial(ll n) {
     vector<pair<ll, int>> res;
     if (n < 0) n = -n;

@@ -4,21 +4,7 @@
 
 namespace nt {
 
-/*
-Deterministic Miller–Rabin for 64-bit integers (u64).
-
-Idea:
-- Write n-1 = d * 2^s with d odd.
-- For a base a, compute x = a^d mod n.
-  If x == 1 or x == n-1 => this base "passes".
-  Else square x up to s-1 times:
-    x = x^2 mod n
-    if x becomes n-1 => passes
-  Otherwise => composite.
-
-For u64, the bases below are enough to be deterministic (no false positives).
-*/
-
+/** Returns whether n is prime using deterministic Miller-Rabin for u64. Time: O(log n). Space: O(1). */
 inline bool is_prime_u64(u64 n) {
     if (n < 2) return false;
     // quick trial division by some small primes (fast)

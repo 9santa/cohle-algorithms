@@ -2,22 +2,23 @@
 
 using namespace std;
 
-// Operations: O(log n)
-// Space: O(n)
+/** Fenwick tree for point additions and prefix/range sum queries. Space: O(n). */
 class FenwickTree {
 private:
     vector<int> tree;
 
+    /** Returns the least significant set bit of i. */
     int LSB(int i) {
         return i & -i;
     }
 
 public:
+    /** Creates an empty tree with the given number of elements. */
     FenwickTree(int size) {
         tree.resize(size+1, 0);
     }
 
-    // Construct Fenwick Tree
+    /** Builds the tree from a 0-indexed array. Time: O(n log n). */
     FenwickTree(const vector<int>& nums) {
         int n = (int)nums.size();
         tree.resize(n+1, 0);
@@ -27,7 +28,7 @@ public:
         }
     }
 
-    // O(n) Fenwick initialization
+    /** Builds the tree from a 1-indexed array. Time: O(n). */
     void init(int n, const vector<int>& nums) {
         for (int i = 1; i <= n; i++) {
             tree[i] += nums[i];
@@ -37,6 +38,7 @@ public:
         }
     }
 
+    /** Adds value to nums[index]. Time: O(log n). */
     void update(int index, int value) {
         index++;
         while(index < (int)tree.size()) {
@@ -45,7 +47,7 @@ public:
         }
     }
 
-    // Get prefix sum [0, index]
+    /** Returns the prefix sum over [0, index]. Time: O(log n). */
     int sum_query(int index) {
         index++;
         int sum = 0;
@@ -56,25 +58,8 @@ public:
         return sum;
     }
 
-    // Get range sum [l, r] (same as prefix sum formula)
+    /** Returns the range sum over [l, r]. Time: O(log n). */
     int range_sum_query(int l, int r) {
         return sum_query(r) - sum_query(l-1);
     }
 };
-
-
-// testing example
-int main(void) {
-    vector<int> nums = {1, 3, 5, 7, 9, 11};
-    FenwickTree ft(nums);
-
-    cout << "Prefix sum [0, 3]: " << ft.sum_query(3) << "\n";        // 1+3+5+7 = 16
-    cout << "Range sum [2, 4]: " << ft.range_sum_query(2, 4) << "\n"; // 5+7+9 = 21
-
-    ft.update(3, 2);  // add 2 to element at index 3 (7+2 = 9)
-    cout << "After update, prefix sum [0, 3]: " << ft.sum_query(3) << "\n";  // 1+3+5+9 = 18
-
-
-
-    return 0;
-}

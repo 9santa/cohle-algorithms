@@ -1,5 +1,6 @@
 #include "../core.h"
 
+/** Implicit splay tree with acted monoid range updates and products. Space: O(n). */
 template<class ActedMonoid>
 struct SplayTree_ActedMonoid {
     using AM = ActedMonoid;
@@ -19,11 +20,16 @@ struct SplayTree_ActedMonoid {
     int root = 0; // root index
     vector<Node> t; // node pool, 0 = null
 
+    /** Builds n identity elements. Time: O(n). */
     SplayTree_ActedMonoid(int n_) { init(n_ + 5); build(n_); }
 
-    template<class F> SplayTree_ActedMonoid(int n_, F f) { init(n_ + 5); build(n_, f); }
+    /** Builds from generator f(i). Time: O(n). */
+    template<class F>
+    SplayTree_ActedMonoid(int n_, F f) { init(n_ + 5); build(n_, f); }
+    /** Builds from values. Time: O(n). */
     SplayTree_ActedMonoid(const vector<X>& v) { init(sz(v) + 5); build(v); }
 
+    /** Clears storage and reserves optional capacity. Time: O(n) to clear. */
     void init(int reserve_n = 0) {
         t.clear();
         t.reserve(max(1, reserve_n) + 3);
@@ -32,12 +38,14 @@ struct SplayTree_ActedMonoid {
         n = 0;
     }
 
-    // --- build ---
+    /** Rebuilds with m identity elements. Time: O(m). */
     void build(int m) { build(m, [](int) -> X { return MX::id(); }); }
+    /** Rebuilds from values. Time: O(n). */
     void build(const vector<X>& v) {
         build(sz(v), [&](int i) -> X { return v[i]; });
     }
 
+    /** Rebuilds from generator f(i). Time: O(m). */
     template<class F>
     void build(int m, F f) {
         n = m;
@@ -51,10 +59,10 @@ struct SplayTree_ActedMonoid {
         root = build_rec(a, 0, sz(a), 0);
     }
 
-    // --- basic ops ---
+    /** Returns the number of stored user elements. Time: O(1). */
     int size() const { return n; }
 
-    // set a[pos] = x
+    /** Sets a[pos] = x. Amortized time: O(log n). */
     void set(int pos, X x) {
         assert(0 <= pos && pos < n);
         int v = kth(pos + 1); // +1 cos of left sentinel
@@ -64,6 +72,7 @@ struct SplayTree_ActedMonoid {
         pull(v);
     }
 
+    /** Applies action a to [l, r). Amortized time: O(log n). */
     void update_range(int l, int r, A a) {
         assert(0 <= l && l <= r && r <= n);
         if (l == r) return;
@@ -74,6 +83,7 @@ struct SplayTree_ActedMonoid {
         pull(L);
     }
 
+    /** Returns a[pos]. Amortized time: O(log n). */
     X get(int pos) {
         assert(0 <= pos && pos < n);
         int v = kth(pos + 1);
@@ -82,7 +92,7 @@ struct SplayTree_ActedMonoid {
         return t[v].val;
     }
 
-    // prod on [l, r)
+    /** Returns the monoid product on [l, r). Amortized time: O(log n). */
     X prod(int l, int r) {
         assert(0 <= l && l <= r && r <= n);
         if (l == r) return MX::id();
@@ -91,9 +101,10 @@ struct SplayTree_ActedMonoid {
         return mid ? t[mid].prod : MX::id();
     }
 
+    /** Returns the product of the full sequence. Amortized time: O(log n). */
     X prod_all() { return prod(0, n); }
 
-    // insert x before position pos
+    /** Inserts x before position pos. Amortized time: O(log n). */
     void insert(int pos, X x) {
         assert(0 <= pos && pos <= n);
         // boundaries are pos and pos+1 cos of sentinel
@@ -109,7 +120,7 @@ struct SplayTree_ActedMonoid {
         n++;
     }
 
-    // erase element at position pos (0..n-1)
+    /** Erases a[pos]. Amortized time: O(log n). */
     void erase(int pos) {
         assert(0 <= pos && pos < n);
         // isolate [pos, pos+1)
@@ -124,7 +135,7 @@ struct SplayTree_ActedMonoid {
         n--;
     }
 
-    // max_right: largest r >= l such that check(prod(l, r)) is true
+    /** Returns the largest r >= l with check(prod(l, r)) true. Amortized time: O(log n). */
     template<class F>
     int max_right(const F& check, int l) {
         assert(0 <= l && l <= n);
@@ -144,7 +155,7 @@ struct SplayTree_ActedMonoid {
         return l + len;
     }
 
-    // min_left: smallest l <= r such that check(prod(l, r)) is true
+    /** Returns the smallest l <= r with check(prod(l, r)) true. Amortized time: O(log n). */
     template<class F>
     int min_left(const F& check, int r) {
         assert(0 <= r && r <= n);
@@ -164,7 +175,7 @@ struct SplayTree_ActedMonoid {
         return r - len;
     }
 
-    // collect everything in correct order with in-order traversal
+    /** Returns all elements in order. Time: O(n). */
     vector<X> get_all() {
         vector<X> out;
         out.reserve(n);
