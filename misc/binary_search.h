@@ -2,8 +2,7 @@
 
 using namespace std;
 
-// standard binary search. returns the element if found, otherwise INT_MIN
-/** Returns index of target by binary search, or -1. Time: O(log n). */
+/** Sorts arr and returns target if found, otherwise INT_MIN. Time: O(n log n). */
 int my_binary_search(vector<int>& arr, int target) {
     int n = (int)arr.size();
     sort(arr.begin(), arr.end());
@@ -21,8 +20,7 @@ int my_binary_search(vector<int>& arr, int target) {
     return INT_MIN;
 }
 
-// return a[i] >= target
-/** Returns first index with value >= target. Time: O(log n). */
+/** Sorts arr and returns the first value >= target. Time: O(n log n). */
 int my_lower_bound(vector<int>& arr, int target) {
     int n = (int)arr.size();
     sort(arr.begin(), arr.end());
@@ -39,8 +37,7 @@ int my_lower_bound(vector<int>& arr, int target) {
     return arr[r];
 }
 
-// return a[i] <= target
-/** Returns first index with value > target. Time: O(log n). */
+/** Sorts arr and returns the last value > target. Time: O(n log n). */
 int my_upper_bound(vector<int>& arr, int target) {
     int n = (int)arr.size();
     sort(arr.begin(), arr.end());
@@ -54,7 +51,7 @@ int my_upper_bound(vector<int>& arr, int target) {
             l = m;
         }
     }
-    return arr[l];
+    return arr[r];
 }
 
 signed main(void)
