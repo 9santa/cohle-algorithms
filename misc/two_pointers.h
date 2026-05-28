@@ -27,7 +27,7 @@ void same_direction(const vector<int>& a) {
     int l = 0;
     for (int r = 0; r < n; r++) {
         // include a[r]
-        while (/* window is valid*/ 1) {
+        while (/* window is invalid*/ 1) {
             // remove a[l]
             l++;
         }
