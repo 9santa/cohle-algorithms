@@ -1,5 +1,5 @@
+#pragma once
 #include <bits/stdc++.h>
-
 using namespace std;
 
 vector<int> arr = {176, 480, 395, 109, 289, 478, 132, 70, 229, 70, 278,

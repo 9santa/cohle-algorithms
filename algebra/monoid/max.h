@@ -1,5 +1,6 @@
 #pragma once
-#include "../core.h"
+#include <bits/stdc++.h>
+using namespace std;
 
 /** Maximum monoid. Space: O(1). */
 template<typename E>

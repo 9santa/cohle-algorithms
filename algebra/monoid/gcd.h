@@ -1,5 +1,6 @@
 #pragma once
-#include "../core.h"
+#include <bits/stdc++.h>
+using namespace std;
 
 /** GCD monoid over integral values. Space: O(1). */
 template<typename E>

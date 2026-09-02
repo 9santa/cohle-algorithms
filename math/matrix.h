@@ -1,78 +1,44 @@
-#include "core.h"
-#include "ModInt.h"
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
 
-using Matrix = vector<vector<Z>>;
+template<class T>
+using Matrix = vector<vector<T>>;
 
-/** Multiplies compatible matrices. Time: O(nmp). Space: O(nm). */
-Matrix multiply(const Matrix& a, const Matrix& b) {
-    int n = sz(a);
-    int m = sz(b[0]);
-    int p = sz(b);
-    Matrix c(n, vector<Z>(m, 0));
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < m; j++) {
-            for (int k = 0; k < p; k++) {
+template<class T>
+Matrix<T> matrix_multiply(const Matrix<T>& a, const Matrix<T>& b) {
+    const int n = (int)a.size();
+    const int p = (int)b.size();
+    const int m = p ? (int)b[0].size() : 0;
+    Matrix<T> c(n, vector<T>(m, T(0)));
+    for (int i = 0; i < n; ++i)
+        for (int k = 0; k < p; ++k)
+            for (int j = 0; j < m; ++j)
                 c[i][j] += a[i][k] * b[k][j];
-            }
-        }
-    }
     return c;
 }
 
-/** Multiplies square matrices, skipping zero entries in the left matrix. Time: O(n^3). Space: O(n^2). */
-Matrix fastmul(const Matrix& a, const Matrix& b) {
-    int n = sz(a);
-    Matrix c(n, vector<Z>(n, 0));
-    for (int i = 0; i < n; i++) {
-        for (int k = 0; k < n; k++) {
-            if (a[i][k].val() == 0) continue;
-            Z aik = a[i][k];
-            for (int j = 0; j < n; j++) {
-                c[i][j] += aik * b[k][j];
-            }
+template<class T>
+Matrix<T> matrix_multiply_square(const Matrix<T>& a, const Matrix<T>& b) {
+    const int n = (int)a.size();
+    Matrix<T> c(n, vector<T>(n, T(0)));
+    for (int i = 0; i < n; ++i)
+        for (int k = 0; k < n; ++k) {
+            if (a[i][k] == T(0)) continue;
+            for (int j = 0; j < n; ++j) c[i][j] += a[i][k] * b[k][j];
         }
-    }
     return c;
 }
 
-// Matrix Binary Exponentiation
-/** Returns mat^power for a square matrix. Time: O(n^3 log power). Space: O(n^2). */
-Matrix mpow(Matrix mat, ll power) {
-    int n = (int)mat.size();
-    Matrix res(n, vector<Z>(n, 0));
-    for (int i = 0; i < n; i++) res[i][i] = 1; // identity
-    while (power > 0) {
-        if (power & 1LL) res = fastmul(res, mat);
-        mat = fastmul(mat, mat);
-        power >>= 1;
+template<class T, class E>
+Matrix<T> matrix_power(Matrix<T> a, E e) {
+    const int n = (int)a.size();
+    Matrix<T> res(n, vector<T>(n, T(0)));
+    for (int i = 0; i < n; ++i) res[i][i] = T(1);
+    while (e > 0) {
+        if (e & 1) res = matrix_multiply_square(res, a);
+        a = matrix_multiply_square(a, a);
+        e >>= 1;
     }
     return res;
-}
-
-
-// Test
-signed main(void) {
-    int n, m, k; re(n, m, k);
-    Matrix a(n, vector<Z>(m, 0));
-    Matrix b(m, vector<Z>(k, 0));
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < m; j++) {
-            cin >> a[i][j];
-        }
-    }
-    for (int i = 0; i < m; i++) {
-        for (int j = 0; j < k; j++) {
-            cin >> b[i][j];
-        }
-    }
-
-    auto res = multiply(a, b);
-    for (int i = 0; i < sz(res); i++) {
-        for (int j = 0; j < sz(res[0]); j++) {
-            cout << res[i][j] << " ";
-        }
-        cout << "\n";
-    }
-
-    return 0;
 }

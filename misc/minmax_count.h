@@ -1,3 +1,8 @@
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
 
 /** Stores minimum, maximum, and their counts. Space: O(1). */
 struct MinMaxCount {

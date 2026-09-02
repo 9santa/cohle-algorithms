@@ -1,5 +1,13 @@
 #pragma once
-#include "core.h"
+#include <bits/stdc++.h>
+using namespace std;
+
+using u32 = unsigned int;
+using u8 = uint8_t;
+inline int popcnt(int x) { return __builtin_popcount((unsigned)x); }
+inline int popcnt(unsigned x) { return __builtin_popcount(x); }
+inline int popcnt(long long x) { return __builtin_popcountll((unsigned long long)x); }
+inline int popcnt(unsigned long long x) { return __builtin_popcountll(x); }
 
 namespace logic {
 

@@ -1,5 +1,6 @@
 #pragma once
-#include "../header.h"
+#include <bits/stdc++.h>
+using namespace std;
 
 /* 1. Opposite-direction pointers.
 Used on sorted arrays, palindrome checks, pair sum, etc. */

@@ -1,77 +1,39 @@
-#include "../header.h"
-#include <bit>
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
 
+using ll = long long;
+using u32 = uint32_t;
+using u64 = uint64_t;
 
-/** Returns number of set bits. Time: O(1). */
-int popcnt(int x) { return __builtin_popcount(x); }
-int popcnt(u32 x) { return __builtin_popcount(x); }
-int popcnt(ll x) { return __builtin_popcountll(x); }
-int popcnt(u64 x) { return __builtin_popcountll(x); }
-/** Returns (-1)^popcount(x). Time: O(1). */
-int popcnt_sign(int x) { return (__builtin_parity(unsigned(x)) & 1 ? -1 : 1); }
-int popcnt_sign(u32 x) { return (__builtin_parity(x) & 1 ? -1 : 1); }
-int popcnt_sign(ll x) { return (__builtin_parityll(x) & 1 ? -1 : 1); }
-int popcnt_sign(u64 x) { return (__builtin_parityll(x) & 1 ? -1 : 1); }
-/** Returns index of highest set bit, or -1 for zero. Time: O(1). */
-int topbit(int x) { return (x == 0 ? -1 : 31 - __builtin_clz(x)); }
-int topbit(u32 x) { return (x == 0 ? -1 : 31 - __builtin_clz(x)); }
-int topbit(ll x) { return (x == 0 ? -1 : 63 - __builtin_clzll(x)); }
-int topbit(u64 x) { return (x == 0 ? -1 : 63 - __builtin_clzll(x)); }
-/** Returns index of lowest set bit, or -1 for zero. Time: O(1). */
-int lowbit(int x) { return (x == 0 ? -1 : __builtin_ctz(x)); }
-int lowbit(u32 x) { return (x == 0 ? -1 : __builtin_ctz(x)); }
-int lowbit(ll x) { return (x == 0 ? -1 : __builtin_ctzll(x)); }
-int lowbit(u64 x) { return (x == 0 ? -1 : __builtin_ctzll(x)); }
+inline int popcnt(int x) { return __builtin_popcount((unsigned)x); }
+inline int popcnt(u32 x) { return __builtin_popcount(x); }
+inline int popcnt(ll x) { return __builtin_popcountll((u64)x); }
+inline int popcnt(u64 x) { return __builtin_popcountll(x); }
 
+inline int popcnt_sign(int x) { return (__builtin_parity((unsigned)x) ? -1 : 1); }
+inline int popcnt_sign(u32 x) { return (__builtin_parity(x) ? -1 : 1); }
+inline int popcnt_sign(ll x) { return (__builtin_parityll((u64)x) ? -1 : 1); }
+inline int popcnt_sign(u64 x) { return (__builtin_parityll(x) ? -1 : 1); }
 
+inline int topbit(u32 x) { return x ? 31 - __builtin_clz(x) : -1; }
+inline int topbit(u64 x) { return x ? 63 - __builtin_clzll(x) : -1; }
+inline int topbit(int x) { return topbit((u32)x); }
+inline int topbit(ll x) { return topbit((u64)x); }
 
+inline int lowbit(u32 x) { return x ? __builtin_ctz(x) : -1; }
+inline int lowbit(u64 x) { return x ? __builtin_ctzll(x) : -1; }
+inline int lowbit(int x) { return lowbit((u32)x); }
+inline int lowbit(ll x) { return lowbit((u64)x); }
 
-// Least Significant Bit
-/** Returns least significant set bit value. Time: O(1). */
-int leastSB(unsigned x) {
-    int lsb = x & 1;
-    return lsb;
+/** Returns the least-significant set-bit mask (0 for x=0). */
+template<class T>
+constexpr T lowest_set_bit(T x) { return x & -x; }
+
+/** Returns the most-significant set-bit mask (0 for x=0). */
+inline u64 highest_set_bit(u64 x) {
+    return x ? (u64(1) << topbit(x)) : 0;
 }
 
-// Lowest Set Bit
-/** Returns least significant set bit value. Time: O(1). */
-int lowestSB(unsigned x) {
-    int lsb = x & -x;
-    return lsb;
-
-    // another way, gives index of LSB
-    int pos = std::countr_zero(x);
-}
-
-// Most Significant Bit
-/** Returns highest power-of-two position by shifting. Time: O(log word). */
-int bit_shift_loop(unsigned x) {
-    int pos = -1;
-    while (x) {
-        x >>= 1;
-        pos++;
-    }
-    return pos;
-}
-
-// using log2
-int pos = std::log2(x);
-int pos = __lg(x);
-
-int pos = 31 - __builtin_clz(x);
-
-// C++20 std::bit_width
-int pos = std::bit_width(x) - 1;
-
-// Mask Directly
-unsigned msb_mask = 1u << (31 - __builtin_clz(x));
-
-// De Bruijn trick
-static const int index32[32] = {
-  0, 1, 28, 2, 29, 14, 24, 3,
-  30, 22, 20, 15, 25, 17, 4, 8,
-  31, 27, 13, 23, 21, 19, 16, 7,
-  26, 12, 18, 6, 11, 5, 10, 9
-};
-
-int msb = index32[(x * 0x077CB531U) >> 27];
+/** C++20 equivalent of topbit for unsigned values. */
+inline int topbit_std(u64 x) { return x ? int(std::bit_width(x)) - 1 : -1; }

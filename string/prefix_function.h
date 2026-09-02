@@ -1,0 +1,23 @@
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
+
+using vi = vector<int>;
+#define sz(x) int((x).size())
+
+// Computes the prefix function (pi array) for string s.
+// pi[i] = the length of the longest proper prefix of s[0..i]
+//         which is also a suffix of s[0..i].
+// O(|s|)
+/** Computes the KMP prefix function. Time: O(|s|). Space: O(|s|). */
+vector<int> prefix_function(const string& s) {
+    int n = sz(s);
+    vi pi(n);
+    for (int i = 1; i < n; i++) {
+        int j = pi[i-1];
+        while (s[i] != s[j] && j != 0) j = pi[j-1];
+        if (s[i] == s[j]) j++;
+        pi[i] = j;
+    }
+    return pi;
+}

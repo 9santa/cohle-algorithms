@@ -1,4 +1,9 @@
-#include "../core.h"
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
 #include "../monoid/sum.h"
 #include "../monoid/xor.h"
 

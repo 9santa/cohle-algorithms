@@ -1,4 +1,9 @@
-#include "../core.h"
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
 /** Xor monoid with inverse and repeated operation helper. Space: O(1). */
 template<typename E>
 struct Monoid_Xor {

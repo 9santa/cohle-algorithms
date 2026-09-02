@@ -1,4 +1,6 @@
-#include <vector>
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
 
 using std::vector;
 
@@ -35,7 +37,7 @@ public:
 
     // Respond to Segment Sum Query
     static int query_sum(const vector<int>& prefix_sum, int l, int r) {
-        return prefix_sum[r+1] - prefix_sum[l]; 
+        return prefix_sum[r+1] - prefix_sum[l];
     }
 
     // 2D Prefix Sum (Integral Image)

@@ -1,5 +1,9 @@
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
 
-#include <chrono>
+using u64 = unsigned long long;
+
 /** General SplitMix64 hash functor for integral values and common containers. Space: O(1). */
 struct splitmix_hash {
     /** Mixes a 64-bit value. Time: O(1). */

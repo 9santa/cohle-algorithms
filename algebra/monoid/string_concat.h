@@ -1,4 +1,7 @@
-#include "../core.h"
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
+
 /** String concatenation monoid. Space: O(total string length). */
 struct Monoid_StringConcat {
     using value_type = std::string;

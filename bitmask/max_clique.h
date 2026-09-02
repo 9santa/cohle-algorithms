@@ -1,4 +1,10 @@
-#include "core.h"
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
+
+using u64 = unsigned long long;
+using u32 = unsigned int;
+using u8 = uint8_t;
 
 /*
 Maximum Clique via Meet-in-the-Middle

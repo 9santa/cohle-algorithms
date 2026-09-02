@@ -1,4 +1,8 @@
-#include "../core.h"
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
 
 /** Additive monoid with inverse and scalar multiplication. Space: O(1). */
 template<typename E>

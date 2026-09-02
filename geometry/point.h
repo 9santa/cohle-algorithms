@@ -1,4 +1,6 @@
-#include "core.h"
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
 
 namespace geom {
 

@@ -1,4 +1,9 @@
-#include "../header.h"
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
+
+using i128 = __int128;
+using ll = long long;
 
 constexpr ll MAX_X = 1e18+1;
 

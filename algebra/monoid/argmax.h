@@ -1,4 +1,7 @@
-#include "../core.h"
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
+
 // Typical usage: RMQ
 /** Comparator-style monoid helper for maximum value with leftmost index. Space: O(1). */
 template<typename E>

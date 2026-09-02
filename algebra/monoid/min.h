@@ -1,4 +1,7 @@
-#include "../core.h"
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
+
 /** Minimum monoid. Space: O(1). */
 template<typename E>
 struct Monoid_Min {

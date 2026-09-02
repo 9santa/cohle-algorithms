@@ -1,3 +1,6 @@
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
 
 // Finds the min/max value in every window of size k
 /** Demonstrates interval scanline accumulation. Time: O(n log n). */

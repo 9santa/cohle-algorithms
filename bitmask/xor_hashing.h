@@ -1,4 +1,14 @@
-#include "core.h"
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
+
+using u64 = unsigned long long;
+template<class T> using V = vector<T>;
+using vi = vector<int>;
+#define all(x) (x).begin(), (x).end()
+#define sz(x) int((x).size())
+template<class T> void re(T& x) { cin >> x; }
+template<class T, class... U> void re(T& x, U&... y) { re(x); re(y...); }
 
 /** SplitMix64 mixer used for deterministic-looking 64-bit random values. Time: O(1). */
 static u64 splitmix64(u64 x) {

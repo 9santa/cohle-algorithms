@@ -138,11 +138,6 @@ def parse_args() -> argparse.Namespace:
         help="fail when a quoted local-looking include cannot be resolved",
     )
     parser.add_argument(
-        "--keep-core",
-        action="store_true",
-        help="include core.h headers instead of assuming your template already provides them",
-    )
-    parser.add_argument(
         "--omit",
         action="append",
         default=[],
@@ -157,8 +152,6 @@ def main() -> int:
     script_root = Path(__file__).resolve().parents[1]
     include_roots = [*args.include_dir, Path.cwd(), script_root]
     omit_patterns = list(args.omit)
-    if not args.keep_core:
-        omit_patterns.append("core.h")
 
     expander = Expander(
         include_roots,

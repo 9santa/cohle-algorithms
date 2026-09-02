@@ -1,4 +1,7 @@
-#include "../core.h"
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
+
 /** Component-wise additive monoid over pairs. Space: O(1). */
 template<typename E>
 struct Monoid_Add_Pair {

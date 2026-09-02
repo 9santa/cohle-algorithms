@@ -1,3 +1,6 @@
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
 
 // Coordinate Compression
 /** Returns compressed ranks for arr values. Time: O(n log n). */

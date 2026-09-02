@@ -1,3 +1,6 @@
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
 
 /** Fixed-capacity, runtime-dimension matrix.
 Storage is MAXN*MAXN no heap allocs. Flat 1D array

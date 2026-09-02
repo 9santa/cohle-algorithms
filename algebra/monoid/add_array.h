@@ -1,4 +1,9 @@
-#include "../core.h"
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
 /** Component-wise additive monoid over fixed-size arrays. Space: O(K). */
 template<typename E, int K>
 struct Monoid_Add_Array {

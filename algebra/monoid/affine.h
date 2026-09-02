@@ -1,4 +1,6 @@
-#include "../core.h"
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
 
 /** Monoid of affine functions f(x) = ax + b under composition. Space: O(1). */
 template<typename E>

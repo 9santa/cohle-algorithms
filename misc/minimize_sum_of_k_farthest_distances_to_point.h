@@ -1,4 +1,8 @@
-#include "../header.h"
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
+
+using ld = long double;
 
 // 2D optimization
 // Minimize sum of k farthest distances to point (X, Y)

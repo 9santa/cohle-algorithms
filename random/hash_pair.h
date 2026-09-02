@@ -1,3 +1,8 @@
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
+
+using u64 = unsigned long long;
 
 /** SplitMix64 pair hash for 64-bit integer pairs. Space: O(1). */
 struct pair_hash {

@@ -1,4 +1,17 @@
-#include "../core.h"
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+#ifndef COHLE_INFINITY_HELPER
+#define COHLE_INFINITY_HELPER
+template<class T> constexpr T infty = 0;
+template<> constexpr int infty<int> = 1'010'000'000;
+template<> constexpr long long infty<long long> = 2'020'000'000'000'000'000;
+template<> constexpr double infty<double> = numeric_limits<double>::infinity();
+template<> constexpr long double infty<long double> = numeric_limits<long double>::infinity();
+#endif
+
 #include "../monoid/add.h"
 #include "../monoid/max.h"
 

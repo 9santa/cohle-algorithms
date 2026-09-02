@@ -1,5 +1,5 @@
+#pragma once
 #include <bits/stdc++.h>
-
 using namespace std;
 
 /** Sorts arr and returns target if found, otherwise INT_MIN. Time: O(n log n). */
@@ -8,12 +8,12 @@ int my_binary_search(vector<int>& arr, int target) {
     sort(arr.begin(), arr.end());
 
     int l = -1, r = n;
-    while(l <= r) {
+    while(l+1 < r) {
         int m = l + (r-l)/2;
         if(arr[m] < target) {
-            l = m + 1;
+            l = m;
         } else if(arr[m] > target) {
-            r = m - 1;
+            r = m;
         } else return arr[m];
     }
 

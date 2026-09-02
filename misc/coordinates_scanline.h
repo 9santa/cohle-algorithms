@@ -1,5 +1,5 @@
+#pragma once
 #include <bits/stdc++.h>
-
 using namespace std;
 
 /** Demonstrates coordinate scanline accumulation. Time: O(n log n). */
@@ -32,7 +32,7 @@ void scanline()
 
         result.push_back(started - ended);
     }
-	
+
     for(int el : result) cout << el << " ";
 
 }

@@ -1,4 +1,8 @@
-#include "core.h"
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
 
 /*
 f[mask]: array of all masks 0..(2^n - 1)
@@ -11,7 +15,8 @@ Graph problems (cliques, independent sets), Frequency convolution over subsets
 /** Demonstrates SOS DP over submasks. Time: O(B 2^B). Space: O(2^B). */
 static void solve() {
     int n; cin >> n;
-    vector<int> a(n); cin >> a;
+    vector<int> a(n);
+    for (int& x : a) cin >> x;
     int B = 0;
     for (auto x : a) B = max(B, 32 - __builtin_clz(x));
     int N = 1 << B;

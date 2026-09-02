@@ -1,4 +1,9 @@
-#include "core.h"
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
 // 'a' should be an 2^n all subsets array
 /** Applies the XOR Walsh-Hadamard transform, or its inverse, in place. Time: O(n 2^n). */
 template<class T>

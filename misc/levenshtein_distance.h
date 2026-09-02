@@ -1,6 +1,5 @@
 #pragma once
 #include <bits/stdc++.h>
-#include <iterator>
 using namespace std;
 
 // Works for string, vector<>, or any container with size() and operator[]
@@ -82,5 +81,3 @@ int levenshtein_distance(It1 first1, It1 last1, It2 first2, It2 last2) {
     }
     return dp[m];
 }
-
-

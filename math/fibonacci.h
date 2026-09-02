@@ -1,5 +1,10 @@
 #pragma once
-#include "core.h"
+#include <bits/stdc++.h>
+using namespace std;
+
+using u128 = unsigned __int128;
+using u64 = unsigned long long;
+using i64 = long long;
 
 static constexpr u64 FIB_MAX_N_U64 = 93; // F(93) fits in u64, F(94) does not
 

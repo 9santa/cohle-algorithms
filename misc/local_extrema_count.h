@@ -1,3 +1,8 @@
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
 
 // pair.first = local mins, pair.second = local maxs
 /** Counts local minima and maxima after ignoring equal adjacent values. Time: O(n). */

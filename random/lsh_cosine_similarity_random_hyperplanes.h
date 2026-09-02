@@ -1,4 +1,6 @@
-
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
 
 /* Idea:
     - we have L hash-tables
@@ -14,13 +16,6 @@
         - gather candidates from those buckets
         - for candidates calc exact cosine similarity */
 
-#include <algorithm>
-#include <stdexcept>
-#include <vector>
-#include <cstdint>
-#include <random>
-#include <unordered_map>
-using namespace std;
 using u32 = uint32_t;
 using u64 = uint64_t;
 

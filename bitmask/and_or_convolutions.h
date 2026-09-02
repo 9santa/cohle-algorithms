@@ -1,4 +1,6 @@
-#include "core.h"
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
 
 /** Applies the OR zeta transform, or its inverse, in place. Time: O(n 2^n). */
 template<class T>

@@ -1,5 +1,5 @@
+#pragma once
 #include <bits/stdc++.h>
-
 using namespace std;
 
 /** Returns whether parentheses/brackets string is balanced. Time: O(n). */

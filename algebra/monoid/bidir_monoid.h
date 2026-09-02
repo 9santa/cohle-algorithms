@@ -1,5 +1,6 @@
 #pragma once
-#include "../core.h"
+#include <bits/stdc++.h>
+using namespace std;
 
 /** Detects whether a value type exposes a fail field. */
 template<class T, class = void>

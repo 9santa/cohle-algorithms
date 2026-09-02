@@ -1,4 +1,6 @@
-#include "../header.h"
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
 
 // Cyclic replacements approach in-place. O(1) space
 /** Rotates array right by k using reverse. Time: O(n). */
@@ -64,5 +66,3 @@ ForwardIt rotate(ForwardIt first, ForwardIt middle, ForwardIt last) {
 
     return new_middle;
 }
-
-

@@ -1,4 +1,9 @@
-#include "../core.h"
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
+
+#define sz(x) int((x).size())
+
 /** Sum monoid for arithmetic values or fixed-size containers. Space: O(size of E). */
 template<typename E>
 struct Monoid_Sum {

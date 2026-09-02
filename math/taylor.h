@@ -1,5 +1,6 @@
 #pragma once
-#include "core.h"
+#include <bits/stdc++.h>
+using namespace std;
 
 namespace taylor {
 
@@ -185,14 +186,6 @@ Series<N> log(const Series<N>& x) {
 
 
 // TODO: sincos pair
-
-
-
-
-
-
-
-
 
 
 } // namespace taylor

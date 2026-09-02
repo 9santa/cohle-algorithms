@@ -1,5 +1,9 @@
 #pragma once
-#include "../core.h"
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
 #include "../monoid/bidir_monoid.h"
 
 /** Wraps an acted monoid so products are tracked in forward and reverse order. Space: O(1). */

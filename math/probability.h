@@ -1,5 +1,5 @@
+#pragma once
 #include <bits/stdc++.h>
-#include <cstdlib>
 using namespace std;
 
 /** Returns P(A | B) from P(A and B) and P(B). Time: O(1). */
@@ -26,8 +26,8 @@ double monteCarloCircle(int total_rounds) {
     srand(time(0));
     int inside = 0;
     for (int i = 0; i < total_rounds; i++) {
-        double x = randDouble();
-        double y = randDouble();
+        double x = randDouble(0.0, 1.0);
+        double y = randDouble(0.0, 1.0);
         if (x*x + y*y <= 1.0) inside++;
     }
     return (double)inside / total_rounds;

@@ -1,3 +1,6 @@
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
 
 // Binary search, O(|s| + sum(|w|) * log |S|)
 /** Counts words that are subsequences of s. Time: O(|s| + total word length). */
@@ -22,7 +25,7 @@ int numMatchingSubseq(string s, vector<string>& words) {
 }
 
 // Waiting buckets (streaming subsequnce check), O(|S| + sum(|w|))
-int numMatchingSubseq(string s, vector<string>& words) {
+int numMatchingSubseq_buckets(string s, vector<string>& words) {
     vector<vector<pair<const string*, int>>> buckets(26);
     for (const auto& w : words) {
         buckets[w[0] - 'a'].push_back({&w, 0});
@@ -41,4 +44,3 @@ int numMatchingSubseq(string s, vector<string>& words) {
     }
     return ans;
 }
-

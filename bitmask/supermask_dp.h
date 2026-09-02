@@ -1,4 +1,9 @@
-#include "core.h"
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
 /*
 dp[mask] = sum over supersets f[sup] that include mask
 mnemonic: if (mask lacks bit) dp[mask] += dp[mask | bit]
